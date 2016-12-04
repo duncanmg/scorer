@@ -78,9 +78,44 @@ angular.module('scorer', ['ionic'])
         controller: 'AccountCtrl'
       }
     }
-  });
-
+  })
   // if none of the above states are matched, use this as the fallback
   $urlRouterProvider.otherwise('/tab/dash');
 
-});
+})
+
+.controller('IndexController', function($scope, $ionicModal) {
+  // No need for testing data anymore
+  $scope.tasks = [];
+  console.log("Start");
+  // Create and load the Modal
+  $ionicModal.fromTemplateUrl('new-task.html', function(modal) {
+    console.log("taskModal: " + $scope.taskModal);
+    $scope.taskModal = modal;
+  }, {
+    scope: $scope,
+    animation: 'slide-in-up'
+  });
+
+  // Called when the form is submitted
+  $scope.createTask = function(task) {
+    $scope.tasks.push({
+      title: task.title
+    });
+    $scope.taskModal.hide();
+    task.title = "";
+  };
+
+  // Open our new task modal
+  $scope.newTask = function() {
+    $scope.taskModal.show();
+  };
+
+  // Close the new task modal
+  $scope.closeNewTask = function() {
+    $scope.taskModal.hide();
+  };
+  console.log("End");
+})
+;
+
