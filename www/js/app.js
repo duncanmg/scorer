@@ -71,15 +71,15 @@ angular.module('scorer', ['ionic'])
     })
 
   .state('tab.account', {
-    url: '/account',
-    views: {
-      'tab-account': {
-        templateUrl: 'templates/tab-account.html',
-        controller: 'AccountCtrl'
+      url: '/account',
+      views: {
+        'tab-account': {
+          templateUrl: 'templates/tab-account.html',
+          controller: 'AccountCtrl'
+        }
       }
-    }
-  })
-  // if none of the above states are matched, use this as the fallback
+    })
+    // if none of the above states are matched, use this as the fallback
   $urlRouterProvider.otherwise('/tab/dash');
 
 })
@@ -88,17 +88,32 @@ angular.module('scorer', ['ionic'])
   // No need for testing data anymore
   $scope.tasks = [];
   console.log("Start");
+
   // Create and load the Modal
-  $ionicModal.fromTemplateUrl('new-task.html', function(modal) {
-    console.log("taskModal: " + $scope.taskModal);
-    $scope.taskModal = modal;
-  }, {
+  //  $ionicModal.fromTemplateUrl('new-task.html', function(modal) {
+  //    console.log("taskModal: " + $scope.taskModal);
+  //    $scope.taskModal = modal;
+  //  }, {
+  //    scope: $scope,
+  //    animation: 'slide-in-up'
+  //  });
+
+  $ionicModal.fromTemplateUrl('new-task.html', {
     scope: $scope,
     animation: 'slide-in-up'
+  }).then(function(modal) {
+    $scope.taskModal = modal;
+    $scope.taskModal.hide();
+    console.log("Modal created and hidden");
+  }, function(e) {
+    console.log(JSON.stringify(e))
   });
 
   // Called when the form is submitted
   $scope.createTask = function(task) {
+    console.log("createTask");
+    console.log(JSON.stringify(task));
+    console.log(JSON.stringify($scope.task));
     $scope.tasks.push({
       title: task.title
     });
@@ -108,6 +123,7 @@ angular.module('scorer', ['ionic'])
 
   // Open our new task modal
   $scope.newTask = function() {
+    console.log("newTask");
     $scope.taskModal.show();
   };
 
@@ -116,6 +132,4 @@ angular.module('scorer', ['ionic'])
     $scope.taskModal.hide();
   };
   console.log("End");
-})
-;
-
+});
