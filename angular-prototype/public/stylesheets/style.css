@@ -1,0 +1,21 @@
+body {
+background: #000;
+font-family: Verdana, Arial, Helvetica, sans-serif;
+font-size: 11px;
+line-height: 18px;
+color: #aaa;
+}
+
+a { color: #97C4FF; text-decoration: none;}
+a:hover { text-decoration: underline; color : #aaa; }
+
+ul {
+list-style-type: square;
+padding: 5px 10px 10px 20px;
+color: #59799F;
+}
+.container {
+border: 5px solid #222;
+/*height: 100px;*/
+background: #333;
+}
