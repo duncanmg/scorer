@@ -15,6 +15,15 @@ padding: 5px 10px 10px 20px;
 color: #59799F;
 }*/
 
+td {
+  text-align: center;
+}
+
+.table_small {
+  font-size: 15px;
+  color:red;
+}
+
 .scoreboard {
   border: 5px solid #222;
   /*height: 100px;*/
