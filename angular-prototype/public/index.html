@@ -62,7 +62,7 @@
   </nav>
 
   <div class="container-fluid">
-    <div class="row" >
+    <div class="row">
       <div class="col-sm-3 col-md-2 sidebar">
         <ul class="nav nav-sidebar">
           <li class="active"><a href="#">Overview <span class="sr-only">(current)</span></a></li>
@@ -83,7 +83,7 @@
           <li><a href="">Another nav item</a></li>
         </ul>
       </div>
-      <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main" >
+      <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
         <h1 class="page-header hidden-xs hidden-sm">Scorer</h1>
 
         <div class="row placeholders hidden-xs hidden-sm">
@@ -112,24 +112,24 @@
         <div class="row">
           <div class="col-sm-2 col-md-2 main hidden-xs hidden-sm">&nbsp;</div>
           <div class="col-sm-8 col-md-8 scoreboard">
-            <h2 class="sub-header hidden-xs hidden-sm" >Scoreboard</h2>
+            <h2 class="sub-header hidden-xs hidden-sm">Scoreboard</h2>
             <h5 class="sub-header visible-xs-* visible-sm-* hidden-md hidden-lg">Scoreboard</h5>
             <div class="table-responsive">
               <table class="table">
 
                 <tbody>
                   <tr>
-                    <td>11</td>
-                    <td>Bt</td>
+                    <td ng-bind="scoreboard.left_bat.no"></td>
+                    <td>Bt <span ng-if="scoreboard.left_bat.striker">*</span></td>
                     <td>Total</td>
-                    <td>Bt</td>
-                    <td>3</td>
+                    <td>Bt <span ng-if="scoreboard.right_bat.striker">*</span></td>
+                    <td ng-bind="scoreboard.right_bat.no"></td>
                   </tr>
                   <tr>
                     <td>&nbsp;</td>
-                    <td>7</td>
-                    <td ng-bind="total"></td>
-                    <td>108</td>
+                    <td ng-bind="scoreboard.left_bat.runs"></td>
+                    <td ng-bind="scoreboard.total"></td>
+                    <td ng-bind="scoreboard.right_bat.runs"></td>
                     <td>&nbsp;</td>
                   </tr>
                   <tr>
@@ -140,11 +140,11 @@
                     <td>Lst Inn</td>
                   </tr>
                   <tr>
-                    <td>38</td>
+                    <td ng-bind="scoreboard.overs_and_balls"></td>
                     <td>&nbsp;</td>
-                    <td ng-bind="wickets"></td>
+                    <td ng-bind="scoreboard.wickets"></td>
                     <td>&nbsp;</td>
-                    <td>221</td>
+                    <td ng-bind="scoreboard.last_innings"></td>
                   </tr>
                 </tbody>
               </table>
@@ -163,24 +163,25 @@
           <div class="col-sm-2 col-md-2 main hidden-xs hidden-sm">&nbsp;</div>
           <div class="col-sm-8 col-md-8 keyboard">
             <h2 class="sub-header hidden-xs hidden-sm">Keyboard</h2>
-              <h5 class="sub-header visible-xs-* visible-sm-* hidden-md hidden-lg">Keyboard</h5>
+            <h5 class="sub-header visible-xs-* visible-sm-* hidden-md hidden-lg">Keyboard</h5>
             <div class="table-responsive">
               <table class="table">
 
                 <tbody>
                   <tr>
                     <td>0</td>
-                    <td ng-click="total = total + 1">1</td>
-                    <td ng-click="total = total + 2">2</td>
-                    <td ng-click="total = total + 3">3</td>
-                    <td ng-click="total = total + 4">4</td>
-                    <td ng-click="total = total + 6">6</td>
+                    <td ng-click="bowls('ball',1)">1</td>
+                    <td ng-click="bowls('ball',2)">2</td>
+                    <td ng-click="bowls('ball',3)">3</td>
+                    <td ng-click="bowls('ball',4)">4</td>
+                    <td ng-click="bowls('ball',6)">6</td>
                   </tr>
                   <tr>
-                    <td ng-click="wickets=wickets+1">WKT</td>
+                    <td ng-click="bowls('wicket',0)">WKT</td>
                     <td>LB</td>
                     <td>NB</td>
                     <td>W</td>
+                    <td>B</td>
                     <td>UNDO</td>
                     <td>&nbsp;</td>
                   </tr>
@@ -210,13 +211,8 @@
 
   <script src="/javascripts/angular.min.js"></script>
 
-  <script>
-    angular.module('scorer', []).controller('ScorerController', function($scope) {
-      $scope.total = 259;
-      $scope.wickets = 5;
-      // alert("hi");
-    });
-  </script>
+  <script src="javascripts/controllers/ScorerController.js"></script>
+
 </body>
 
 </html>
