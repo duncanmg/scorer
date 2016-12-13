@@ -1,33 +1,20 @@
-angular.module("scorer", ['ui.router']).config(function($stateProvider, $urlRouterProvider) {
+'use strict';
+
+angular.module("scorer", ['ui.router', 'ngResource']).config(function($stateProvider, $urlRouterProvider) {
+  
+  $urlRouterProvider.otherwise('/');
+
   $stateProvider
-    .state('app', {
-      url: '/',
-      views: {
-        //  'header': {
-        //      templateUrl : 'views/header.html',
-        //  },
+    .state('scorer', {
+      'url': '/',
+      'views': {
         'content': {
-          templateUrl: '/main.htm',
-          controller: 'ScorerController'
-        } //,
-        //  'footer': {
-        //      templateUrl : 'views/footer.html',
-        //  }
+          'templateUrl': 'main.htm',
+          'controller': 'ScorerController'
+        }
       }
 
     });
 
 
 });
-
-//     .when("/other", {
-//         templateUrl : "red.htm"
-//     })
-//     // .when("/green", {
-//     //     templateUrl : "green.htm"
-//     // })
-//     // .when("/blue", {
-//     //     templateUrl : "blue.htm"
-//     // })
-//     ;
-// });

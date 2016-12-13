@@ -1,8 +1,6 @@
 'use strict';
 
-var app = angular.module('scorer', []);
-
-app.controller('ScorerController', function($scope) {
+angular.module('scorer').controller('ScorerController', function($scope) {
   var batsman = {
     no: 0,
     striker: false,
