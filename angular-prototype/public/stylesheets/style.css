@@ -17,11 +17,27 @@ color: #59799F;
 
 td {
   text-align: center;
+
 }
 
-.table_small {
-  font-size: 15px;
-  color:red;
+.table-small {
+font-size: 13px;
+}
+
+.sb1 {
+  width:20%;
+}
+.sb2 {
+  width:20%;
+}
+.sb3 {
+  width:20%;
+}
+.sb4 {
+  width:20%;
+}
+.sb5 {
+  width:20%;
 }
 
 .scoreboard {

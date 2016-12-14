@@ -4,36 +4,36 @@
     <h2 class="sub-header hidden-xs hidden-sm">Scoreboard</h2>
     <h5 class="sub-header visible-xs-* visible-sm-* hidden-md hidden-lg">Scoreboard</h5>
     <div class="table-responsive">
-      <table class="table">
+      <table class="table table-small">
 
         <tbody>
           <tr>
-            <td ng-bind="scoreboard.left_bat.no"></td>
-            <td><span class="hidden-md hidden-lg">BT</span><span class="hidden-xs hidden-sm">Batsman</span> <span ng-if="scoreboard.left_bat.striker">*</span></td>
-            <td><span class="hidden-md hidden-lg">Total</span><span class="hidden-xs hidden-sm">Total</span></td>
-            <td><span class="hidden-md hidden-lg">BT</span><span class="hidden-xs hidden-sm">Batsman</span> <span ng-if="scoreboard.right_bat.striker">*</span></td>
-            <td ng-bind="scoreboard.right_bat.no"></td>
+            <td class="sb1" ng-bind="scoreboard.left_bat.no"></td>
+            <td class="sb2"><span class="hidden-md hidden-lg">BT</span><span class="hidden-xs hidden-sm">Batsman</span> <span ng-if="scoreboard.left_bat.striker">*</span></td>
+            <td class="sb3"><span class="hidden-md hidden-lg">Total</span><span class="hidden-xs hidden-sm">Total</span></td>
+            <td class="sb4"><span class="hidden-md hidden-lg">BT</span><span class="hidden-xs hidden-sm">Batsman</span> <span ng-if="scoreboard.right_bat.striker">*</span></td>
+            <td class="sb5" ng-bind="scoreboard.right_bat.no"></td>
           </tr>
           <tr>
-            <td>&nbsp;</td>
-            <td ng-bind="scoreboard.left_bat.runs"></td>
-            <td ng-bind="scoreboard.total"></td>
-            <td ng-bind="scoreboard.right_bat.runs"></td>
-            <td>&nbsp;</td>
+            <td class="sb1" >&nbsp;</td>
+            <td class="sb2" ng-bind="scoreboard.left_bat.runs"></td>
+            <td class="sb3" ng-bind="scoreboard.total"></td>
+            <td class="sb4" ng-bind="scoreboard.right_bat.runs"></td>
+            <td class="sb5">&nbsp;</td>
           </tr>
           <tr>
-            <td><span class="hidden-md hidden-lg">Ov</span><span class="hidden-xs hidden-sm">Overs</span> </td>
-            <td>&nbsp;</td>
-            <td><span class="hidden-md hidden-lg">Wickets</span><span class="hidden-xs hidden-sm">Wickets</span></td>
-            <td>&nbsp;</td>
-            <td><span class="hidden-md hidden-lg">Lst Inns</span><span class="hidden-xs hidden-sm">Last Innings</span></td>
+            <td class="sb1"><span class="hidden-md hidden-lg">Ov</span><span class="hidden-xs hidden-sm">Overs</span> </td>
+            <td class="sb2">&nbsp;</td>
+            <td class="sb3"><span class="hidden-md hidden-lg">Wkts</span><span class="hidden-xs hidden-sm">Wickets</span></td>
+            <td class="sb4">&nbsp;</td>
+            <td class="sb5"><span class="hidden-md hidden-lg">Tgt</span><span class="hidden-xs hidden-sm">Target</span></td>
           </tr>
           <tr>
-            <td ng-bind="scoreboard.overs_and_balls"></td>
-            <td>&nbsp;</td>
-            <td ng-bind="scoreboard.wickets"></td>
-            <td>&nbsp;</td>
-            <td ng-bind="scoreboard.last_innings"></td>
+            <td class="sb1" ng-bind="scoreboard.overs_and_balls"></td>
+            <td class="sb2">&nbsp;</td>
+            <td class="sb3" ng-bind="scoreboard.wickets"></td>
+            <td class="sb4">&nbsp;</td>
+            <td class="sb5" ng-bind="scoreboard.last_innings"></td>
           </tr>
         </tbody>
       </table>
@@ -54,7 +54,7 @@
     <h2 class="sub-header hidden-xs hidden-sm">Keyboard</h2>
     <h5 class="sub-header visible-xs-* visible-sm-* hidden-md hidden-lg">Keyboard</h5>
     <div class="table-responsive">
-      <table class="table">
+      <table class="table small-table">
 
         <tbody>
           <tr>
