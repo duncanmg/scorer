@@ -1,10 +1,11 @@
 'use strict';
 
 angular.module('scorer').controller('ScorerController', function($scope) {
-  var batsman = {
-    no: 0,
-    striker: false,
-    runs: 0
+
+  var Batsman = function(){
+    this.no = 0;
+    this.striker = false;
+    this.runs = 0;
   };
 
   var scoreboard = {
@@ -111,14 +112,14 @@ angular.module('scorer').controller('ScorerController', function($scope) {
     var next_batsman_no = ($scope.scoreboard.left_bat.no > $scope.scoreboard.right_bat.no) ?
       $scope.scoreboard.left_bat.no + 1 :
       $scope.scoreboard.right_bat.no + 1;
-
+    alert("next_batsman_no = " + next_batsman_no)
     if ($scope.scoreboard.left_bat.striker == true) {
-      $scope.scoreboard.left_bat = batsman;
+      $scope.scoreboard.left_bat = new Batsman();
       $scope.scoreboard.left_bat.no = next_batsman_no;
       $scope.scoreboard.left_bat.striker = true;
 
     } else {
-      $scope.scoreboard.right_bat = batsman;
+      $scope.scoreboard.right_bat = new Batsman();
       $scope.scoreboard.right_bat.no = next_batsman_no;
       $scope.scoreboard.right_bat.striker = true;
     }
