@@ -1,0 +1,29 @@
+<div class="row">
+  <div class="col-sm-2 col-md-2 main hidden-xs hidden-sm">&nbsp;</div>
+  <div class="col-sm-8 col-md-8 scoreboard">
+    <h2 class="sub-header hidden-xs hidden-sm">Others</h2>
+    <h5 class="sub-header visible-xs-* visible-sm-* hidden-md hidden-lg">Scoreboard</h5>
+    <div class="table-responsive">
+      <table class="table table-small">
+
+        <tbody>
+          <tr>
+            <td class="sb1">No balls: <span ng-bind="no_ball_extras" ng-click="alert(1);"></span><i class="glyphicon glyphicon-plus" ng-click="alert('Ouch!');"><i class="glyphicon glyphicon-minus"></i>
+              extra(s) and <span ng-bind="no_ball_runs"></span><i class="glyphicon glyphicon-plus"><i class="glyphicon glyphicon-minus"> run(s) off bat</td>
+            <tr>
+              <td class="sb1">Wides: <span ng-bind="wide_extras"></span><i class="glyphicon glyphicon-plus"><i class="glyphicon glyphicon-minus">
+                 wide(s) and <span ng-bind="wide_runs"></span><i class="glyphicon glyphicon-plus"><i class="glyphicon glyphicon-minus"> run(s) off bat</td>
+            </tr>
+            <tr>
+              <td class="sb1">Leg byes: <span ng-bind="leg_bye_extras"></span><i class="glyphicon glyphicon-plus"><i class="glyphicon glyphicon-minus"> extra(s)</td>
+            </tr>
+            <tr>
+              <td class="sb1"></td>
+
+            </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <div class="col-sm-2 col-md-2 main hidden-xs hidden-sm">&nbsp;</div>
+</div>

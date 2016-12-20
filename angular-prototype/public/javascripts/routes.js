@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module("scorer", ['ui.router', 'ngResource']).config(function($stateProvider, $urlRouterProvider) {
-  
+
   $urlRouterProvider.otherwise('/');
 
   $stateProvider
@@ -13,8 +13,17 @@ angular.module("scorer", ['ui.router', 'ngResource']).config(function($stateProv
           'controller': 'ScorerController'
         }
       }
-
-    });
+    })
+    .state('others', {
+      'url': '/others',
+      'views': {
+        'content': {
+          'templateUrl': 'others.htm',
+          'controller': 'OthersController'
+        }
+      }
+    })
+    ;
 
 
 });
