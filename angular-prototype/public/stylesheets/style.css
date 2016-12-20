@@ -62,3 +62,7 @@ td {
   color: #aaa;
   cursor: pointer;
 }
+
+.others td {
+  width: 76px;
+}
