@@ -21,6 +21,10 @@ angular.module('scorer').controller('ScorerController', ['$scope', '$stateParams
     $scope.wide_extras = 0;
     $scope.leg_bye_extras = 0;
     $scope.bye_extras = 0;
+    $scope.run_out_striker_runs = 0;
+    $scope.run_out_striker_extras = 0;
+    $scope.run_out_non_striker_runs = 0;
+    $scope.run_out_non_striker_extras = 0;
 
     $scope.no_ball_extras_up = function() {
       $scope.no_ball_extras += 1;
@@ -89,7 +93,7 @@ angular.module('scorer').controller('ScorerController', ['$scope', '$stateParams
         alert("Please enter just one type of extra.");
         return false;
       }
-      if (count==0) {
+      if (count == 0) {
         alert("Nothing has been entered.");
         return false;
       }
