@@ -40,11 +40,8 @@ angular.module("scorer").factory('Scoreboard', ['Storage', function(Storage) {
 
     change_ends: function(num_runs) {
 
-      switch (num_runs) {
-        case 2:
-        case 4:
-        case 6:
-          return true;
+      if (num_runs % 2 == 0) {
+        return true;
       }
 
       if (this.scoreboard.left_bat.striker == true) {
@@ -146,49 +143,36 @@ angular.module("scorer").factory('Scoreboard', ['Storage', function(Storage) {
       this.save();
     },
 
-    add_extra_no_balls: function(extras, runs) {
-      if (extras == 0 && runs == 0) {
-        return false;
-      }
-      this.scoreboard.total += runs + extras;
-      this.add_runs_to_striker(runs);
-      this.change_ends(runs + extras - 1);
+    add_extra: function(extra) {
+      this.add_extras[extra.type](this, extra);
       this.save();
     },
 
-    add_extra_wides: function(extras) {
-      if (extras == 0) {
-        return false;
+    add_extras: {
+      no_ball: function(obj, extra) {
+        obj.scoreboard.total += (extra.runs + extra.extras);
+        obj.add_runs_to_striker(extra.runs);
+        obj.change_ends(extra.runs + extra.extras - 1);
+      },
+      wide: function(obj, extra) {
+        obj.scoreboard.total += extra.extras;
+        if (extra.extras > 1) {
+          obj.change_ends(extra.extras - 1);
+        }
+      },
+      leg_bye: function(obj, extra) {
+        obj.scoreboard.balls++;
+        obj.scoreboard.total += extra.extras;
+        obj.change_ends(extra.extras);
+        obj.over();
+      },
+      bye: function(obj, extra) {
+        obj.scoreboard.balls++;
+        obj.scoreboard.total += extra.extras;
+        obj.change_ends(extra.extras);
+        obj.over();
       }
-      this.scoreboard.total += extras;
-      if (extras > 1) {
-        this.change_ends(extras - 1);
-      }
-      this.save();
     },
-
-    add_extra_leg_byes: function(extras) {
-      if (extras == 0) {
-        return false;
-      }
-      this.scoreboard.balls++;
-      this.scoreboard.total += extras;
-      this.change_ends(extras);
-      this.over();
-      this.save();
-    },
-
-    add_extra_byes: function(extras) {
-      if (extras == 0) {
-        return false;
-      }
-      this.scoreboard.balls++;
-      this.scoreboard.total += extras;
-      this.change_ends(extras);
-      this.over();
-      this.save();
-    },
-
     save: function() {
       Storage.put_scoreboard(this.scoreboard);
     }

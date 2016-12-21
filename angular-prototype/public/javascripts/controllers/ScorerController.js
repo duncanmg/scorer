@@ -15,79 +15,57 @@ angular.module('scorer').controller('ScorerController', ['$scope', '$stateParams
 
     var board = Scoreboard;
 
-    $scope.no_ball_extras = 0;
-    $scope.no_ball_runs = 0;
-    $scope.wide_extras = 0;
-    $scope.wide_extras = 0;
-    $scope.leg_bye_extras = 0;
-    $scope.bye_extras = 0;
+    var Extra = function(type) {
+      this.type = type;
+      this.runs = 0;
+      this.extras = 0;
+      this.is_clean = function() {
+        return (this.runs == 0 && this.extras == 0) ? true : false;
+      };
+      this.runs_up = function() {
+        this.runs += 1;
+      };
+      this.runs_down = function() {
+        if (this.runs > 0) {
+          this.runs -= 1;
+        }
+
+      };
+      this.extras_up = function() {
+        this.extras += 1;
+      };
+      this.extras_down = function() {
+        if (this.extras > 0) {
+          this.extras -= 1;
+        }
+      };
+      this.add = function() {
+        board.add_extra(this);
+      }
+    };
+
+    $scope.extras = {};
+
+    $scope.extras.no_ball = new Extra('no_ball');
+    $scope.extras.wide = new Extra('wide');
+    $scope.extras.bye = new Extra('bye');
+    $scope.extras.leg_bye = new Extra('leg_bye');
+
     $scope.run_out_striker_runs = 0;
     $scope.run_out_striker_extras = 0;
     $scope.run_out_non_striker_runs = 0;
     $scope.run_out_non_striker_extras = 0;
 
-    $scope.no_ball_extras_up = function() {
-      $scope.no_ball_extras += 1;
-    };
-    $scope.no_ball_extras_down = function() {
-      if ($scope.no_ball_extras) {
-        $scope.no_ball_extras -= 1;
-      }
-    };
-
-    $scope.no_ball_runs_up = function() {
-      $scope.no_ball_runs += 1;
-    };
-    $scope.no_ball_runs_down = function() {
-      if ($scope.no_ball_runs > 0) {
-        $scope.no_ball_runs -= 1;
-      }
-    };
-
-    $scope.wide_extras_up = function() {
-      $scope.wide_extras += 1;
-    };
-
-    $scope.wide_extras_down = function() {
-      if ($scope.wide_extras) {
-        $scope.wide_extras -= 1;
-      }
-    };
-
-    $scope.leg_bye_extras_up = function() {
-      $scope.leg_bye_extras += 1;
-    };
-
-    $scope.leg_bye_extras_down = function() {
-      if ($scope.leg_bye_extras) {
-        $scope.leg_bye_extras -= 1;
-      }
-    };
-
-    $scope.bye_extras_up = function() {
-      $scope.bye_extras += 1;
-    };
-
-    $scope.bye_extras_down = function() {
-      if ($scope.bye_extras) {
-        $scope.bye_extras -= 1;
-      }
-    };
-
     $scope.accept = function() {
 
       var count = 0;
-      if ($scope.no_ball_extras > 0 || $scope.no_ball_runs > 0) {
-        count += 1;
-      }
-      if ($scope.wide_extras > 0) {
-        count += 1;
-      }
-      if ($scope.leg_bye_extras > 0) {
-        count += 1;
-      }
-      if ($scope.bye_extras > 0) {
-        count += 1;
+      var extra;
+      for (var e in $scope.extras) {
+        if (!$scope.extras[e].is_clean()) {
+          count += 1;
+          // alert(e);
+          extra = $scope.extras[e];
+        }
       }
       if (count > 1) {
         alert("Please enter just one type of extra.");
@@ -98,10 +76,7 @@ angular.module('scorer').controller('ScorerController', ['$scope', '$stateParams
         return false;
       }
 
-      board.add_extra_no_balls($scope.no_ball_extras, $scope.no_ball_runs);
-      board.add_extra_wides($scope.wide_extras);
-      board.add_extra_leg_byes($scope.leg_bye_extras);
-      board.add_extra_byes($scope.bye_extras);
+      extra.add();
 
       $state.go('scorer');
       // alert("ok");
