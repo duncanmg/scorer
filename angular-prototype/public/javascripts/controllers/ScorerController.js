@@ -109,10 +109,16 @@ angular.module('scorer').controller('ScorerController', ['$scope', '$stateParams
     var wicket = function() {
       $scope.scoreboard.balls++;
       $scope.scoreboard.wickets += 1;
+
+      if ($scope.scoreboard.wickets >= 10) {
+        $scope.scoreboard.game_over = true;
+        return true;
+      }
+
       var next_batsman_no = ($scope.scoreboard.left_bat.no > $scope.scoreboard.right_bat.no) ?
         $scope.scoreboard.left_bat.no + 1 :
         $scope.scoreboard.right_bat.no + 1;
-      alert("next_batsman_no = " + next_batsman_no)
+
       if ($scope.scoreboard.left_bat.striker == true) {
         $scope.scoreboard.left_bat = new Batsman();
         $scope.scoreboard.left_bat.no = next_batsman_no;
@@ -123,15 +129,11 @@ angular.module('scorer').controller('ScorerController', ['$scope', '$stateParams
         $scope.scoreboard.right_bat.no = next_batsman_no;
         $scope.scoreboard.right_bat.striker = true;
       }
-      if ($scope.scoreboard.wickets >= 10) {
-        $scope.scoreboard.game_over = true;
-      }
+
     };
 
     $scope.go_others = function() {
-      // alert('AAAAAA');
       $state.go('others');
-      // alert('Gone');
     };
 
   }])
