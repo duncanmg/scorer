@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module("scorer").factory('Scoreboard', function() {
+angular.module("scorer").factory('Scoreboard', ['Storage', function(Storage) {
 
   var Batsman = function() {
     this.no = 0;
@@ -8,9 +8,10 @@ angular.module("scorer").factory('Scoreboard', function() {
     this.runs = 0;
   };
 
-  var Scoreboard = {
+  var initial_scoreboard = Storage.get_scoreboard();
 
-    scoreboard: {
+  if (!initial_scoreboard) {
+    initial_scoreboard = {
       total: 259,
       wickets: 5,
       extras: 3,
@@ -30,7 +31,12 @@ angular.module("scorer").factory('Scoreboard', function() {
       },
       game_over: false,
       extras: 0
-    },
+    };
+  }
+
+  var Scoreboard = {
+
+    scoreboard: initial_scoreboard,
 
     change_ends: function(num_runs) {
 
@@ -74,6 +80,7 @@ angular.module("scorer").factory('Scoreboard', function() {
           this.ball(runs);
           this.change_ends(runs);
           break;
+
       }
 
       this.over();
@@ -82,6 +89,7 @@ angular.module("scorer").factory('Scoreboard', function() {
         this.scoreboard.game_over = true;
       }
 
+      this.save();
     },
 
     over: function() {
@@ -135,7 +143,7 @@ angular.module("scorer").factory('Scoreboard', function() {
         this.scoreboard.right_bat.no = next_batsman_no;
         this.scoreboard.right_bat.striker = true;
       }
-
+      this.save();
     },
 
     add_extra_no_balls: function(extras, runs) {
@@ -145,6 +153,7 @@ angular.module("scorer").factory('Scoreboard', function() {
       this.scoreboard.total += runs + extras;
       this.add_runs_to_striker(runs);
       this.change_ends(runs + extras - 1);
+      this.save();
     },
 
     add_extra_wides: function(extras) {
@@ -155,6 +164,7 @@ angular.module("scorer").factory('Scoreboard', function() {
       if (extras > 1) {
         this.change_ends(extras - 1);
       }
+      this.save();
     },
 
     add_extra_leg_byes: function(extras) {
@@ -165,6 +175,7 @@ angular.module("scorer").factory('Scoreboard', function() {
       this.scoreboard.total += extras;
       this.change_ends(extras);
       this.over();
+      this.save();
     },
 
     add_extra_byes: function(extras) {
@@ -175,9 +186,33 @@ angular.module("scorer").factory('Scoreboard', function() {
       this.scoreboard.total += extras;
       this.change_ends(extras);
       this.over();
+      this.save();
+    },
+
+    save: function() {
+      Storage.put_scoreboard(this.scoreboard);
     }
 
   };
   return Scoreboard;
+
+}]).factory('Storage', function() {
+
+  return {
+    get_scoreboard: function() {
+      var scoreboard;
+      if (sessionStorage.scoreboard) {
+        scoreboard = JSON.parse(sessionStorage.scoreboard);
+      } else {
+        return false;
+      }
+      return scoreboard;
+    },
+    put_scoreboard: function(scoreboard) {
+      sessionStorage.scoreboard = JSON.stringify(scoreboard);
+      return true;
+    }
+
+  };
 
 });
