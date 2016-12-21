@@ -8,17 +8,17 @@
 
         <tbody>
           <tr>
-            <td class="sb1" ng-bind="scoreboard.left_bat.no"></td>
-            <td class="sb2"><span class="hidden-md hidden-lg">BT</span><span class="hidden-xs hidden-sm">Batsman</span> <span ng-if="scoreboard.left_bat.striker">*</span></td>
+            <td class="sb1" ng-bind="board.scoreboard.left_bat.no"></td>
+            <td class="sb2"><span class="hidden-md hidden-lg">BT</span><span class="hidden-xs hidden-sm">Batsman</span> <span ng-if="board.scoreboard.left_bat.striker">*</span></td>
             <td class="sb3"><span class="hidden-md hidden-lg">Total</span><span class="hidden-xs hidden-sm">Total</span></td>
-            <td class="sb4"><span class="hidden-md hidden-lg">BT</span><span class="hidden-xs hidden-sm">Batsman</span> <span ng-if="scoreboard.right_bat.striker">*</span></td>
-            <td class="sb5" ng-bind="scoreboard.right_bat.no"></td>
+            <td class="sb4"><span class="hidden-md hidden-lg">BT</span><span class="hidden-xs hidden-sm">Batsman</span> <span ng-if="board.scoreboard.right_bat.striker">*</span></td>
+            <td class="sb5" ng-bind="board.scoreboard.right_bat.no"></td>
           </tr>
           <tr>
             <td class="sb1" >&nbsp;</td>
-            <td class="sb2" ng-bind="scoreboard.left_bat.runs"></td>
-            <td class="sb3" ng-bind="scoreboard.total"></td>
-            <td class="sb4" ng-bind="scoreboard.right_bat.runs"></td>
+            <td class="sb2" ng-bind="board.scoreboard.left_bat.runs"></td>
+            <td class="sb3" ng-bind="board.scoreboard.total"></td>
+            <td class="sb4" ng-bind="board.scoreboard.right_bat.runs"></td>
             <td class="sb5">&nbsp;</td>
           </tr>
           <tr>
@@ -29,11 +29,11 @@
             <td class="sb5"><span class="hidden-md hidden-lg">Tgt</span><span class="hidden-xs hidden-sm">Target</span></td>
           </tr>
           <tr>
-            <td class="sb1" ng-bind="scoreboard.overs_and_balls"></td>
+            <td class="sb1" ng-bind="board.scoreboard.overs_and_balls"></td>
             <td class="sb2">&nbsp;</td>
-            <td class="sb3" ng-bind="scoreboard.wickets"></td>
+            <td class="sb3" ng-bind="board.scoreboard.wickets"></td>
             <td class="sb4">&nbsp;</td>
-            <td class="sb5" ng-bind="scoreboard.last_innings"></td>
+            <td class="sb5" ng-bind="board.scoreboard.last_innings"></td>
           </tr>
         </tbody>
       </table>
@@ -58,19 +58,19 @@
 
         <tbody>
           <tr>
-            <td ng-click="bowls('ball',0)">0</td>
-            <td ng-click="bowls('ball',1)">1</td>
-            <td ng-click="bowls('ball',2)">2</td>
-            <td ng-click="bowls('ball',3)">3</td>
-            <td ng-click="bowls('ball',4)">4</td>
-            <td ng-click="bowls('ball',6)">6</td>
+            <td ng-click="board.bowls('ball',0)">0</td>
+            <td ng-click="board.bowls('ball',1)">1</td>
+            <td ng-click="board.bowls('ball',2)">2</td>
+            <td ng-click="board.bowls('ball',3)">3</td>
+            <td ng-click="board.bowls('ball',4)">4</td>
+            <td ng-click="board.bowls('ball',6)">6</td>
           </tr>
           <tr>
-            <td ng-click="bowls('wicket',0)"><span class="hidden-md hidden-lg">WKT</span><span class="hidden-xs hidden-sm">Wicket</span></td>
-            <td ng-click="bowls('leg_bye',1)"><span class="hidden-md hidden-lg">LB</span><span class="hidden-xs hidden-sm">Leg Bye</span></td>
-            <td ng-click="bowls('no_ball',1)"><span class="hidden-md hidden-lg">NB</span><span class="hidden-xs hidden-sm">No Ball</span></td>
-            <td ng-click="bowls('wide',1)"><span class="hidden-md hidden-lg">W</span><span class="hidden-xs hidden-sm">Wide</span></td>
-            <td ng-click="bowls('bye',1)"><span class="hidden-md hidden-lg">B</span><span class="hidden-xs hidden-sm">Bye</span></td>
+            <td ng-click="board.bowls('wicket',0)"><span class="hidden-md hidden-lg">WKT</span><span class="hidden-xs hidden-sm">Wicket</span></td>
+            <td ng-click="board.bowls('leg_bye',1)"><span class="hidden-md hidden-lg">LB</span><span class="hidden-xs hidden-sm">Leg Bye</span></td>
+            <td ng-click="board.bowls('no_ball',1)"><span class="hidden-md hidden-lg">NB</span><span class="hidden-xs hidden-sm">No Ball</span></td>
+            <td ng-click="board.bowls('wide',1)"><span class="hidden-md hidden-lg">W</span><span class="hidden-xs hidden-sm">Wide</span></td>
+            <td ng-click="board.bowls('bye',1)"><span class="hidden-md hidden-lg">B</span><span class="hidden-xs hidden-sm">Bye</span></td>
             <td ng-click="go_others()"><span class="hidden-md hidden-lg">Other</span><span class="hidden-xs hidden-sm">Other</span></td>
           </tr>
 
