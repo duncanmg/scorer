@@ -95,16 +95,21 @@ angular.module("scorer").factory('Scoreboard', function() {
       }
     },
 
-    ball: function(runs) {
-
-      this.scoreboard.total += runs;
-      this.scoreboard.balls++;
-
+    add_runs_to_striker: function(runs) {
       if (this.scoreboard.left_bat.striker) {
         this.scoreboard.left_bat.runs += runs;
       } else {
         this.scoreboard.right_bat.runs += runs;
       }
+    },
+
+    ball: function(runs) {
+
+      this.scoreboard.total += runs;
+      this.scoreboard.balls++;
+
+      this.add_runs_to_striker(runs);
+
     },
 
     wicket: function() {
@@ -131,6 +136,45 @@ angular.module("scorer").factory('Scoreboard', function() {
         this.scoreboard.right_bat.striker = true;
       }
 
+    },
+
+    add_extra_no_balls: function(extras, runs) {
+      if (extras == 0 && runs == 0) {
+        return false;
+      }
+      this.scoreboard.total += runs + extras;
+      this.add_runs_to_striker(runs);
+      this.change_ends(runs + extras - 1);
+    },
+
+    add_extra_wides: function(extras) {
+      if (extras == 0) {
+        return false;
+      }
+      this.scoreboard.total += extras;
+      if (extras > 1) {
+        this.change_ends(extras - 1);
+      }
+    },
+
+    add_extra_leg_byes: function(extras) {
+      if (extras == 0) {
+        return false;
+      }
+      this.scoreboard.balls++;
+      this.scoreboard.total += extras;
+      this.change_ends(extras);
+      this.over();
+    },
+
+    add_extra_byes: function(extras) {
+      if (extras == 0) {
+        return false;
+      }
+      this.scoreboard.balls++;
+      this.scoreboard.total += extras;
+      this.change_ends(extras);
+      this.over();
     }
 
   };
