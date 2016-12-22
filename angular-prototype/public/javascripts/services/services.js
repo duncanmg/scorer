@@ -52,11 +52,16 @@ angular.module("scorer").factory('Scoreboard', ['Storage', function(Storage) {
         this.scoreboard.right_bat.striker = false;
       }
     },
-
-    bowls: function(type, runs) {
-
+    alert_game_over: function() {
       if (this.scoreboard.game_over == true) {
         alert("The innings is over!");
+        return true;
+      }
+      return false;
+    },
+    bowls: function(type, runs) {
+
+      if (this.alert_game_over()) {
         return false;
       }
 
@@ -82,13 +87,19 @@ angular.module("scorer").factory('Scoreboard', ['Storage', function(Storage) {
 
       this.over();
 
-      if (this.scoreboard.last_innings > 0 && this.scoreboard.total > this.scoreboard.last_innings) {
-        this.scoreboard.game_over = true;
-      }
+      this.set_game_over();
 
       this.save();
     },
-
+    set_game_over : function() {
+      if (this.scoreboard.last_innings > 0 && this.scoreboard.total > this.scoreboard.last_innings) {
+        this.scoreboard.game_over = true;
+      }
+      if (this.scoreboard.wickets >= 10) {
+        this.scoreboard.game_over = true;
+      }
+      return this.scoreboard.game_over;
+    },
     over: function() {
       if (this.scoreboard.balls >= 6) {
         this.scoreboard.balls = 0;
@@ -121,8 +132,7 @@ angular.module("scorer").factory('Scoreboard', ['Storage', function(Storage) {
       this.scoreboard.balls++;
       this.scoreboard.wickets += 1;
 
-      if (this.scoreboard.wickets >= 10) {
-        this.scoreboard.game_over = true;
+      if (this.set_game_over()) {
         return true;
       }
 
@@ -144,7 +154,11 @@ angular.module("scorer").factory('Scoreboard', ['Storage', function(Storage) {
     },
 
     add_extra: function(extra) {
+      if (this.alert_game_over()) {
+        return false;
+      }
       this.add_extras[extra.type](this, extra);
+      this.set_game_over();
       this.save();
     },
 
