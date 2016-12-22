@@ -113,9 +113,18 @@ angular.module('scorer').controller('ScorerController', ['$scope', '$stateParams
         }],
         num_overs: 40,
         num_innings: 1,
-        home_team: 'England',
-        away_team: 'Australia',
-        team_batting_first: 'England'
+        home_team: {
+          id: 1,
+          name: 'England'
+        },
+        away_team: {
+          id: 2,
+          name: 'Australia'
+        },
+        team_batting_first: {
+          id: 1,
+          name: 'England'
+        }
       };
     }
 

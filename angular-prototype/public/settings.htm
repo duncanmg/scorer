@@ -28,7 +28,7 @@
                 </div>
               </td>
             </tr>
-            <tr>
+            <tr ng-hide="settings.match_type.id == 2">
               <td class="others">
                 <div class="form-group">
                   <label for="num_overs">Number of overs</label>
@@ -36,7 +36,7 @@
                 </div>
               </td>
             </tr>
-            <tr>
+            <tr ng-hide="settings.match_type.id != 2">
               <td class="others">
                 <div class="form-group">
                   <label for="num_innings">Number of innings per team</label>
@@ -48,7 +48,7 @@
               <td class="others">
                 <div class="form-group">
                   <label for="home_team">Home team</label>
-                  <input type="text" class="form-control" id="home_team" placeholder="eg England" ng-model="settings.home_team">
+                  <input type="text" class="form-control" id="home_team" placeholder="eg England" ng-model="settings.home_team.name">
                 </div>
               </td>
             </tr>
@@ -56,7 +56,7 @@
               <td class="others">
                 <div class="form-group">
                   <label for="away_team">Away team</label>
-                  <input type="text" class="form-control" id="away_team" placeholder="eg Australia" ng-model="settings.away_team">
+                  <input type="text" class="form-control" id="away_team" placeholder="eg Australia" ng-model="settings.away_team.name">
                 </div>
               </td>
             </tr>
@@ -64,7 +64,8 @@
               <td class="others">
                 <div class="form-group">
                   <label for="team_batting_first">Team batting first</label>
-                  <input type="text" class="form-control" id="team_batting_first" placeholder="eg Australia" ng-model="settings.team_batting_first">
+                  <select class="form-control" id="team_batting_first" ng-model="settings.team_batting_first"
+                   ng-options="option.name for option in [ settings.home_team, settings.away_team ] track by option.id"></select>
                 </div>
               </td>
             </tr>
