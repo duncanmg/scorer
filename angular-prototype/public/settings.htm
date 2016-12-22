@@ -32,7 +32,7 @@
               <td class="others">
                 <div class="form-group">
                   <label for="num_overs">Number of overs</label>
-                  <input type="text" class="form-control" id="num_overs" placeholder="eg 40" ng-model="settings.num_overs">
+                  <input type="number" min="0" class="form-control" id="num_overs" placeholder="eg 40" ng-model="settings.num_overs">
                 </div>
               </td>
             </tr>
@@ -40,7 +40,7 @@
               <td class="others">
                 <div class="form-group">
                   <label for="num_innings">Number of innings per team</label>
-                  <input type="text" class="form-control" id="num_innings" placeholder="eg 1" ng-model="settings.num_innings">
+                  <input type="number" min="1" max="2" class="form-control" id="num_innings" placeholder="eg 1" ng-model="settings.num_innings">
                 </div>
               </td>
             </tr>
@@ -64,8 +64,7 @@
               <td class="others">
                 <div class="form-group">
                   <label for="team_batting_first">Team batting first</label>
-                  <select class="form-control" id="team_batting_first" ng-model="settings.team_batting_first"
-                   ng-options="option.name for option in [ settings.home_team, settings.away_team ] track by option.id"></select>
+                  <select class="form-control" id="team_batting_first" ng-model="settings.team_batting_first" ng-options="option.name for option in [ settings.home_team, settings.away_team ] track by option.id"></select>
                 </div>
               </td>
             </tr>
