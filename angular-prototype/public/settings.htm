@@ -24,7 +24,7 @@
               <td class="others">
                 <div class="form-group">
                   <label for="match_type">Type of match</label>
-                  <input type="text" class="form-control" id="match_type" placeholder="eg Limited Overs" ng-model="settings.match_type">
+                  <select class="form-control" id="match_type" ng-model="settings.match_type" ng-options="option.name for option in settings.match_types track by option.id"></select>
                 </div>
               </td>
             </tr>

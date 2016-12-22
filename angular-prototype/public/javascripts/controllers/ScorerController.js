@@ -97,7 +97,20 @@ angular.module('scorer').controller('ScorerController', ['$scope', '$stateParams
 
     if (!settings) {
       settings = {
-        match_type: 'Limited Overs',
+        match_type: {
+          id: 1,
+          name: 'Limited Overs'
+        },
+        match_types: [{
+          id: 1,
+          name: 'Limited Overs'
+        }, {
+          id: 2,
+          name: 'Timed'
+        }, {
+          id: 3,
+          name: 'Pairs'
+        }],
         num_overs: 40,
         num_innings: 1,
         home_team: 'England',
@@ -118,6 +131,6 @@ angular.module('scorer').controller('ScorerController', ['$scope', '$stateParams
     };
 
     $('#navbar').collapse('hide');
-    
+
   }]);
 // alert('Bang!');
