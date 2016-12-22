@@ -88,5 +88,12 @@ angular.module('scorer').controller('ScorerController', ['$scope', '$stateParams
     };
 
 
+  }])
+  .controller('SettingsController', ['$scope', '$stateParams', '$state', 'Scoreboard', function($scope, $stateParams, $state, Scoreboard) {
+
+    var board = Scoreboard;
+
+  
+
   }]);
 // alert('Bang!');

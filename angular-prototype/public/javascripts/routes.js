@@ -23,7 +23,15 @@ angular.module("scorer", ['ui.router', 'ngResource']).config(function($stateProv
         }
       }
     })
-    ;
+    .state('settings', {
+      'url': '/settings',
+      'views': {
+        'content': {
+          'templateUrl': 'settings.htm',
+          'controller': 'SettingsController'
+        }
+      }
+    });
 
 
 });
