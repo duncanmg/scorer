@@ -117,5 +117,7 @@ angular.module('scorer').controller('ScorerController', ['$scope', '$stateParams
       $state.go('scorer');
     };
 
+    $('#navbar').collapse('hide');
+    
   }]);
 // alert('Bang!');
