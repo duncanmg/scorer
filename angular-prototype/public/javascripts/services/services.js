@@ -184,19 +184,25 @@ angular.module("scorer").factory('Scoreboard', ['Storage', function(Storage) {
 
   return {
     get_scoreboard: function() {
-      var scoreboard;
-      if (sessionStorage.scoreboard) {
-        scoreboard = JSON.parse(sessionStorage.scoreboard);
-      } else {
-        return false;
-      }
-      return scoreboard;
+      return this.get('scoreboard');
     },
     put_scoreboard: function(scoreboard) {
-      sessionStorage.scoreboard = JSON.stringify(scoreboard);
+      this.put('scoreboard', scoreboard);
+      return true;
+    },
+    get: function(key) {
+      var value;
+      try {
+        value = JSON.parse(sessionStorage[key]);
+        return value;
+      } catch (e) {
+        return false;
+      }
+    },
+    put: function(key, value) {
+      sessionStorage[key] = JSON.stringify(value);
       return true;
     }
-
   };
 
 });

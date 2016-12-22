@@ -89,11 +89,33 @@ angular.module('scorer').controller('ScorerController', ['$scope', '$stateParams
 
 
   }])
-  .controller('SettingsController', ['$scope', '$stateParams', '$state', 'Scoreboard', function($scope, $stateParams, $state, Scoreboard) {
+  .controller('SettingsController', ['$scope', '$stateParams', '$state', 'Scoreboard', 'Storage', function($scope, $stateParams, $state, Scoreboard, Storage) {
 
     var board = Scoreboard;
 
-  
+    var settings = Storage.get('settings');
+
+    if (!settings) {
+      settings = {
+        match_type: 'Limited Overs',
+        num_overs: 40,
+        num_innings: 1,
+        home_team: 'England',
+        away_team: 'Australia',
+        team_batting_first: 'England'
+      };
+    }
+
+    $scope.settings = settings;
+
+    $scope.accept = function() {
+      Storage.put('settings', $scope.settings);
+      $state.go('scorer');
+    };
+
+    $scope.reject = function() {
+      $state.go('scorer');
+    };
 
   }]);
 // alert('Bang!');
