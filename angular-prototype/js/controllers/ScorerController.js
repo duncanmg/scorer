@@ -20,7 +20,7 @@ angular.module('scorer').controller('ScorerController', ['$scope', '$stateParams
       this.runs = 0;
       this.extras = 0;
       this.is_clean = function() {
-        return (this.runs == 0 && this.extras == 0) ? true : false;
+        return (this.runs === 0 && this.extras === 0) ? true : false;
       };
       this.runs_up = function() {
         this.runs += 1;
@@ -41,7 +41,7 @@ angular.module('scorer').controller('ScorerController', ['$scope', '$stateParams
       };
       this.add = function() {
         board.add_extra(this);
-      }
+      };
     };
 
     $scope.extras = {};
@@ -71,7 +71,7 @@ angular.module('scorer').controller('ScorerController', ['$scope', '$stateParams
         alert("Please enter just one type of extra.");
         return false;
       }
-      if (count == 0) {
+      if (count === 0) {
         alert("Nothing has been entered.");
         return false;
       }

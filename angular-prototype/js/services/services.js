@@ -1,6 +1,6 @@
-'use strict';
-
 angular.module("scorer").factory('Scoreboard', ['Storage', function(Storage) {
+
+  // 'use strict';
 
   var Batsman = function() {
     this.no = 0;
@@ -29,8 +29,7 @@ angular.module("scorer").factory('Scoreboard', ['Storage', function(Storage) {
         striker: true,
         runs: 20
       },
-      game_over: false,
-      extras: 0
+      game_over: false
     };
   }
 
@@ -40,11 +39,11 @@ angular.module("scorer").factory('Scoreboard', ['Storage', function(Storage) {
 
     change_ends: function(num_runs) {
 
-      if (num_runs % 2 == 0) {
+      if (num_runs % 2 === 0) {
         return true;
       }
 
-      if (this.scoreboard.left_bat.striker == true) {
+      if (this.scoreboard.left_bat.striker === true) {
         this.scoreboard.left_bat.striker = false;
         this.scoreboard.right_bat.striker = true;
       } else {
@@ -53,7 +52,7 @@ angular.module("scorer").factory('Scoreboard', ['Storage', function(Storage) {
       }
     },
     alert_game_over: function() {
-      if (this.scoreboard.game_over == true) {
+      if (this.scoreboard.game_over === true) {
         alert("The innings is over!");
         return true;
       }
@@ -73,6 +72,9 @@ angular.module("scorer").factory('Scoreboard', ['Storage', function(Storage) {
         case 'leg_bye':
           this.scoreboard.balls += 1;
           this.change_ends(1);
+          this.scoreboard.extras += 1;
+          this.scoreboard.total += 1;
+          break;
         case 'no_ball':
         case 'wide':
           this.scoreboard.extras += 1;
@@ -91,7 +93,7 @@ angular.module("scorer").factory('Scoreboard', ['Storage', function(Storage) {
 
       this.save();
     },
-    set_game_over : function() {
+    set_game_over: function() {
       if (this.scoreboard.last_innings > 0 && this.scoreboard.total > this.scoreboard.last_innings) {
         this.scoreboard.game_over = true;
       }
@@ -140,7 +142,7 @@ angular.module("scorer").factory('Scoreboard', ['Storage', function(Storage) {
         this.scoreboard.left_bat.no + 1 :
         this.scoreboard.right_bat.no + 1;
 
-      if (this.scoreboard.left_bat.striker == true) {
+      if (this.scoreboard.left_bat.striker === true) {
         this.scoreboard.left_bat = new Batsman();
         this.scoreboard.left_bat.no = next_batsman_no;
         this.scoreboard.left_bat.striker = true;
