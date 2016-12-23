@@ -8,7 +8,7 @@ var rename = require('gulp-rename');
 
 gulp.task('lint', function()
 {
-   return gulp.src('js/*.js')
+   return gulp.src(['js/*.js','js/controllers/*.js', 'js/services/*.js'])
 
       .pipe(jshint())
 
@@ -30,7 +30,7 @@ gulp.task('scripts', function() {
 });
 
 gulp.task('watch', function() {
-   gulp.watch('js/*.js', ['lint', 'scripts']);
+   gulp.watch(['js/*.js','js/controllers/*.js', 'js/services/*.js'], ['lint', 'scripts']);
 });
 
 gulp.task('default', ['lint', 'scripts', 'watch']);
