@@ -17,68 +17,33 @@ angular.module('scorer').controller('ScorerController', ['$scope', '$stateParams
 
     var others = Others;
 
-
     $scope.others = others;
 
     $scope.accept = function() {
+
       others.accept();
       $state.go('scorer');
     };
 
     $scope.reject = function() {
-      others.reject();
       $state.go('scorer');
     };
 
 
   }])
-  .controller('SettingsController', ['$scope', '$stateParams', '$state', 'Scoreboard', 'Storage', function($scope, $stateParams, $state, Scoreboard, Storage) {
+  .controller('SettingsController', ['$scope', '$stateParams', '$state', 'Scoreboard', 'Storage', 'Settings', function($scope, $stateParams, $state, Scoreboard, Storage, Settings) {
 
-    var board = Scoreboard;
-
-    var settings = Storage.get('settings');
-
-    if (!settings) {
-      settings = {
-        match_type: {
-          id: 1,
-          name: 'Limited Overs'
-        },
-        match_types: [{
-          id: 1,
-          name: 'Limited Overs'
-        }, {
-          id: 2,
-          name: 'Timed'
-        }, {
-          id: 3,
-          name: 'Pairs'
-        }],
-        num_overs: 40,
-        num_innings: 1,
-        home_team: {
-          id: 1,
-          name: 'England'
-        },
-        away_team: {
-          id: 2,
-          name: 'Australia'
-        },
-        team_batting_first: {
-          id: 1,
-          name: 'England'
-        }
-      };
-    }
+    var settings = Settings;
 
     $scope.settings = settings;
 
     $scope.accept = function() {
-      Storage.put('settings', $scope.settings);
+      settings.accept();
       $state.go('scorer');
     };
 
     $scope.reject = function() {
+      settings.reset();
       $state.go('scorer');
     };
 
