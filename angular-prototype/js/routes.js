@@ -1,7 +1,5 @@
-'use strict';
-
 angular.module("scorer", ['ui.router', 'ngResource']).config(function($stateProvider, $urlRouterProvider) {
-
+  'use strict';
   $urlRouterProvider.otherwise('/');
 
   $stateProvider
