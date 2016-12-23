@@ -1,6 +1,6 @@
-'use strict';
-
 angular.module('scorer').controller('ScorerController', ['$scope', '$stateParams', '$state', 'Scoreboard', function($scope, $stateParams, $state, Scoreboard) {
+
+    'use strict';
 
     var board = Scoreboard;
     $scope.scoreboard = board.scoreboard;
