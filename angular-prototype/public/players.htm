@@ -16,13 +16,13 @@
                             <span class="glyphicon glyphicon-remove-circle"></span>
               </button>
             </tr>
-            <tr ng-repeat="player in players">
+            <tr ng-repeat="player in players.players">
               <td class="others">
                 <div class="form-group">
                     <input type="text" class="form-control" id="player_1" placeholder="eg Bradman" ng-model="player.name">
                   <div class="input-group">
-                    <span class="input-group-addon glyphicon glyphicon-arrow-up" ng-click="up(player)"></span>
-                    <span class="input-group-addon glyphicon glyphicon-arrow-down" ng-click="down(player)"></span>
+                    <span class="input-group-addon glyphicon glyphicon-arrow-up" ng-click="players.up(player)"></span>
+                    <span class="input-group-addon glyphicon glyphicon-arrow-down" ng-click="players.down(player)"></span>
                       <span class="input-group-addon glyphicon glyphicon-edit" ng-click="edit(player)"></span>
                   </div>
                 </div>

@@ -1,7 +1,5 @@
 angular.module("scorer").factory('Scoreboard', ['Storage', function(Storage) {
 
-  // 'use strict';
-
   var Batsman = function() {
     this.no = 0;
     this.striker = false;
