@@ -37,6 +37,14 @@ angular.module("scorer", ['ui.router', 'ngResource']).config(function($stateProv
           'controller': 'PlayersController'
         }
       }
+    }).state('edit_player', {
+      'url': '/players/edit/:playerId',
+      'views': {
+        'content': {
+          'templateUrl': 'edit_player.htm',
+          'controller': 'EditPlayerController'
+        }
+      }
     });
 
 
