@@ -29,6 +29,14 @@ angular.module("scorer", ['ui.router', 'ngResource']).config(function($stateProv
           'controller': 'SettingsController'
         }
       }
+    }).state('players', {
+      'url': '/players',
+      'views': {
+        'content': {
+          'templateUrl': 'players.htm',
+          'controller': 'PlayersController'
+        }
+      }
     });
 
 
