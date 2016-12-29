@@ -19,11 +19,11 @@
             <tr ng-repeat="player in players.players">
               <td class="others">
                 <div class="form-group">
-                    <input type="text" class="form-control" id="player_1" placeholder="eg Bradman" ng-model="player.name">
+                  <input type="text" class="form-control" id="player_1" placeholder="eg Bradman" ng-model="player.name">
                   <div class="input-group">
-                    <span class="input-group-addon glyphicon glyphicon-arrow-up" ng-click="players.up(player)"></span>
-                    <span class="input-group-addon glyphicon glyphicon-arrow-down" ng-click="players.down(player)"></span>
-                      <span class="input-group-addon glyphicon glyphicon-edit" ng-click="edit(player)"></span>
+                    <button class="btn btn-default btn-right" ng-click="edit(player)"><span class="glyphicon glyphicon-edit"></span></button>
+                    <button class="btn btn-default btn-right" ng-click="players.down(player)"><span class="glyphicon glyphicon-arrow-down"></span></button>
+                    <button class="btn btn-default btn-right" ng-click="players.up(player)"><span class="glyphicon glyphicon-arrow-up"></span></button>
                   </div>
                 </div>
               </td>
