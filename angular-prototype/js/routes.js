@@ -45,6 +45,14 @@ angular.module("scorer", ['ui.router', 'ngResource']).config(function($stateProv
           'controller': 'EditPlayerController'
         }
       }
+    }).state('new_match', {
+      'url': '/new_match',
+      'views': {
+        'content': {
+          'templateUrl': 'main.htm',
+          'controller': 'NewMatchController'
+        }
+      }
     });
 
 

@@ -9,6 +9,7 @@ angular.module('scorer').controller('ScorerController', ['$scope', '$stateParams
     $scope.go_others = function() {
       $state.go('others');
     };
+
     $('#navbar').collapse('hide');
   }])
   .controller('OthersController', ['$scope', '$stateParams', '$state', 'Scoreboard', 'Others', function($scope, $stateParams, $state, Scoreboard, Others) {
@@ -48,6 +49,12 @@ angular.module('scorer').controller('ScorerController', ['$scope', '$stateParams
     };
 
     $('#navbar').collapse('hide');
+
+  }]).controller('NewMatchController', ['$scope', '$stateParams', '$state', 'Scoreboard', function($scope, $stateParams, $state, Scoreboard) {
+    $('#navbar').collapse('hide');
+    var board = Scoreboard;
+    board.new_match();
+    $state.go('scorer');
 
   }]);
 // alert('Bang!');
