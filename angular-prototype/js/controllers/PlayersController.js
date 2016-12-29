@@ -11,6 +11,16 @@ angular.module('scorer')
       });
     };
 
+    $scope.accept = function() {
+      $scope.players.accept();
+      $state.go('scorer');
+    };
+
+    $scope.reject = function() {
+      $scope.players.reset();
+      $state.go('scorer');
+    };
+
     $('#navbar').collapse('hide');
 
   }]);

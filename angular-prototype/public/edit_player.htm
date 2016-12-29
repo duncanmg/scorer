@@ -12,10 +12,18 @@
               <td class="others">
                 <button type="button" class="btn btn-default btn-left" ng-click="accept()">
                             <span class="glyphicon glyphicon-ok-circle"></span>
-              </button>
+                </button>
                 <button type="button" class="btn btn-default btn-right" ng-click="reject()">
                             <span class="glyphicon glyphicon-remove-circle"></span>
-              </button>
+                </button>
+              </td>
+            </tr>
+            <tr>
+              <td class="others">
+                <div class="form-group">
+                  <label for="batting_no">Batting No.</label>
+                  <input type="number" min="1" max="11" class="form-control" id="batting_no" placeholder="eg Bradman" ng-model="player.batting_no">
+                </div>
               </td>
             </tr>
             <tr>
