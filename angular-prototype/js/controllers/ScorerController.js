@@ -9,7 +9,7 @@ angular.module('scorer').controller('ScorerController', ['$scope', '$stateParams
     $scope.go_others = function() {
       $state.go('others');
     };
-
+    $('#navbar').collapse('hide');
   }])
   .controller('OthersController', ['$scope', '$stateParams', '$state', 'Scoreboard', 'Others', function($scope, $stateParams, $state, Scoreboard, Others) {
 
@@ -28,7 +28,7 @@ angular.module('scorer').controller('ScorerController', ['$scope', '$stateParams
     $scope.reject = function() {
       $state.go('scorer');
     };
-
+    $('#navbar').collapse('hide');
 
   }])
   .controller('SettingsController', ['$scope', '$stateParams', '$state', 'Scoreboard', 'Storage', 'Settings', function($scope, $stateParams, $state, Scoreboard, Storage, Settings) {
