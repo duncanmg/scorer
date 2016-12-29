@@ -7,29 +7,29 @@ angular.module("scorer").factory('Scoreboard', ['Storage', function(Storage) {
   };
 
   var initial_scoreboard = Storage.get_scoreboard();
-  var blank_scoreboard = {
-    total: 0,
-    wickets: 0,
-    extras: 0,
-    last_innings: 0,
-    overs: 0,
-    balls: 0,
-    overs_and_balls: 0,
-    left_bat: {
+  var blank_scoreboard = function() {
+    this.total = 0;
+    this.wickets = 0;
+    this.extras = 0;
+    this.last_innings = 0;
+    this.overs = 0;
+    this.balls = 0;
+    this.overs_and_balls = 0;
+    this.left_bat = {
       no: 1,
       striker: true,
       runs: 0
-    },
-    right_bat: {
+    };
+    this.right_bat = {
       no: 2,
       striker: false,
       runs: 0
-    },
-    game_over: false
+    };
+    this.game_over = false;
   };
 
   if (!initial_scoreboard) {
-    initial_scoreboard = new blank_scoreboard;
+    initial_scoreboard = new blank_scoreboard();
   }
 
   var Scoreboard = {
