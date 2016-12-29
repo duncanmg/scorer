@@ -46,8 +46,8 @@ angular.module("scorer").factory('Players', ['Storage', function(Storage) {
         if (this.players[i].id == player.id) {
           return i;
         }
-        return -1;
       }
+      return -1;
     },
 
     up: function(player) {
