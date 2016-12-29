@@ -1,6 +1,4 @@
-angular.module("scorer").factory('Settings', ['Scoreboard', 'Storage', function(Scoreboard, Storage) {
-
-  var board = Scoreboard;
+angular.module("scorer").factory('Settings', ['Storage', '$rootScope', function(Storage, $rootScope) {
 
   var get_settings = function() {
     var settings = Storage.get('settings');
@@ -47,6 +45,8 @@ angular.module("scorer").factory('Settings', ['Scoreboard', 'Storage', function(
     },
     'accept': function() {
       Storage.put('settings', this.settings);
+      $rootScope.$broadcast('settings_changed', this.settings );
+      alert(9);
     }
   };
 

@@ -1,4 +1,4 @@
-angular.module("scorer").factory('Scoreboard', ['Storage', function(Storage) {
+angular.module("scorer").factory('Scoreboard', ['Storage', 'Settings', '$rootScope', function(Storage, Settings, $rootScope) {
 
   var Batsman = function() {
     this.no = 0;
@@ -26,6 +26,13 @@ angular.module("scorer").factory('Scoreboard', ['Storage', function(Storage) {
       runs: 0
     };
     this.game_over = false;
+    this.num_overs = function() {
+      alert(Settings.settings.match_type.name);
+      if (Settings.settings.match_type.id == 1) {
+        return Settings.settings.num_overs;
+      }
+      return false;
+    }();
   };
 
   if (!initial_scoreboard) {
@@ -99,6 +106,11 @@ angular.module("scorer").factory('Scoreboard', ['Storage', function(Storage) {
       if (this.scoreboard.wickets >= 10) {
         this.scoreboard.game_over = true;
       }
+      // alert(this.scoreboard.num_overs + ' : ' + this.scoreboard.overs);
+      if (this.scoreboard.num_overs && this.scoreboard.overs >= this.scoreboard.num_overs) {
+        this.scoreboard.game_over = true;
+      }
+
       return this.scoreboard.game_over;
     },
     over: function() {
@@ -193,10 +205,16 @@ angular.module("scorer").factory('Scoreboard', ['Storage', function(Storage) {
     },
     new_match: function() {
       Storage.put_scoreboard(blank_scoreboard);
-      this.scoreboard = blank_scoreboard;
+      this.scoreboard = new blank_scoreboard();
     }
 
   };
+
+  $rootScope.$on('settings_changed', function(event, args) {
+    Scoreboard.scoreboard.num_overs = args.num_overs;
+    // alert('Hi '+ Scoreboard.scoreboard.num_overs);
+  });
+
   return Scoreboard;
 
 }]).factory('Storage', function() {
