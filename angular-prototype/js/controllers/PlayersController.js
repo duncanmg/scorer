@@ -4,6 +4,9 @@ angular.module('scorer')
     'use strict';
 
     $scope.players = Players;
+    // alert(JSON.stringify($stateParams));
+    $scope.players.set_team($stateParams.team); // "home" or "away"
+    $scope.players.reset();
 
     $scope.edit = function(player) {
       $state.go('edit_player', {

@@ -30,7 +30,7 @@ angular.module("scorer", ['ui.router', 'ngResource']).config(function($stateProv
         }
       }
     }).state('players', {
-      'url': '/players',
+      'url': '/players/:team',
       'views': {
         'content': {
           'templateUrl': 'players.htm',

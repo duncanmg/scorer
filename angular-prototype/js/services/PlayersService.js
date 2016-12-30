@@ -143,7 +143,7 @@ angular.module("scorer").factory('Players', ['Storage', function(Storage) {
       }
       //alert(player.batting_no +
       //  ' != ' + (i + 1));
-      if (player.batting_no != i+1) {
+      if (player.batting_no != i + 1) {
         //alert("Change");
         this.players.splice(i, 1);
         //alert("Removed item "+i);
@@ -153,7 +153,7 @@ angular.module("scorer").factory('Players', ['Storage', function(Storage) {
       } else {
         this.players[i] = player;
       }
-      Storage.put('players', this.players);
+      Storage.put(this.team, this.players);
       this.reset();
     },
     renumber: function() {
@@ -171,14 +171,21 @@ angular.module("scorer").factory('Players', ['Storage', function(Storage) {
       });
     },
     reset: function() {
-      var p = Storage.get('players');
-      // alert(JSON.stringify(p));
-      this.players = p ? p : players;
-      this.sort_by_batting_no();
-      this.renumber();
+      // alert("reset: "+this.team);
+      if (this.team) {
+        var p = Storage.get(this.team);
+        // alert(JSON.stringify(p));
+        this.players = p ? p : this.team == "home" ? home_players : away_players;
+        this.sort_by_batting_no();
+        this.renumber();
+      }
     },
-    accept:function(){
-      Storage.put('players', this.players);
+    accept: function() {
+      Storage.put(this.team, this.players);
+    },
+    set_team: function(team) {
+      // alert(team);
+      this.team = team;
     }
   };
 
