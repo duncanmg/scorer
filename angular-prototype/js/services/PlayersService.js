@@ -2,7 +2,7 @@ angular.module("scorer").factory('Players', ['Storage', function(Storage) {
 
   'use strict';
 
-  var players = [{
+  var home_players = [{
     id: 1,
     name: 'Alastair Cook',
     batting_no: 1
@@ -45,6 +45,52 @@ angular.module("scorer").factory('Players', ['Storage', function(Storage) {
   }, {
     id: 11,
     name: 'Jimmy Anderson',
+    batting_no: 11
+  }];
+
+  var away_players = [{
+    id: 12,
+    name: 'M.T.Renshaw',
+    batting_no: 1
+  }, {
+    id: 13,
+    name: 'D.A.Warner',
+    batting_no: 2
+  }, {
+    id: 14,
+    name: 'U.T.Khawaja',
+    batting_no: 3
+  }, {
+    id: 15,
+    name: 'S.P.D.Smith',
+    batting_no: 4
+  }, {
+    id: 16,
+    name: 'P.S.P.Handscomb',
+    batting_no: 5
+  }, {
+    id: 17,
+    name: 'N.J.Maddinson',
+    batting_no: 6
+  }, {
+    id: 18,
+    name: 'M.S.Wade',
+    batting_no: 7
+  }, {
+    id: 19,
+    name: 'M.A.Starc',
+    batting_no: 8
+  }, {
+    id: 20,
+    name: 'N.M.Lyon',
+    batting_no: 9
+  }, {
+    id: 21,
+    name: 'J.R.Hazlewood',
+    batting_no: 10
+  }, {
+    id: 22,
+    name: 'J.M.Bird',
     batting_no: 11
   }];
 
