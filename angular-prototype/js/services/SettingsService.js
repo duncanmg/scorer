@@ -46,7 +46,7 @@ angular.module("scorer").factory('Settings', ['Storage', '$rootScope', function(
     'accept': function() {
       Storage.put('settings', this.settings);
       $rootScope.$broadcast('settings_changed', this.settings );
-      alert(9);
+      // alert(9);
     }
   };
 
