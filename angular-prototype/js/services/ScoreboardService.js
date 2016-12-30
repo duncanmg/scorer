@@ -12,6 +12,7 @@ angular.module("scorer").factory('Scoreboard', ['Storage', 'Settings', '$rootSco
     this.wickets = 0;
     this.extras = 0;
     this.last_innings = 0;
+    this.target = 0;
     this.overs = 0;
     this.balls = 0;
     this.overs_and_balls = 0;
@@ -27,12 +28,13 @@ angular.module("scorer").factory('Scoreboard', ['Storage', 'Settings', '$rootSco
     };
     this.game_over = false;
     this.num_overs = function() {
-      alert(Settings.settings.match_type.name);
+      // alert(Settings.settings.match_type.name);
       if (Settings.settings.match_type.id == 1) {
         return Settings.settings.num_overs;
       }
       return false;
     }();
+    this.innings_no = 1;
   };
 
   if (!initial_scoreboard) {
@@ -59,7 +61,15 @@ angular.module("scorer").factory('Scoreboard', ['Storage', 'Settings', '$rootSco
     },
     alert_game_over: function() {
       if (this.scoreboard.game_over === true) {
+        alert("The game is over!");
+        return true;
+      }
+      return this.alert_innings_over();
+    },
+    alert_innings_over: function() {
+      if (this.scoreboard.game_over === false && this.scoreboard.innings_over === true) {
         alert("The innings is over!");
+        this.new_innings();
         return true;
       }
       return false;
@@ -100,18 +110,25 @@ angular.module("scorer").factory('Scoreboard', ['Storage', 'Settings', '$rootSco
       this.save();
     },
     set_game_over: function() {
+      this.set_innings_over();
       if (this.scoreboard.last_innings > 0 && this.scoreboard.total > this.scoreboard.last_innings) {
         this.scoreboard.game_over = true;
       }
-      if (this.scoreboard.wickets >= 10) {
+      if (this.scoreboard.innings_over && this.scoreboard.innings_no > 1) {
         this.scoreboard.game_over = true;
       }
-      // alert(this.scoreboard.num_overs + ' : ' + this.scoreboard.overs);
+    },
+    set_innings_over: function() {
+      if (this.scoreboard.wickets >= 10) {
+        this.scoreboard.innings_over = true;
+      }
+      //alert(this.scoreboard.num_overs + ' : ' + this.scoreboard.overs);
       if (this.scoreboard.num_overs && this.scoreboard.overs >= this.scoreboard.num_overs) {
-        this.scoreboard.game_over = true;
+        //alert(1);
+        this.scoreboard.innings_over = true;
       }
 
-      return this.scoreboard.game_over;
+      return this.scoreboard.innings_over;
     },
     over: function() {
       if (this.scoreboard.balls >= 6) {
@@ -204,10 +221,17 @@ angular.module("scorer").factory('Scoreboard', ['Storage', 'Settings', '$rootSco
       Storage.put_scoreboard(this.scoreboard);
     },
     new_match: function() {
-      Storage.put_scoreboard(blank_scoreboard);
       this.scoreboard = new blank_scoreboard();
+      Storage.put_scoreboard(this.scoreboard);
+    },
+    new_innings: function() {
+      Storage.put('last_innings', this.scoreboard);
+      var last_innings_runs = this.scoreboard.total;
+      this.new_match();
+      this.scoreboard.last_innings = last_innings_runs;
+      this.scoreboard.target = last_innings_runs + 1;
+      this.scoreboard.innings_no += 1;
     }
-
   };
 
   $rootScope.$on('settings_changed', function(event, args) {
