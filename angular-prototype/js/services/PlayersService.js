@@ -1,4 +1,4 @@
-angular.module("scorer").factory('Players', ['Storage', function(Storage) {
+angular.module("scorer").factory('Players', ['Storage', '$rootScope', function(Storage, $rootScope) {
 
   'use strict';
 
@@ -182,6 +182,14 @@ angular.module("scorer").factory('Players', ['Storage', function(Storage) {
     },
     accept: function() {
       Storage.put(this.team, this.players);
+      // alert('put '+this.team+' '+JSON.stringify(this.players));
+      this.broadcast_players();
+    },
+    broadcast_players: function() {
+      $rootScope.$broadcast('players_changed', {
+        'home_players': Storage.get('home'),
+        'away_players': Storage.get('away')
+      });
     },
     set_team: function(team) {
       // alert(team);
@@ -189,8 +197,14 @@ angular.module("scorer").factory('Players', ['Storage', function(Storage) {
     }
   };
 
+  obj.set_team('home');
   obj.reset();
+  obj.accept();
+  obj.set_team('away');
+  obj.reset();
+  obj.accept();
 
+  //alert('Here');
   return obj;
 
 }]);

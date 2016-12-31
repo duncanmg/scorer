@@ -1,4 +1,4 @@
-angular.module("scorer").factory('Scoreboard', ['Storage', 'Settings', '$rootScope', function(Storage, Settings, $rootScope) {
+angular.module("scorer").factory('Scoreboard', ['Storage', 'Settings', '$rootScope', 'Players', function(Storage, Settings, $rootScope, Players) {
 
   var Batsman = function() {
     this.no = 0;
@@ -231,6 +231,29 @@ angular.module("scorer").factory('Scoreboard', ['Storage', 'Settings', '$rootSco
       this.scoreboard.last_innings = last_innings_runs;
       this.scoreboard.target = last_innings_runs + 1;
       this.scoreboard.innings_no += 1;
+    },
+    set_batsmen_details: function() {
+      // alert('x');
+      var check = function(batsman, players) {
+        // alert('check ' + players.length);
+        for (var i = 0; i < players.length; i++) {
+          // alert(i);
+          // alert(batsman.no);
+          // alert(batsman.no + ' == ' + players[i].batting_no);
+          if (batsman.no == players[i].batting_no) {
+            batsman.name = players[i].name;
+            batsman.id = players[i].id;
+            batsman.description = players[i].description;
+            return batsman;
+          }
+          return false;
+        }
+
+      };
+
+      this.left_bat = check(this.scoreboard.left_bat, this.home_players);
+      // alert(JSON.stringify(this.left_bat));
+      this.right_bat = check(this.scoreboard.right_bat, this.home_players);
     }
   };
 
@@ -238,6 +261,15 @@ angular.module("scorer").factory('Scoreboard', ['Storage', 'Settings', '$rootSco
     Scoreboard.scoreboard.num_overs = args.num_overs;
     // alert('Hi '+ Scoreboard.scoreboard.num_overs);
   });
+
+  $rootScope.$on('players_changed', function(event, args) {
+    Scoreboard.home_players = args.home_players;
+    Scoreboard.away_players = args.away_players;
+    Scoreboard.set_batsmen_details();
+  });
+
+  Players.broadcast_players();
+  // alert(JSON.stringify(Players));
 
   return Scoreboard;
 
