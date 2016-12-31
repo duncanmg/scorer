@@ -38,6 +38,7 @@ angular.module("scorer").factory('Scoreboard', ['Storage', 'Settings', '$rootSco
       return false;
     }();
     this.innings_no = 1;
+    this.batting_team = "home";
   };
 
   if (!initial_scoreboard) {
@@ -227,6 +228,7 @@ angular.module("scorer").factory('Scoreboard', ['Storage', 'Settings', '$rootSco
     new_match: function() {
       this.scoreboard = new blank_scoreboard();
       Storage.put_scoreboard(this.scoreboard);
+      this.set_batsmen_details();
     },
     new_innings: function() {
       Storage.put('last_innings', this.scoreboard);
@@ -235,15 +237,13 @@ angular.module("scorer").factory('Scoreboard', ['Storage', 'Settings', '$rootSco
       this.scoreboard.last_innings = last_innings_runs;
       this.scoreboard.target = last_innings_runs + 1;
       this.scoreboard.innings_no += 1;
+      this.scoreboard.batting_team = this.scoreboard.batting_team == "home" ? "away" : "home";
+      this.set_batsmen_details();
     },
     set_batsmen_details: function() {
-      // alert('x');
+
       var check = function(batsman, players) {
-        // alert('check ' + players.length);
         for (var i = 0; i < players.length; i++) {
-          // alert(i);
-          // alert(batsman.no);
-          // alert(batsman.no + ' == ' + players[i].batting_no);
           if (batsman.no == players[i].batting_no) {
             batsman.name = players[i].name;
             batsman.id = players[i].id;
@@ -254,9 +254,12 @@ angular.module("scorer").factory('Scoreboard', ['Storage', 'Settings', '$rootSco
         return false;
       };
 
-      this.left_bat = check(this.scoreboard.left_bat, this.home_players);
+      // alert(this.scoreboard.batting_team);
+      var players = this.scoreboard.batting_team == "home" ? this.home_players : this.away_players;
+
+      this.left_bat = check(this.scoreboard.left_bat, players);
+      this.right_bat = check(this.scoreboard.right_bat, players);
       // alert(JSON.stringify(this.scoreboard.right_bat));
-      this.right_bat = check(this.scoreboard.right_bat, this.home_players);
 
     }
   };
