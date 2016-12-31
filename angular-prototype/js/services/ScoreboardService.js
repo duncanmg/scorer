@@ -26,6 +26,9 @@ angular.module("scorer").factory('Scoreboard', ['Storage', 'Settings', '$rootSco
       striker: false,
       runs: 0
     };
+    this.bowler = {
+      name: "Jimmy Anderson"
+    };
     this.game_over = false;
     this.num_overs = function() {
       // alert(Settings.settings.match_type.name);
