@@ -180,6 +180,7 @@ angular.module("scorer").factory('Scoreboard', ['Storage', 'Settings', '$rootSco
         this.scoreboard.right_bat.no = next_batsman_no;
         this.scoreboard.right_bat.striker = true;
       }
+      this.set_batsmen_details();
       this.save();
     },
 
@@ -246,14 +247,14 @@ angular.module("scorer").factory('Scoreboard', ['Storage', 'Settings', '$rootSco
             batsman.description = players[i].description;
             return batsman;
           }
-          return false;
         }
-
+        return false;
       };
 
       this.left_bat = check(this.scoreboard.left_bat, this.home_players);
-      // alert(JSON.stringify(this.left_bat));
+      // alert(JSON.stringify(this.scoreboard.right_bat));
       this.right_bat = check(this.scoreboard.right_bat, this.home_players);
+
     }
   };
 

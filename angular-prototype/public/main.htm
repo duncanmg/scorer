@@ -10,24 +10,30 @@
           <tr>
             <td class="sb1" ng-bind="board.scoreboard.left_bat.no"></td>
             <td class="sb2">
-              <span class="hidden-md hidden-lg" data-toggle="modal" data-target="#left_bat_modal">BT</span>
-              <span class="hidden-xs hidden-sm" data-toggle="modal" data-target="#left_bat_modal">Batsman</span>
+              <span class="hidden-md hidden-lg has_modal" data-toggle="modal" data-target="#left_bat_modal">BT</span>
+              <span class="hidden-xs hidden-sm has_modal" data-toggle="modal" data-target="#left_bat_modal">Batsman</span>
               <span ng-if="board.scoreboard.left_bat.striker">*</span>
-              <div class="slide-animate" ng-include="'../left_bat_modal.htm'"></div></div>
+              <div class="slide-animate" ng-include="'../left_bat_modal.htm'"></div>
             </td>
             <td class="sb3"><span class="hidden-md hidden-lg">Total</span><span class="hidden-xs hidden-sm">Total</span></td>
-            <td class="sb4"><span class="hidden-md hidden-lg">BT</span><span class="hidden-xs hidden-sm">Batsman</span> <span ng-if="board.scoreboard.right_bat.striker">*</span></td>
+            <td class="sb4">
+              <span class="hidden-md hidden-lg has_modal" data-toggle="modal" data-target="#right_bat_modal">BT</span>
+              <span class="hidden-xs hidden-sm has_modal" data-toggle="modal" data-target="#right_bat_modal">Batsman</span>
+              <span ng-if="board.scoreboard.right_bat.striker">*</span>
+              <div class="slide-animate" ng-include="'../right_bat_modal.htm'"></div>
+            </td>
             <td class="sb5" ng-bind="board.scoreboard.right_bat.no"></td>
           </tr>
           <tr>
-            <td class="sb1" >&nbsp;</td>
+            <td class="sb1">&nbsp;</td>
             <td class="sb2" ng-bind="board.scoreboard.left_bat.runs"></td>
             <td class="sb3" ng-bind="board.scoreboard.total"></td>
             <td class="sb4" ng-bind="board.scoreboard.right_bat.runs"></td>
             <td class="sb5">&nbsp;</td>
           </tr>
           <tr>
-            <td class="sb1"><span class="hidden-md hidden-lg">Ov</span><span class="hidden-xs hidden-sm">Overs</span> </td>
+            <td class="sb1">
+              <span class="hidden-md hidden-lg">Ov</span><span class="hidden-xs hidden-sm">Overs</span> </td>
             <td class="sb2">&nbsp;</td>
             <td class="sb3"><span class="hidden-md hidden-lg">Wkts</span><span class="hidden-xs hidden-sm">Wickets</span></td>
             <td class="sb4">&nbsp;</td>

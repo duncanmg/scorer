@@ -63,6 +63,10 @@ td {
   cursor: pointer;
 }
 
+.has_modal {
+  cursor: pointer;
+}
+
 .others td {
   width: 76px;
 }
