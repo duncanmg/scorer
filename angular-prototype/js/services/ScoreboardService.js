@@ -63,6 +63,11 @@ angular.module("scorer").factory('Scoreboard', ['Storage', 'Settings', '$rootSco
         this.scoreboard.right_bat.striker = false;
       }
     },
+    change_bowlers: function() {
+      var tmp = this.scoreboard.bowler;
+      this.scoreboard.bowler = this.scoreboard.next_bowler;
+      this.scoreboard.next_bowler = tmp;
+    },
     alert_game_over: function() {
       if (this.scoreboard.game_over === true) {
         alert("The game is over!");
@@ -151,6 +156,7 @@ angular.module("scorer").factory('Scoreboard', ['Storage', 'Settings', '$rootSco
         this.scoreboard.overs += 1;
         this.scoreboard.overs_and_balls = this.scoreboard.overs;
         this.change_ends();
+        this.change_bowlers();
       } else {
         this.scoreboard.overs_and_balls = this.scoreboard.overs + '.' + this.scoreboard.balls;
       }
@@ -259,6 +265,8 @@ angular.module("scorer").factory('Scoreboard', ['Storage', 'Settings', '$rootSco
             batsman.name = players[i].name;
             batsman.id = players[i].id;
             batsman.description = players[i].description;
+            batsman.bowling = players[i].bowling;
+            batsman.bowler = players[i].bowler;
             return batsman;
           }
         }
@@ -272,7 +280,52 @@ angular.module("scorer").factory('Scoreboard', ['Storage', 'Settings', '$rootSco
       this.right_bat = check(this.scoreboard.right_bat, players);
       // alert(JSON.stringify(this.scoreboard.right_bat));
 
+    },
+    set_bowler_details: function() {
+
+      var get_bowlers = function(players) {
+        var bowling = [];
+        for (var i = 0; i < players.length; i++) {
+          if (players[i].bowling) {
+            bowling.push(players[i]);
+          }
+        }
+        return bowling;
+      };
+
+      var is_bowling = function(bowlers, bowler) {
+        for (var i = 0; i < bowlers.length; i++) {
+          if (bowlers[i].id == bowler.id) {
+            return bowlers[i];
+          }
+        }
+        return false;
+      };
+
+      var set_bowler = function(bowlers, bowler) {
+
+        if (!bowlers.length) {
+          return {};
+        }
+
+        if (!bowler.id) {
+          return bowlers.shift();
+        } else if (!is_bowling(bowlers, bowler)) {
+          return {};
+        } else {
+          return bowlers[0].id == bowler.id ? bowlers.shift() : bowlers.pop();
+        }
+        return bowler;
+      };
+
+      var bowling_team = this.scoreboard.batting_team == "home" ? this.away_players : this.home_players;
+      var bowlers = get_bowlers(bowling_team);
+
+      this.scoreboard.bowler = set_bowler(bowlers, this.scoreboard.bowler);
+
+      this.scoreboard.next_bowler = set_bowler(bowlers, this.scoreboard.next_bowler);
     }
+
   };
 
   $rootScope.$on('settings_changed', function(event, args) {
@@ -284,6 +337,7 @@ angular.module("scorer").factory('Scoreboard', ['Storage', 'Settings', '$rootSco
     Scoreboard.home_players = args.home_players;
     Scoreboard.away_players = args.away_players;
     Scoreboard.set_batsmen_details();
+    Scoreboard.set_bowler_details();
   });
 
   Players.broadcast_players();

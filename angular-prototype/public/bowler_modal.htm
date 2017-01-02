@@ -11,10 +11,13 @@
           <span aria-hidden="true">&times;</span>
         </button>
         <h4 class="modal-title" id="myModalLabel">{{ board.scoreboard.bowler.name }}</h4>
-      </div>
-      <div class="modal-body">
         {{ board.scoreboard.bowler.description }}
+        <h5 class="modal-title" id="myModalLabel">{{ board.scoreboard.next_bowler.name }}</h5>
+        {{ board.scoreboard.next_bowler.description }}
       </div>
+    <!-- <div class="modal-body">
+
+      </div> -->
     </div>
   </div>
 </div>
