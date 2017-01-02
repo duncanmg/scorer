@@ -7,6 +7,9 @@ angular.module('scorer').controller('ScorerController', ['$scope', '$stateParams
     $scope.board = board;
 
     $scope.go_others = function() {
+      if ($scope.board.alert_no_bowler()) {
+        return false;
+      }
       $state.go('others');
     };
 

@@ -4,6 +4,8 @@ angular.module("scorer").factory('Scoreboard', ['Storage', 'Settings', '$rootSco
     this.no = 0;
     this.striker = false;
     this.runs = 0;
+    this.bowler = false;
+    this.bowling = false;
   };
 
   var initial_scoreboard = Storage.get_scoreboard();
@@ -26,9 +28,7 @@ angular.module("scorer").factory('Scoreboard', ['Storage', 'Settings', '$rootSco
       striker: false,
       runs: 0
     };
-    this.bowler = {
-      name: "Jimmy Anderson"
-    };
+    this.bowler = {};
     this.game_over = false;
     this.num_overs = function() {
       // alert(Settings.settings.match_type.name);
@@ -78,9 +78,20 @@ angular.module("scorer").factory('Scoreboard', ['Storage', 'Settings', '$rootSco
       }
       return false;
     },
+    alert_no_bowler: function() {
+      if (!this.scoreboard.bowler.name) {
+        alert("Please select a bowler.");
+        return true;
+      }
+      return false;
+    },
     bowls: function(type, runs) {
 
       if (this.alert_game_over()) {
+        return false;
+      }
+
+      if (this.alert_no_bowler()) {
         return false;
       }
 
