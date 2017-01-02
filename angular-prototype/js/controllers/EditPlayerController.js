@@ -14,6 +14,18 @@ angular.module('scorer')
       }
     }
 
+    $scope.toggle_bowling = function(player) {
+      if (player.bowling) {
+        Players.stop_bowling(player);
+      } else {
+        if (!Players.start_bowling(player)) {
+          alert("You already have two bowlers");
+          return false;
+        }
+      }
+      return true;
+    };
+
     $scope.accept = function() {
       //alert($scope.player.id);
       Players.save($scope.player);

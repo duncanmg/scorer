@@ -21,14 +21,6 @@
             <tr>
               <td class="others">
                 <div class="form-group">
-                  <label for="batting_no">Batting No.</label>
-                  <input type="number" min="1" max="11" class="form-control" id="batting_no" placeholder="eg Bradman" ng-model="player.batting_no">
-                </div>
-              </td>
-            </tr>
-            <tr>
-              <td class="others">
-                <div class="form-group">
                   <label for="name">Name</label>
                   <input type="text" class="form-control" id="name" placeholder="eg Bradman" ng-model="player.name">
                 </div>
@@ -39,6 +31,17 @@
                 <div class="form-group">
                   <label for="description">Description</label>
                   <textarea class="form-control" id="description" placeholder="eg Jolly green giant" ng-model="player.description" rows="3"></textarea>
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <td class="others">
+                <div class="form-group">
+                  <div class="input-group">
+                    <button class="btn btn-default btn-left" ng-click="toggle_bowling(player)" ng-disabled="player.bowling">Start Bowling</span></button>
+                    <button class="btn btn-default btn-left" ng-click="toggle_bowling(player)" ng-disabled="! player.bowling">Stop Bowling</span></button>
+                    <!--<button class="btn btn-default btn-right" ng-click="players.up(player)"><span class="glyphicon glyphicon-arrow-up"></span></button>-->
+                  </div>
                 </div>
               </td>
             </tr>

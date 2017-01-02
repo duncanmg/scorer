@@ -170,6 +170,45 @@ angular.module("scorer").factory('Players', ['Storage', '$rootScope', function(S
         return a.batting_no - b.batting_no;
       });
     },
+    start_bowling: function(player) {
+      var bowling = this.get_bowling();
+      if (bowling.length >= 2) {
+        return false;
+      }
+      var i = this.lookup(player);
+      if (i >= 0) {
+        this.players[i].bowler = true;
+        this.players[i].bowling = true;
+      }
+      return true;
+    },
+    stop_bowling: function(player) {
+      var i = this.lookup(player);
+      if (i >= 0) {
+        this.players[i].bowling = false;
+        return true;
+      }
+      return false;
+    },
+    get_bowlers: function() {
+      var bowlers = [];
+      for (var i = 0; i < this.players.length; i++) {
+        if (this.players[i].bowler) {
+          bowlers.push(this.players[i]);
+        }
+      }
+      return bowlers;
+    },
+    get_bowling: function() {
+      var bowlers = this.get_bowlers();
+      var bowling = [];
+      for (var i = 0; i < bowlers.length; i++) {
+        if (bowlers[i].bowling) {
+          bowling.push(bowlers[i]);
+        }
+      }
+      return bowling;
+    },
     reset: function() {
       // alert("reset: "+this.team);
       if (this.team) {
