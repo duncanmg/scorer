@@ -233,6 +233,15 @@ angular.module("scorer").factory('Players', ['Storage', '$rootScope', function(S
     set_team: function(team) {
       // alert(team);
       this.team = team;
+    },
+    clear_bowlers: function(team) {
+      var players = Storage.get(team);
+      for (var i = 0; i < players.length; i++) {
+        players[i].bowling = false;
+        players[i].bowler = false;
+      }
+      Storage.put(team, players);
+      this.broadcast_players();
     }
   };
 

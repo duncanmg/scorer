@@ -23,15 +23,18 @@ angular.module("scorer").factory('Settings', ['Storage', '$rootScope', function(
         num_innings: 1,
         home_team: {
           id: 1,
-          name: 'England'
+          name: 'England',
+          home_away: 'home'
         },
         away_team: {
           id: 2,
-          name: 'Australia'
+          name: 'Australia',
+          home_away: 'away'
         },
         team_batting_first: {
           id: 1,
-          name: 'England'
+          name: 'England',
+          home_away: 'home'
         }
       };
     }
@@ -42,10 +45,11 @@ angular.module("scorer").factory('Settings', ['Storage', '$rootScope', function(
     'settings': {},
     'reset': function() {
       this.settings = get_settings();
+      $rootScope.$broadcast('settings_changed', this.settings);
     },
     'accept': function() {
       Storage.put('settings', this.settings);
-      $rootScope.$broadcast('settings_changed', this.settings );
+      $rootScope.$broadcast('settings_changed', this.settings);
       // alert(9);
     }
   };

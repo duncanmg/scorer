@@ -38,7 +38,7 @@ angular.module("scorer").factory('Scoreboard', ['Storage', 'Settings', '$rootSco
       return false;
     }();
     this.innings_no = 1;
-    this.batting_team = "home";
+    this.batting_team = Settings.settings.team_batting_first.home_away;
   };
 
   if (!initial_scoreboard) {
@@ -246,6 +246,8 @@ angular.module("scorer").factory('Scoreboard', ['Storage', 'Settings', '$rootSco
       this.scoreboard = new blank_scoreboard();
       Storage.put_scoreboard(this.scoreboard);
       this.set_batsmen_details();
+      Players.clear_bowlers('home');
+      Players.clear_bowlers('away');
     },
     new_innings: function() {
       Storage.put('last_innings', this.scoreboard);
@@ -256,6 +258,15 @@ angular.module("scorer").factory('Scoreboard', ['Storage', 'Settings', '$rootSco
       this.scoreboard.innings_no += 1;
       this.scoreboard.batting_team = this.scoreboard.batting_team == "home" ? "away" : "home";
       this.set_batsmen_details();
+    },
+    set_batting_team: function(batting_team) {
+      if (batting_team != this.scoreboard.batting_team) {
+        this.scoreboard.batting_team = batting_team;
+        this.set_batsmen_details();
+        //alert("About to set_bowler_details");
+        this.set_bowler_details();
+        //alert("Done");
+      }
     },
     set_batsmen_details: function() {
 
@@ -331,6 +342,7 @@ angular.module("scorer").factory('Scoreboard', ['Storage', 'Settings', '$rootSco
   $rootScope.$on('settings_changed', function(event, args) {
     Scoreboard.scoreboard.num_overs = args.num_overs;
     // alert('Hi '+ Scoreboard.scoreboard.num_overs);
+    Scoreboard.set_batting_team(args.team_batting_first.home_away);
   });
 
   $rootScope.$on('players_changed', function(event, args) {
