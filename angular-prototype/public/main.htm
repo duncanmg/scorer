@@ -1,0 +1,96 @@
+<div class="row">
+  <div class="col-sm-2 col-md-2 main hidden-xs hidden-sm">&nbsp;</div>
+  <div class="col-sm-8 col-md-8 scoreboard">
+    <h2 class="sub-header hidden-xs hidden-sm">Scoreboard</h2>
+    <h5 class="sub-header visible-xs-* visible-sm-* hidden-md hidden-lg">Scoreboard</h5>
+    <div class="table-responsive">
+      <table class="table table-small">
+
+        <tbody>
+          <tr>
+            <td class="sb1" ng-bind="board.scoreboard.left_bat.no"></td>
+            <td class="sb2">
+              <span class="hidden-md hidden-lg has_modal" data-toggle="modal" data-target="#left_bat_modal">BT</span>
+              <span class="hidden-xs hidden-sm has_modal" data-toggle="modal" data-target="#left_bat_modal">Batsman</span>
+              <span ng-if="board.scoreboard.left_bat.striker">*</span>
+              <div class="slide-animate" ng-include="'../left_bat_modal.htm'"></div>
+            </td>
+            <td class="sb3"><span class="hidden-md hidden-lg">Total</span><span class="hidden-xs hidden-sm">Total</span></td>
+            <td class="sb4">
+              <span class="hidden-md hidden-lg has_modal" data-toggle="modal" data-target="#right_bat_modal">BT</span>
+              <span class="hidden-xs hidden-sm has_modal" data-toggle="modal" data-target="#right_bat_modal">Batsman</span>
+              <span ng-if="board.scoreboard.right_bat.striker">*</span>
+              <div class="slide-animate" ng-include="'../right_bat_modal.htm'"></div>
+            </td>
+            <td class="sb5" ng-bind="board.scoreboard.right_bat.no"></td>
+          </tr>
+          <tr>
+            <td class="sb1">&nbsp;</td>
+            <td class="sb2" ng-bind="board.scoreboard.left_bat.runs"></td>
+            <td class="sb3" ng-bind="board.scoreboard.total"></td>
+            <td class="sb4" ng-bind="board.scoreboard.right_bat.runs"></td>
+            <td class="sb5">&nbsp;</td>
+          </tr>
+          <tr>
+            <td class="sb1">
+              <span class="hidden-md hidden-lg has_modal" data-toggle="modal" data-target="#bowler_modal">Ov</span>
+              <span class="hidden-xs hidden-sm has_modal" data-toggle="modal" data-target="#bowler_modal">Overs</span>
+              <div class="slide-animate" ng-include="'../bowler_modal.htm'"></div>
+            </td>
+            <td class="sb2">&nbsp;</td>
+            <td class="sb3"><span class="hidden-md hidden-lg">Wkts</span><span class="hidden-xs hidden-sm">Wickets</span></td>
+            <td class="sb4">&nbsp;</td>
+            <td class="sb5"><span class="hidden-md hidden-lg">Tgt</span><span class="hidden-xs hidden-sm">Target</span></td>
+          </tr>
+          <tr>
+            <td class="sb1" ng-bind="board.scoreboard.overs_and_balls"></td>
+            <td class="sb2">&nbsp;</td>
+            <td class="sb3" ng-bind="board.scoreboard.wickets"></td>
+            <td class="sb4">&nbsp;</td>
+            <td class="sb5" ng-bind="board.scoreboard.target"></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <div class="col-sm-2 col-md-2 main hidden-xs hidden-sm">&nbsp;</div>
+</div>
+
+<div class="row hidden-xs hidden-sm">
+  <div class="col-sm-2 col-md-2 main">&nbsp;</div>
+  <div class="col-sm-8 col-md-8 main">&nbsp;</div>
+  <div class="col-sm-2 col-md-2 main">&nbsp;</div>
+</div>
+
+<div class="row">
+  <div class="col-sm-2 col-md-2 main hidden-xs hidden-sm">&nbsp;</div>
+  <div class="col-sm-8 col-md-8 keyboard">
+    <h2 class="sub-header hidden-xs hidden-sm">Keyboard</h2>
+    <h5 class="sub-header visible-xs-* visible-sm-* hidden-md hidden-lg">Keyboard</h5>
+    <div class="table-responsive">
+      <table class="table small-table">
+
+        <tbody>
+          <tr>
+            <td ng-click="board.bowls('ball',0)">0</td>
+            <td ng-click="board.bowls('ball',1)">1</td>
+            <td ng-click="board.bowls('ball',2)">2</td>
+            <td ng-click="board.bowls('ball',3)">3</td>
+            <td ng-click="board.bowls('ball',4)">4</td>
+            <td ng-click="board.bowls('ball',6)">6</td>
+          </tr>
+          <tr>
+            <td ng-click="board.bowls('wicket',0)"><span class="hidden-md hidden-lg">WKT</span><span class="hidden-xs hidden-sm">Wicket</span></td>
+            <td ng-click="board.bowls('leg_bye',1)"><span class="hidden-md hidden-lg">LB</span><span class="hidden-xs hidden-sm">Leg Bye</span></td>
+            <td ng-click="board.bowls('no_ball',1)"><span class="hidden-md hidden-lg">NB</span><span class="hidden-xs hidden-sm">No Ball</span></td>
+            <td ng-click="board.bowls('wide',1)"><span class="hidden-md hidden-lg">W</span><span class="hidden-xs hidden-sm">Wide</span></td>
+            <td ng-click="board.bowls('bye',1)"><span class="hidden-md hidden-lg">B</span><span class="hidden-xs hidden-sm">Bye</span></td>
+            <td ng-click="go_others()"><span class="hidden-md hidden-lg">Other</span><span class="hidden-xs hidden-sm">Other</span></td>
+          </tr>
+
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <div id="hidden_when_xs_sm" class="col-sm-2 col-md-2 main hidden-xs hidden-sm">&nbsp;</div>
+</div>

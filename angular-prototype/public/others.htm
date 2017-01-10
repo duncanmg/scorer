@@ -1,0 +1,227 @@
+<div class="row">
+  <div class="col-sm-2 col-md-2 main hidden-xs hidden-sm">&nbsp;</div>
+  <div class="col-sm-8 col-md-8 scoreboard">
+    <h2 class="sub-header hidden-xs hidden-sm">Others</h2>
+
+    <h5 class="sub-header visible-xs-* visible-sm-* hidden-md hidden-lg others">Others
+    </h5>
+
+    <!-- <button type="button" class="btn btn-default btn-number" ng-click="accept()"> <span class="glyphicon glyphicon-ok-circle"></span></button>
+      <button type="button" class="btn btn-default btn-number" ng-click="reject()"> <span class="glyphicon glyphicon-remove-circle"></span></button> -->
+
+    <div class="table-responsive">
+      <table class="table table-small others">
+
+        <tbody>
+          <tr>
+            <button type="button" class="btn btn-default btn-left" ng-click="accept()">
+                            <span class="glyphicon glyphicon-ok-circle"></span>
+              </button>
+            <button type="button" class="btn btn-default btn-right" ng-click="reject()">
+                            <span class="glyphicon glyphicon-remove-circle"></span>
+              </button>
+          </tr>
+          <tr>
+            <td>No balls as extras</td>
+          </tr>
+          <tr>
+            <td class="others">
+              <div class="input-group">
+                <span class="input-group-btn">
+                            <button type="button" class="btn btn-default btn-number" ng-click="others.extras.no_ball.extras_down()">
+                                <span class="glyphicon glyphicon-minus"></span>
+                </button>
+                </span>
+                <span class="form-control input-number" ng-bind="others.extras.no_ball.extras"></span>
+                <span class="input-group-btn">
+                            <button type="button" class="btn btn-default btn-number" ng-click="others.extras.no_ball.extras_up()">
+                                <span class="glyphicon glyphicon-plus"></span>
+                </button>
+                </span>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td>No balls as runs for batsman</td>
+          </tr>
+          <tr>
+            <td class="others">
+              <div class="input-group">
+                <span class="input-group-btn">
+                              <button type="button" class="btn btn-default btn-number" ng-click="others.extras.no_ball.runs_down()">
+                                  <span class="glyphicon glyphicon-minus"></span>
+                </button>
+                </span>
+                <span class="form-control input-number" ng-bind="others.extras.no_ball.runs"></span>
+                <span class="input-group-btn">
+                              <button type="button" class="btn btn-default btn-number" ng-click="others.extras.no_ball.runs_up()">
+                                  <span class="glyphicon glyphicon-plus"></span>
+                </button>
+                </span>
+              </div>
+            </td>
+          </tr>
+
+          <tr>
+            <td>Wides</td>
+          </tr>
+          <tr>
+            <td class="others">
+              <div class="input-group">
+                <span class="input-group-btn">
+                              <button type="button" class="btn btn-default btn-number" ng-click="others.extras.wide.extras_down()">
+                                  <span class="glyphicon glyphicon-minus"></span>
+                </button>
+                </span>
+                <span class="form-control input-number" ng-bind="others.extras.wide.extras"></span>
+                <span class="input-group-btn">
+                              <button type="button" class="btn btn-default btn-number" ng-click="others.extras.wide.extras_up()">
+                                  <span class="glyphicon glyphicon-plus"></span>
+                </button>
+                </span>
+              </div>
+            </td>
+          </tr>
+
+          <tr>
+            <td>Leg Byes</td>
+          </tr>
+          <tr>
+            <td class="others">
+              <div class="input-group">
+                <span class="input-group-btn">
+                              <button type="button" class="btn btn-default btn-number" ng-click="others.extras.leg_bye.extras_down()">
+                                  <span class="glyphicon glyphicon-minus"></span>
+                </button>
+                </span>
+                <span class="form-control input-number" ng-bind="others.extras.leg_bye.extras"></span>
+                <span class="input-group-btn">
+                              <button type="button" class="btn btn-default btn-number" ng-click="others.extras.leg_bye.extras_up()">
+                                  <span class="glyphicon glyphicon-plus"></span>
+                </button>
+                </span>
+              </div>
+            </td>
+          </tr>
+
+          <tr>
+            <td>Byes</td>
+          </tr>
+          <tr>
+            <td class="others">
+              <div class="input-group">
+                <span class="input-group-btn">
+                              <button type="button" class="btn btn-default btn-number" ng-click="others.extras.bye.extras_down()">
+                                  <span class="glyphicon glyphicon-minus"></span>
+                </button>
+                </span>
+                <span class="form-control input-number" ng-bind="others.extras.bye.extras"></span>
+                <span class="input-group-btn">
+                              <button type="button" class="btn btn-default btn-number" ng-click="others.extras.bye.extras_up()">
+                                  <span class="glyphicon glyphicon-plus"></span>
+                </button>
+                </span>
+              </div>
+            </td>
+          </tr>
+          <!-- *********************************************************** -->
+          <!-- <tr>
+              <td>Run Out Striker. Runs Scored</td>
+            </tr>
+            <tr>
+              <td class="others">
+                <div class="input-group">
+                  <span class="input-group-btn">
+                              <button type="button" class="btn btn-default btn-number" ng-click="run_out_striker_runs_down()">
+                                  <span class="glyphicon glyphicon-minus"></span>
+                  </button>
+                  </span>
+                  <span class="form-control input-number" ng-bind="run_out_striker_runs"></span>
+                  <span class="input-group-btn">
+                              <button type="button" class="btn btn-default btn-number" ng-click="run_out_striker_runs_up()">
+                                  <span class="glyphicon glyphicon-plus"></span>
+                  </button>
+                  </span>
+                </div>
+              </td>
+            </tr>
+
+            <tr>
+              <td>Run Out Striker. Extras</td>
+            </tr>
+            <tr>
+              <td class="others">
+                <div class="input-group">
+                  <span class="input-group-btn">
+                              <button type="button" class="btn btn-default btn-number" ng-click="run_out_striker_extras_down()">
+                                  <span class="glyphicon glyphicon-minus"></span>
+                  </button>
+                  </span>
+                  <span class="form-control input-number" ng-bind="run_out_striker_extras"></span>
+                  <span class="input-group-btn">
+                              <button type="button" class="btn btn-default btn-number" ng-click="run_out_striker_extras_up()">
+                                  <span class="glyphicon glyphicon-plus"></span>
+                  </button>
+                  </span>
+                </div>
+              </td>
+            </tr>
+
+            <tr>
+              <td>Run Out Non-Striker. Runs Scored</td>
+            </tr>
+            <tr>
+              <td class="others">
+                <div class="input-group">
+                  <span class="input-group-btn">
+                              <button type="button" class="btn btn-default btn-number" ng-click="run_out_non_striker_runs_down()">
+                                  <span class="glyphicon glyphicon-minus"></span>
+                  </button>
+                  </span>
+                  <span class="form-control input-number" ng-bind="run_out_non_striker_runs"></span>
+                  <span class="input-group-btn">
+                              <button type="button" class="btn btn-default btn-number" ng-click="run_out_non_striker_runs_up()">
+                                  <span class="glyphicon glyphicon-plus"></span>
+                  </button>
+                  </span>
+                </div>
+              </td>
+            </tr>
+
+            <tr>
+              <td>Run Out Non-Striker. Extras</td>
+            </tr>
+            <tr>
+              <td class="others">
+                <div class="input-group">
+                  <span class="input-group-btn">
+                              <button type="button" class="btn btn-default btn-number" ng-click="run_out_non_striker_extras_down()">
+                                  <span class="glyphicon glyphicon-minus"></span>
+                  </button>
+                  </span>
+                  <span class="form-control input-number" ng-bind="run_out_non_striker_extras"></span>
+                  <span class="input-group-btn">
+                              <button type="button" class="btn btn-default btn-number" ng-click="run_out_non_striker_extras_up()">
+                                  <span class="glyphicon glyphicon-plus"></span>
+                  </button>
+                  </span>
+                </div>
+              </td>
+            </tr> -->
+
+          <tr>
+            <td>
+              <button type="button" class="btn btn-default btn-left" ng-click="accept()">
+                              <span class="glyphicon glyphicon-ok-circle"></span>
+                </button>
+              <button type="button" class="btn btn-default btn-right" ng-click="reject()">
+                              <span class="glyphicon glyphicon-remove-circle"></span>
+                </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <div class="col-sm-2 col-md-2 main hidden-xs hidden-sm">&nbsp;</div>
+</div>
