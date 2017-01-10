@@ -335,6 +335,20 @@ angular.module("scorer").factory('Scoreboard', ['Storage', 'Settings', '$rootSco
       this.scoreboard.bowler = set_bowler(bowlers, this.scoreboard.bowler);
 
       this.scoreboard.next_bowler = set_bowler(bowlers, this.scoreboard.next_bowler);
+    },
+    reset: function(){
+      alert(1);
+      Players.set_team('home');
+      Players.reset();
+      this.home_players = Players.players;
+
+      Players.set_team('away');
+      Players.reset();
+      this.away_players = Players.players;
+
+      this.set_batsmen_details();
+      this.set_bowler_details();
+      alert('End reset()');
     }
 
   };
@@ -344,16 +358,7 @@ angular.module("scorer").factory('Scoreboard', ['Storage', 'Settings', '$rootSco
     // alert('Hi '+ Scoreboard.scoreboard.num_overs);
     Scoreboard.set_batting_team(args.team_batting_first.home_away);
   });
-
-  $rootScope.$on('players_changed', function(event, args) {
-    Scoreboard.home_players = args.home_players;
-    Scoreboard.away_players = args.away_players;
-    Scoreboard.set_batsmen_details();
-    Scoreboard.set_bowler_details();
-  });
-
-  Players.broadcast_players();
-  // alert(JSON.stringify(Players));
+  alert("End Scoreboard Service");
 
   return Scoreboard;
 
@@ -371,13 +376,16 @@ angular.module("scorer").factory('Scoreboard', ['Storage', 'Settings', '$rootSco
       var value;
       try {
         value = JSON.parse(sessionStorage[key]);
+        console.log(key + " get: " + JSON.stringify(value));
         return value;
       } catch (e) {
         return false;
       }
     },
     put: function(key, value) {
+      console.log("About to put " + key);
       sessionStorage[key] = JSON.stringify(value);
+      console.log(key + " put " + JSON.stringify(value));
       return true;
     }
   };

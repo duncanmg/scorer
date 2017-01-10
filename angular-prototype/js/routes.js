@@ -38,12 +38,18 @@ angular.module("scorer", ['ui.router', 'ngResource']).config(function($stateProv
         }
       }
     }).state('edit_player', {
-      'url': '/players/edit/:playerId',
+      'url': '/players/edit/:team/:playerId',
       'views': {
         'content': {
           'templateUrl': 'edit_player.htm',
           'controller': 'EditPlayerController'
         }
+      },
+      'resolve': {
+        team: ['$stateParams', function($stateParams) {
+          alert('Bang Banana ' + JSON.stringify($stateParams));
+          return $stateParams.team;
+        }]
       }
     }).state('new_match', {
       'url': '/new_match',

@@ -1,10 +1,14 @@
 angular.module('scorer').controller('ScorerController', ['$scope', '$stateParams', '$state', 'Scoreboard', function($scope, $stateParams, $state, Scoreboard) {
 
     'use strict';
+    alert('Scorer Controller');
+
 
     var board = Scoreboard;
     $scope.scoreboard = board.scoreboard;
     $scope.board = board;
+    $scope.board.reset();
+    alert('??');
 
     $scope.go_others = function() {
       if ($scope.board.alert_no_bowler()) {

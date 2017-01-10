@@ -4,13 +4,16 @@ angular.module('scorer')
     'use strict';
 
     $scope.players = Players;
-    // alert(JSON.stringify($stateParams));
-    $scope.players.set_team($stateParams.team); // "home" or "away"
+    $scope.team = $stateParams.team;
+    alert("PlayersController " + JSON.stringify($stateParams));
+    $scope.players.set_team($scope.team); // "home" or "away"
     $scope.players.reset();
 
     $scope.edit = function(player) {
+      alert("editttt " + $scope.team);
       $state.go('edit_player', {
-        playerId: player.id
+        "playerId": player.id,
+        "team": $scope.team
       });
     };
 

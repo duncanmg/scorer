@@ -134,6 +134,7 @@ angular.module("scorer").factory('Players', ['Storage', '$rootScope', function(S
     },
 
     save: function(player) {
+      alert("save "+this.team);
       if (player.batting_no < 1 || player.batting_no > 11) {
         return false;
       }
