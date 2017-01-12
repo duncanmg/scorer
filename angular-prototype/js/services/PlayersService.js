@@ -175,9 +175,14 @@ angular.module("scorer").factory('Players', ['Storage', '$rootScope', function(S
       if (bowling.length >= 2) {
         return false;
       }
+      // alert(1);
+      var bowlers = this.get_bowlers();
+      // alert(JSON.stringify(bowlers));
+      var next_bowler_no = bowlers.length ? bowlers[bowlers.length - 1].bowler + 1 : 1;
+      // alert("next_bowler_no " + next_bowler_no);
       var i = this.lookup(player);
       if (i >= 0) {
-        this.players[i].bowler = true;
+        this.players[i].bowler = next_bowler_no;
         this.players[i].bowling = true;
       }
       return true;
@@ -197,6 +202,7 @@ angular.module("scorer").factory('Players', ['Storage', '$rootScope', function(S
           bowlers.push(this.players[i]);
         }
       }
+      bowlers = bowlers.sort(this.sort_by_bowler_no);
       return bowlers;
     },
     get_bowling: function() {
@@ -242,6 +248,15 @@ angular.module("scorer").factory('Players', ['Storage', '$rootScope', function(S
       }
       Storage.put(team, players);
       this.broadcast_players();
+    },
+    sort_by_bowler_no: function(a, b) {
+      if (!a.bowler) {
+        a.bowler = 0;
+      }
+      if (!b.bowler) {
+        b.bowler = 0;
+      }
+      return parseInt(a.bowler) - parseInt(b.bowler);
     }
   };
 
