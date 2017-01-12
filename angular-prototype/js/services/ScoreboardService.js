@@ -337,7 +337,6 @@ angular.module("scorer").factory('Scoreboard', ['Storage', 'Settings', '$rootSco
       this.scoreboard.next_bowler = set_bowler(bowlers, this.scoreboard.next_bowler);
     },
     reset: function(){
-      alert(1);
       Players.set_team('home');
       Players.reset();
       this.home_players = Players.players;
@@ -348,7 +347,6 @@ angular.module("scorer").factory('Scoreboard', ['Storage', 'Settings', '$rootSco
 
       this.set_batsmen_details();
       this.set_bowler_details();
-      alert('End reset()');
     }
 
   };
@@ -358,7 +356,6 @@ angular.module("scorer").factory('Scoreboard', ['Storage', 'Settings', '$rootSco
     // alert('Hi '+ Scoreboard.scoreboard.num_overs);
     Scoreboard.set_batting_team(args.team_batting_first.home_away);
   });
-  alert("End Scoreboard Service");
 
   return Scoreboard;
 

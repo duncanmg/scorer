@@ -47,7 +47,6 @@ angular.module("scorer", ['ui.router', 'ngResource']).config(function($stateProv
       },
       'resolve': {
         team: ['$stateParams', function($stateParams) {
-          alert('Bang Banana ' + JSON.stringify($stateParams));
           return $stateParams.team;
         }]
       }

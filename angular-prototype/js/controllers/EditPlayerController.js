@@ -2,12 +2,8 @@ angular.module('scorer')
   .controller('EditPlayerController', ['$scope', '$stateParams', '$state', 'Players', 'team', function($scope, $stateParams, $state, Players, team) {
     'use strict';
 
-    alert('banana ' + team);
-    alert("EditPlayer stateParams " + JSON.stringify($stateParams));
     $scope.playerId = $stateParams.playerId;
     $scope.team = $stateParams.team;
-    alert("EditPlayer " + $scope.team);
-    alert("playerId: " + $scope.PlayerId);
 
     var players = Players.players;
     for (var i = 0; i < players.length; i++) {
