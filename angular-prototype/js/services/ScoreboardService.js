@@ -54,6 +54,9 @@ angular.module("scorer").factory('Scoreboard', ['Storage', 'Settings', '$rootSco
           return false;
         }
         return true;
+      },
+      clear: function() {
+        this.overs = [];
       }
     };
     this.total = 0;
@@ -153,6 +156,7 @@ angular.module("scorer").factory('Scoreboard', ['Storage', 'Settings', '$rootSco
         case 'bye':
         case 'leg_bye':
           this.scoreboard.balls += 1;
+          this.scoreboard.overs_history.add_ball(this.scoreboard.left_bat.striker ? this.scoreboard.left_bat.no : this.scoreboard.right_bat.no, 0, 1, false, true);
           this.change_ends(1);
           this.scoreboard.extras += 1;
           this.scoreboard.total += 1;
@@ -161,6 +165,7 @@ angular.module("scorer").factory('Scoreboard', ['Storage', 'Settings', '$rootSco
         case 'wide':
           this.scoreboard.extras += 1;
           this.scoreboard.total += 1;
+          this.scoreboard.overs_history.add_ball(this.scoreboard.left_bat.striker ? this.scoreboard.left_bat.no : this.scoreboard.right_bat.no, 0, 1, false, false);
           break;
         case 'ball':
           this.ball(runs);
@@ -226,7 +231,6 @@ angular.module("scorer").factory('Scoreboard', ['Storage', 'Settings', '$rootSco
       this.scoreboard.overs_history.add_ball(this.scoreboard.left_bat.striker ? this.scoreboard.left_bat.no : this.scoreboard.right_bat.no, runs, 0, false, true);
       // console.log(JSON.stringify(this.scoreboard.overs_history));
     },
-
     wicket: function() {
       this.scoreboard.balls++;
       this.scoreboard.wickets += 1;
@@ -234,7 +238,7 @@ angular.module("scorer").factory('Scoreboard', ['Storage', 'Settings', '$rootSco
       if (this.set_game_over()) {
         return true;
       }
-
+      this.scoreboard.overs_history.add_ball(this.scoreboard.left_bat.striker ? this.scoreboard.left_bat.no : this.scoreboard.right_bat.no, 0, 0, true, true);
       var next_batsman_no = (this.scoreboard.left_bat.no > this.scoreboard.right_bat.no) ?
         this.scoreboard.left_bat.no + 1 :
         this.scoreboard.right_bat.no + 1;
@@ -267,9 +271,13 @@ angular.module("scorer").factory('Scoreboard', ['Storage', 'Settings', '$rootSco
         obj.scoreboard.total += (extra.runs + extra.extras);
         obj.add_runs_to_striker(extra.runs);
         obj.change_ends(extra.runs + extra.extras - 1);
+        obj.scoreboard.overs_history.add_ball(obj.scoreboard.left_bat.striker ?
+          obj.scoreboard.left_bat.no : obj.scoreboard.right_bat.no, 0, extra.extras, false, false);
       },
       wide: function(obj, extra) {
         obj.scoreboard.total += extra.extras;
+        obj.scoreboard.overs_history.add_ball(obj.scoreboard.left_bat.striker ?
+          obj.scoreboard.left_bat.no : obj.scoreboard.right_bat.no, 0, extra.extras, false, false);
         if (extra.extras > 1) {
           obj.change_ends(extra.extras - 1);
         }
@@ -277,12 +285,16 @@ angular.module("scorer").factory('Scoreboard', ['Storage', 'Settings', '$rootSco
       leg_bye: function(obj, extra) {
         obj.scoreboard.balls++;
         obj.scoreboard.total += extra.extras;
+        obj.scoreboard.overs_history.add_ball(obj.scoreboard.left_bat.striker ?
+          obj.scoreboard.left_bat.no : obj.scoreboard.right_bat.no, 0, extra.extras, false, true);
         obj.change_ends(extra.extras);
         obj.over();
       },
       bye: function(obj, extra) {
         obj.scoreboard.balls++;
         obj.scoreboard.total += extra.extras;
+        obj.scoreboard.overs_history.add_ball(obj.scoreboard.left_bat.striker ?
+          obj.scoreboard.left_bat.no : obj.scoreboard.right_bat.no, 0, extra.extras, false, true);
         obj.change_ends(extra.extras);
         obj.over();
       }
@@ -398,6 +410,8 @@ angular.module("scorer").factory('Scoreboard', ['Storage', 'Settings', '$rootSco
       this.set_batsmen_details();
       this.set_bowler_details();
 
+      alert(this.scoreboard.overs_history);
+      alert(this.scoreboard.overs_history.is_ready);
       if (!this.scoreboard.overs_history.is_ready()) {
         this.scoreboard.overs_history.add_over();
       }
