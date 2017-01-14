@@ -292,6 +292,7 @@ angular.module("scorer").factory('Scoreboard', ['Storage', 'Settings', '$rootSco
       // alert(JSON.stringify(this.scoreboard.right_bat));
 
     },
+    // ***********************************************************************
     set_bowler_details: function() {
 
       var get_bowlers = function(players) {
@@ -330,13 +331,14 @@ angular.module("scorer").factory('Scoreboard', ['Storage', 'Settings', '$rootSco
       };
 
       var bowling_team = this.scoreboard.batting_team == "home" ? this.away_players : this.home_players;
-      var bowlers = get_bowlers(bowling_team);
+      var bowlers = Players.get_bowlers();
 
       this.scoreboard.bowler = set_bowler(bowlers, this.scoreboard.bowler);
 
       this.scoreboard.next_bowler = set_bowler(bowlers, this.scoreboard.next_bowler);
     },
-    reset: function(){
+    // ***********************************************************************
+    reset: function() {
       Players.set_team('home');
       Players.reset();
       this.home_players = Players.players;
