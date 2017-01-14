@@ -8,8 +8,54 @@ angular.module("scorer").factory('Scoreboard', ['Storage', 'Settings', '$rootSco
     this.bowling = false;
   };
 
+  var Over = function(over_no, bowler_no) {
+    this.over_no = over_no;
+    this.bowler_no = bowler_no;
+    this.balls = [];
+    this.add_ball = function(striker, runs, extras, wkt, valid) {
+      this.balls.push({
+        'striker': striker,
+        'runs': runs,
+        'extras': extras,
+        'wkt': wkt,
+        'valid': valid
+      });
+      if (valid) {
+        this.valid_balls += 1;
+      }
+      this.total_balls += 1;
+    };
+    this.valid_balls = 0;
+    this.total_balls = 0;
+  };
+
   var initial_scoreboard = Storage.get_scoreboard();
   var blank_scoreboard = function() {
+    this.overs_history = {
+      overs: [],
+      add_over: function(over_no, bowler_no) {
+        this.overs.push(new Over(over_no, bowler_no));
+      },
+      add_ball: function(striker, runs, extras, wkt, valid) {
+        if (!this.overs.length) {
+          alert("Please add an over.");
+        }
+        var over = this.overs[this.overs.length - 1];
+        if (over.valid_balls >= 6) {
+          alert("The over has finished.");
+        }
+        this.overs[this.overs.length - 1].add_ball(striker, runs, extras, wkt, valid);
+      },
+      is_ready: function() {
+        if (!this.overs.length) {
+          return false;
+        }
+        if (this.overs[this.overs.length - 1].valid_balls >= 6) {
+          return false;
+        }
+        return true;
+      }
+    };
     this.total = 0;
     this.wickets = 0;
     this.extras = 0;
@@ -120,7 +166,6 @@ angular.module("scorer").factory('Scoreboard', ['Storage', 'Settings', '$rootSco
           this.ball(runs);
           this.change_ends(runs);
           break;
-
       }
 
       this.over();
@@ -157,6 +202,7 @@ angular.module("scorer").factory('Scoreboard', ['Storage', 'Settings', '$rootSco
         this.scoreboard.overs_and_balls = this.scoreboard.overs;
         this.change_ends();
         this.change_bowlers();
+        this.scoreboard.overs_history.add_over();
       } else {
         this.scoreboard.overs_and_balls = this.scoreboard.overs + '.' + this.scoreboard.balls;
       }
@@ -177,6 +223,8 @@ angular.module("scorer").factory('Scoreboard', ['Storage', 'Settings', '$rootSco
 
       this.add_runs_to_striker(runs);
 
+      this.scoreboard.overs_history.add_ball(this.scoreboard.left_bat.striker ? this.scoreboard.left_bat.no : this.scoreboard.right_bat.no, runs, 0, false, true);
+      // console.log(JSON.stringify(this.scoreboard.overs_history));
     },
 
     wicket: function() {
@@ -349,6 +397,10 @@ angular.module("scorer").factory('Scoreboard', ['Storage', 'Settings', '$rootSco
 
       this.set_batsmen_details();
       this.set_bowler_details();
+
+      if (!this.scoreboard.overs_history.is_ready()) {
+        this.scoreboard.overs_history.add_over();
+      }
     }
 
   };
