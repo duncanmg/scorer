@@ -442,10 +442,12 @@ angular.module("scorer").factory('Scoreboard', ['Storage', 'Settings', '$rootSco
       this.set_batsmen_details();
       this.set_bowler_details();
 
-      alert(this.scoreboard.overs_history);
-      alert(this.scoreboard.overs_history.is_ready);
-      if (!this.scoreboard.overs_history.is_ready()) {
-        this.scoreboard.overs_history.add_over();
+      // alert(this.scoreboard.overs_history);
+      // alert(this.scoreboard.overs_history.is_ready ? "is_ready defined" : "is_ready not defined");
+      if (this.scoreboard.overs_history.is_ready) {
+        if (!this.scoreboard.overs_history.is_ready()) {
+          this.scoreboard.overs_history.add_over();
+        }
       }
     }
 
@@ -458,7 +460,7 @@ angular.module("scorer").factory('Scoreboard', ['Storage', 'Settings', '$rootSco
   });
 
   return Scoreboard;
-  /** @function */
+  /** @class Storage */
 }]).factory('Storage', function() {
 
   return {
