@@ -5,6 +5,7 @@ var concat = require('gulp-concat');
 var header = require('gulp-header');
 var uglify = require('gulp-uglify');
 var rename = require('gulp-rename');
+var jsdoc = require('gulp-jsdoc3');
 
 gulp.task('lint', function()
 {
@@ -29,8 +30,14 @@ gulp.task('scripts', function() {
       .pipe(gulp.dest('public/javascripts'));
 });
 
-gulp.task('watch', function() {
-   gulp.watch(['js/*.js','js/controllers/*.js', 'js/services/*.js'], ['lint', 'scripts']);
+gulp.task('jsdoc', function (cb) {
+    var config = require('./jsdoc.json');
+    gulp.src(['README.md', './js/*.js'], {read: false})
+        .pipe(jsdoc(config, cb));
 });
 
-gulp.task('default', ['lint', 'scripts', 'watch']);
+gulp.task('watch', function() {
+   gulp.watch(['js/*.js','js/controllers/*.js', 'js/services/*.js'], ['lint', 'scripts', 'jsdoc']);
+});
+
+gulp.task('default', ['lint', 'scripts', 'jsdoc', 'watch']);
