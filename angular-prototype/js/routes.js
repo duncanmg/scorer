@@ -58,7 +58,14 @@ angular.module("scorer", ['ui.router', 'ngResource']).config(function($stateProv
           'controller': 'NewMatchController'
         }
       }
+    }).state('history', {
+      'url': '/history',
+      'views': {
+        'content': {
+          'templateUrl': 'history.htm',
+          'controller': 'HistoryController'
+        }
+      }
     });
-
 
 });
