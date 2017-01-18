@@ -223,7 +223,7 @@ angular.module("scorer").factory('Scoreboard', ['Storage', 'Settings', '$rootSco
         this.scoreboard.overs_and_balls = this.scoreboard.overs;
         this.change_ends();
         this.change_bowlers();
-        this.scoreboard.overs_history.add_over(this.scoreboard.overs, this.scoreboard.bowler);
+        this.add_over(this.scoreboard.overs, this.scoreboard.bowler);
       } else {
         this.scoreboard.overs_and_balls = this.scoreboard.overs + '.' + this.scoreboard.balls;
       }
