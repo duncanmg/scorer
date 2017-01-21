@@ -39,8 +39,8 @@ angular.module("scorer").factory('Scoreboard', ['Storage', 'Settings', '$rootSco
     this.over_no = over_no;
     this.bowler = jQuery.extend({}, bowler_obj); // Shallow copy / clone.
     this.balls = [];
-    if (!over_no || !bowler_no) {
-      throw "Over object requires over_no and bowler_no";
+    if (!over_no || !bowler_obj) {
+      throw "Over object requires over_no and bowler_obj";
     }
     // this.add_ball = function(striker, runs, extras, wkt, valid) {
     //   this.balls.push({
@@ -57,6 +57,30 @@ angular.module("scorer").factory('Scoreboard', ['Storage', 'Settings', '$rootSco
     // };
     this.valid_balls = 0;
     this.total_balls = 0;
+  };
+
+  /** Creates an instance of Ball
+   *
+   * @constructor Ball
+   * @ball {Ball}
+   * @param {Batsman} striker - The batsman who was on strike.
+   * @param {integer} runs - The number runs scored off the bat.
+   * @param {integer} extras - The number of extras.
+   * @param {integer} valid = Was the ball valid? 1 = Yes, 0 = No.
+   * @return {Ball} The new Ball object.
+   *
+   * @property striker
+   * @property runs
+   * @property extras
+   * @property wkt
+   * @property valid
+   */
+  var Ball = function(striker, runs, extras, wkt, valid) {
+    this.striker = jQuery.extend(true, {}, striker);
+    this.runs = runs;
+    this.extras = extras;
+    this.wkt = wkt;
+    this.valid = valid;
   };
 
   var initial_scoreboard = Storage.get_scoreboard();
@@ -172,7 +196,7 @@ angular.module("scorer").factory('Scoreboard', ['Storage', 'Settings', '$rootSco
         case 'bye':
         case 'leg_bye':
           this.scoreboard.balls += 1;
-          this.add_ball(this.scoreboard.left_bat.striker ? this.scoreboard.left_bat.no : this.scoreboard.right_bat.no, 0, 1, false, true);
+          this.add_ball(this.scoreboard.left_bat.striker ? this.scoreboard.left_bat : this.scoreboard.right_bat, 0, 1, false, true);
           this.change_ends(1);
           this.scoreboard.extras += 1;
           this.scoreboard.total += 1;
@@ -181,7 +205,7 @@ angular.module("scorer").factory('Scoreboard', ['Storage', 'Settings', '$rootSco
         case 'wide':
           this.scoreboard.extras += 1;
           this.scoreboard.total += 1;
-          this.add_ball(this.scoreboard.left_bat.striker ? this.scoreboard.left_bat.no : this.scoreboard.right_bat.no, 0, 1, false, false);
+          this.add_ball(this.scoreboard.left_bat.striker ? this.scoreboard.left_bat : this.scoreboard.right_bat, 0, 1, false, false);
           break;
         case 'ball':
           this.ball(runs);
@@ -226,8 +250,8 @@ angular.module("scorer").factory('Scoreboard', ['Storage', 'Settings', '$rootSco
         this.scoreboard.overs_and_balls = this.scoreboard.overs;
         this.change_ends();
         this.change_bowlers();
-        alert("About to add over " + this.scoreboard.overs + 1);
-        this.add_over(this.scoreboard.overs + 1, this.scoreboard.bowler);
+        // alert("About to add over " + parseInt(this.scoreboard.overs + 1));
+        this.add_over(parseInt(this.scoreboard.overs) + 1, this.scoreboard.bowler);
       } else {
         this.scoreboard.overs_and_balls = this.scoreboard.overs + '.' + this.scoreboard.balls;
       }
@@ -248,7 +272,7 @@ angular.module("scorer").factory('Scoreboard', ['Storage', 'Settings', '$rootSco
 
       this.add_runs_to_striker(runs);
 
-      this.add_ball(this.scoreboard.left_bat.striker ? this.scoreboard.left_bat.no : this.scoreboard.right_bat.no, runs, 0, false, true);
+      this.add_ball(this.scoreboard.left_bat.striker ? this.scoreboard.left_bat : this.scoreboard.right_bat, runs, 0, false, true);
       // console.log(JSON.stringify(this.scoreboard.overs_history));
     },
     /** @function */
@@ -259,7 +283,7 @@ angular.module("scorer").factory('Scoreboard', ['Storage', 'Settings', '$rootSco
       if (this.set_game_over()) {
         return true;
       }
-      this.add_ball(this.scoreboard.left_bat.striker ? this.scoreboard.left_bat.no : this.scoreboard.right_bat.no, 0, 0, true, true);
+      this.add_ball(this.scoreboard.left_bat.striker ? this.scoreboard.left_bat : this.scoreboard.right_bat, 0, 0, true, true);
       var next_batsman_no = (this.scoreboard.left_bat.no > this.scoreboard.right_bat.no) ?
         this.scoreboard.left_bat.no + 1 :
         this.scoreboard.right_bat.no + 1;
@@ -293,12 +317,12 @@ angular.module("scorer").factory('Scoreboard', ['Storage', 'Settings', '$rootSco
         obj.add_runs_to_striker(extra.runs);
         obj.change_ends(extra.runs + extra.extras - 1);
         obj.scoreboard.overs_history.add_ball(obj.scoreboard.left_bat.striker ?
-          obj.scoreboard.left_bat.no : obj.scoreboard.right_bat.no, 0, extra.extras, false, false);
+          obj.scoreboard.left_bat : obj.scoreboard.right_bat, 0, extra.extras, false, false);
       },
       wide: function(obj, extra) {
         obj.scoreboard.total += extra.extras;
         obj.scoreboard.overs_history.add_ball(obj.scoreboard.left_bat.striker ?
-          obj.scoreboard.left_bat.no : obj.scoreboard.right_bat.no, 0, extra.extras, false, false);
+          obj.scoreboard.left_bat : obj.scoreboard.right_bat, 0, extra.extras, false, false);
         if (extra.extras > 1) {
           obj.change_ends(extra.extras - 1);
         }
@@ -307,7 +331,7 @@ angular.module("scorer").factory('Scoreboard', ['Storage', 'Settings', '$rootSco
         obj.scoreboard.balls++;
         obj.scoreboard.total += extra.extras;
         obj.scoreboard.overs_history.add_ball(obj.scoreboard.left_bat.striker ?
-          obj.scoreboard.left_bat.no : obj.scoreboard.right_bat.no, 0, extra.extras, false, true);
+          obj.scoreboard.left_bat : obj.scoreboard.right_bat, 0, extra.extras, false, true);
         obj.change_ends(extra.extras);
         obj.over();
       },
@@ -315,7 +339,7 @@ angular.module("scorer").factory('Scoreboard', ['Storage', 'Settings', '$rootSco
         obj.scoreboard.balls++;
         obj.scoreboard.total += extra.extras;
         obj.scoreboard.overs_history.add_ball(obj.scoreboard.left_bat.striker ?
-          obj.scoreboard.left_bat.no : obj.scoreboard.right_bat.no, 0, extra.extras, false, true);
+          obj.scoreboard.left_bat : obj.scoreboard.right_bat, 0, extra.extras, false, true);
         obj.change_ends(extra.extras);
         obj.over();
       }
@@ -451,13 +475,8 @@ angular.module("scorer").factory('Scoreboard', ['Storage', 'Settings', '$rootSco
       if (over.valid_balls >= 6) {
         alert("The over has finished.");
       }
-      this.scoreboard.overs_history[this.scoreboard.overs_history.length - 1].balls.push({
-        "striker": striker,
-        "runs": runs,
-        "extras": extras,
-        "wkt": wkt,
-        "valid": valid
-      });
+      this.scoreboard.overs_history[this.scoreboard.overs_history.length - 1].balls.push(new Ball(
+        striker, runs, extras, wkt, valid));
       if (valid) {
         this.scoreboard.overs_history[this.scoreboard.overs_history.length - 1].valid_balls += 1;
       }

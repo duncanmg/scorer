@@ -8,37 +8,29 @@
         <table class="table table-small others">
 
           <tbody>
-            <tr>
-              <button type="button" class="btn btn-default btn-left" ng-click="accept()">
-                            <span class="glyphicon glyphicon-ok-circle"></span>
-              </button>
-              <button type="button" class="btn btn-default btn-right" ng-click="reject()">
-                            <span class="glyphicon glyphicon-remove-circle"></span>
-              </button>
-            </tr>
-            <tr ng-repeat="over in overs">
+
+            <tr ng-repeat="over in overs track by $index">
               <td class="others">
-                Over: {{ over.over_no }}
-                Bowler: {{ over.bowler.name}}
-                <ul>
-                  <li ng-repeat="ball in over.balls">{{ ball.runs }}</li>
-                </ul>
+                Over: {{ over.over_no }} Bowler: {{ over.bowler.name }}
+                <table class="table table-small others">
+                  <tbody>
+                    <tr ng-repeat="ball in over.balls track by $index">
+                      <td class="others">{{ball.striker.name}} ({{ball.striker.runs}})</td>
+                      <td class="others"> {{ ball.runs }}</td>
+                      <td class="others"> <span ng-if="ball.wkt">OUT!</span>
+                        <span ng-if="ball.extras">Extras: {{ ball.extras }}</span>
+                        <span class="glyphicon glyphicon-ok" ng-if="ball.valid"></span>
+                        <span class="glyphicon glyphicon-remove" ng-if="!ball.valid"></span>
+                      </td>
+                    </tr>
+                  </tbody>
               </td>
 
             </tr>
             <!-- *********************************************************** -->
-            <tr>
-              <td>
-                <button type="button" class="btn btn-default btn-left" ng-click="accept()">
-                              <span class="glyphicon glyphicon-ok-circle"></span>
-                </button>
-                <button type="button" class="btn btn-default btn-right" ng-click="reject()">
-                              <span class="glyphicon glyphicon-remove-circle"></span>
-                </button>
-              </td>
-            </tr>
+
           </tbody>
-        </table>
+          </table>
       </form>
     </div>
   </div>
