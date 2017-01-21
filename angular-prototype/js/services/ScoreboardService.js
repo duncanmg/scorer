@@ -88,6 +88,7 @@ angular.module("scorer").factory('Scoreboard', ['Storage', 'Settings', '$rootSco
   /** @constructor blank_scoreboard */
   var blank_scoreboard = function() {
     this.overs_history = [];
+    this.last_overs_history = [];
     this.total = 0;
     this.wickets = 0;
     this.extras = 0;
@@ -360,8 +361,10 @@ angular.module("scorer").factory('Scoreboard', ['Storage', 'Settings', '$rootSco
     new_innings: function() {
       Storage.put('last_innings', this.scoreboard);
       var last_innings_runs = this.scoreboard.total;
+      var last_overs_history = this.scoreboard.overs_history;
       this.new_match();
       this.scoreboard.last_innings = last_innings_runs;
+      this.scoreboard.last_overs_history = last_overs_history;
       this.scoreboard.target = last_innings_runs + 1;
       this.scoreboard.innings_no += 1;
       this.scoreboard.batting_team = this.scoreboard.batting_team == "home" ? "away" : "home";

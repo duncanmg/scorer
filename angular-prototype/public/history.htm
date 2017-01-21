@@ -24,18 +24,60 @@
                       </td>
                     </tr>
                   </tbody>
+                </table>
               </td>
 
             </tr>
-            <!-- *********************************************************** -->
-
           </tbody>
-          </table>
+        </table>
       </form>
     </div>
+
   </div>
   <div class="col-sm-2 col-md-2 main hidden-xs hidden-sm">&nbsp;</div>
 </div>
+
+<div class="row" ng-if="last_overs.length">
+  <div class="col-sm-2 col-md-2 main hidden-xs hidden-sm">&nbsp;</div>
+  <div class="col-sm-8 col-md-8 scoreboard">
+    <h2 class="sub-header hidden-xs hidden-sm">History of Last Innings</h2>
+    <h5 class="sub-header visible-xs-* visible-sm-* hidden-md hidden-lg">History of Last Innings</h5>
+    <div class="table-responsive">
+      <form>
+        <table class="table table-small others">
+
+          <tbody>
+
+            <tr ng-repeat="over in last_overs track by $index">
+              <td class="others">
+                Over: {{ over.over_no }} Bowler: {{ over.bowler.name }}
+                <table class="table table-small others">
+                  <tbody>
+                    <tr ng-repeat="ball in over.balls track by $index">
+                      <td class="others">{{ball.striker.name}} ({{ball.striker.runs}})</td>
+                      <td class="others"> {{ ball.runs }}</td>
+                      <td class="others"> <span ng-if="ball.wkt">OUT!</span>
+                        <span ng-if="ball.extras">Extras: {{ ball.extras }}</span>
+                        <span class="glyphicon glyphicon-ok" ng-if="ball.valid"></span>
+                        <span class="glyphicon glyphicon-remove" ng-if="!ball.valid"></span>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </td>
+
+            </tr>
+          </tbody>
+        </table>
+      </form>
+    </div>
+
+  </div>
+  <div class="col-sm-2 col-md-2 main hidden-xs hidden-sm">&nbsp;</div>
+</div>
+
+
+
 
 
 <div id="hidden_when_xs_sm" class="col-sm-2 col-md-2 main hidden-xs hidden-sm">&nbsp;</div>
