@@ -273,7 +273,7 @@ angular.module("scorer").factory('Scoreboard', ['Storage', 'Settings', '$rootSco
       this.add_runs_to_striker(runs);
 
       this.add_ball(this.scoreboard.left_bat.striker ? this.scoreboard.left_bat : this.scoreboard.right_bat, runs, 0, false, true);
-      // console.log(JSON.stringify(this.scoreboard.overs_history));
+
     },
     /** @function */
     wicket: function() {
@@ -394,9 +394,7 @@ angular.module("scorer").factory('Scoreboard', ['Storage', 'Settings', '$rootSco
         return false;
       };
 
-      // alert(this.scoreboard.batting_team);
-      var players = this.scoreboard.batting_team == "home" ? this.home_players : this.away_players;
-
+      var players = this.scoreboard.batting_team == "home" ? this.home_players.players : this.away_players.players;
       this.left_bat = check(this.scoreboard.left_bat, players);
       this.right_bat = check(this.scoreboard.right_bat, players);
       // alert(JSON.stringify(this.scoreboard.right_bat));
@@ -426,7 +424,6 @@ angular.module("scorer").factory('Scoreboard', ['Storage', 'Settings', '$rootSco
       };
       /** @function */
       var set_bowler = function(bowlers, bowler) {
-
         if (!bowlers.length) {
           return {};
         }
@@ -442,7 +439,7 @@ angular.module("scorer").factory('Scoreboard', ['Storage', 'Settings', '$rootSco
       };
 
       var bowling_team = this.scoreboard.batting_team == "home" ? this.away_players : this.home_players;
-      var bowlers = Players.get_bowlers();
+      var bowlers = bowling_team.get_bowlers();
 
       this.scoreboard.bowler = set_bowler(bowlers, this.scoreboard.bowler);
 
@@ -454,11 +451,11 @@ angular.module("scorer").factory('Scoreboard', ['Storage', 'Settings', '$rootSco
     reset: function() {
       Players.set_team('home');
       Players.reset();
-      this.home_players = Players.players;
+      this.home_players = jQuery.extend(true, {}, Players);
 
       Players.set_team('away');
       Players.reset();
-      this.away_players = Players.players;
+      this.away_players = jQuery.extend(true, {}, Players);
 
       this.set_batsmen_details();
       this.set_bowler_details();
@@ -521,16 +518,13 @@ angular.module("scorer").factory('Scoreboard', ['Storage', 'Settings', '$rootSco
       var value;
       try {
         value = JSON.parse(sessionStorage[key]);
-        console.log(key + " get: " + JSON.stringify(value));
         return value;
       } catch (e) {
         return false;
       }
     },
     put: function(key, value) {
-      console.log("About to put " + key);
       sessionStorage[key] = JSON.stringify(value);
-      console.log(key + " put " + JSON.stringify(value));
       return true;
     }
   };

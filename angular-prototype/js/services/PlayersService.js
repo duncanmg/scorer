@@ -216,10 +216,8 @@ angular.module("scorer").factory('Players', ['Storage', '$rootScope', function(S
       return bowling;
     },
     reset: function() {
-      // alert("reset: "+this.team);
       if (this.team) {
         var p = Storage.get(this.team);
-        // alert(JSON.stringify(p));
         this.players = p ? p : this.team == "home" ? home_players : away_players;
         this.sort_by_batting_no();
         this.renumber();
