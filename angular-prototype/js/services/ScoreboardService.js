@@ -316,12 +316,12 @@ angular.module("scorer").factory('Scoreboard', ['Storage', 'Settings', '$rootSco
         obj.scoreboard.total += (extra.runs + extra.extras);
         obj.add_runs_to_striker(extra.runs);
         obj.change_ends(extra.runs + extra.extras - 1);
-        obj.scoreboard.overs_history.add_ball(obj.scoreboard.left_bat.striker ?
-          obj.scoreboard.left_bat : obj.scoreboard.right_bat, 0, extra.extras, false, false);
+        obj.add_ball(obj.scoreboard.left_bat.striker ?
+          obj.scoreboard.left_bat : obj.scoreboard.right_bat, extra.runs, extra.extras, false, false);
       },
       wide: function(obj, extra) {
         obj.scoreboard.total += extra.extras;
-        obj.scoreboard.overs_history.add_ball(obj.scoreboard.left_bat.striker ?
+        obj.add_ball(obj.scoreboard.left_bat.striker ?
           obj.scoreboard.left_bat : obj.scoreboard.right_bat, 0, extra.extras, false, false);
         if (extra.extras > 1) {
           obj.change_ends(extra.extras - 1);
@@ -330,7 +330,7 @@ angular.module("scorer").factory('Scoreboard', ['Storage', 'Settings', '$rootSco
       leg_bye: function(obj, extra) {
         obj.scoreboard.balls++;
         obj.scoreboard.total += extra.extras;
-        obj.scoreboard.overs_history.add_ball(obj.scoreboard.left_bat.striker ?
+        obj.add_ball(obj.scoreboard.left_bat.striker ?
           obj.scoreboard.left_bat : obj.scoreboard.right_bat, 0, extra.extras, false, true);
         obj.change_ends(extra.extras);
         obj.over();
@@ -338,7 +338,7 @@ angular.module("scorer").factory('Scoreboard', ['Storage', 'Settings', '$rootSco
       bye: function(obj, extra) {
         obj.scoreboard.balls++;
         obj.scoreboard.total += extra.extras;
-        obj.scoreboard.overs_history.add_ball(obj.scoreboard.left_bat.striker ?
+        obj.add_ball(obj.scoreboard.left_bat.striker ?
           obj.scoreboard.left_bat : obj.scoreboard.right_bat, 0, extra.extras, false, true);
         obj.change_ends(extra.extras);
         obj.over();
