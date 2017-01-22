@@ -12,7 +12,7 @@ angular.module('scorer').controller('HistoryController', ['$scope', '$stateParam
       h[i].balls.reverse();
     }
     return h;
-  }
+  };
 
   var board = Scoreboard;
   $scope.scoreboard = board.scoreboard;

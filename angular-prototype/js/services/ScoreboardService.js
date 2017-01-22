@@ -396,7 +396,7 @@ angular.module("scorer").factory('Scoreboard', ['Storage', 'Settings', '$rootSco
         }
         return false;
       };
-
+      
       var players = this.scoreboard.batting_team == "home" ? this.home_players.players : this.away_players.players;
       this.left_bat = check(this.scoreboard.left_bat, players);
       this.right_bat = check(this.scoreboard.right_bat, players);
