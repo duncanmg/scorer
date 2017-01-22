@@ -4,93 +4,93 @@ angular.module("scorer").factory('Players', ['Storage', '$rootScope', function(S
 
   var home_players = [{
     id: 1,
-    name: 'Alastair Cook',
+    name: 'Home Player 1',
     batting_no: 1
   }, {
     id: 2,
-    name: 'Haseeb Hameed',
+    name: 'Home Player 2',
     batting_no: 2
   }, {
     id: 3,
-    name: 'Keaton Jennings',
+    name: 'Home Player 3',
     batting_no: 3
   }, {
     id: 4,
-    name: 'Joe Root',
+    name: 'Home Player 4',
     batting_no: 4
   }, {
     id: 5,
-    name: 'Jonny Bairstow',
+    name: 'Home Player 5',
     batting_no: 5
   }, {
     id: 6,
-    name: 'Ben Stokes',
+    name: 'Home Player 6',
     batting_no: 6
   }, {
     id: 7,
-    name: 'Ben Duckett',
+    name: 'Home Player 7',
     batting_no: 7
   }, {
     id: 8,
-    name: 'Moeen Ali',
+    name: 'Home Player 8',
     batting_no: 8
   }, {
     id: 9,
-    name: 'Chris Woakes',
+    name: 'Home Player 9',
     batting_no: 9
   }, {
     id: 10,
-    name: 'Chris Broad',
+    name: 'Home Player 10',
     batting_no: 10
   }, {
     id: 11,
-    name: 'Jimmy Anderson',
+    name: 'Home Player 11',
     batting_no: 11
   }];
 
   var away_players = [{
     id: 12,
-    name: 'M.T.Renshaw',
+    name: 'Away Player 1',
     batting_no: 1
   }, {
     id: 13,
-    name: 'D.A.Warner',
+    name: 'Away Player 2',
     batting_no: 2
   }, {
     id: 14,
-    name: 'U.T.Khawaja',
+    name: 'Away Player 3',
     batting_no: 3
   }, {
     id: 15,
-    name: 'S.P.D.Smith',
+    name: 'Away Player 4',
     batting_no: 4
   }, {
     id: 16,
-    name: 'P.S.P.Handscomb',
+    name: 'Away Player 5',
     batting_no: 5
   }, {
     id: 17,
-    name: 'N.J.Maddinson',
+    name: 'Away Player 6',
     batting_no: 6
   }, {
     id: 18,
-    name: 'M.S.Wade',
+    name: 'Away Player 7',
     batting_no: 7
   }, {
     id: 19,
-    name: 'M.A.Starc',
+    name: 'Away Player 8',
     batting_no: 8
   }, {
     id: 20,
-    name: 'N.M.Lyon',
+    name: 'Away Player 9',
     batting_no: 9
   }, {
     id: 21,
-    name: 'J.R.Hazlewood',
+    name: 'Away Player 10',
     batting_no: 10
   }, {
     id: 22,
-    name: 'J.M.Bird',
+    name: 'Away Player 11',
     batting_no: 11
   }];
 

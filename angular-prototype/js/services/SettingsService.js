@@ -23,17 +23,17 @@ angular.module("scorer").factory('Settings', ['Storage', '$rootScope', function(
         num_innings: 1,
         home_team: {
           id: 1,
-          name: 'England',
+          name: 'Home Team',
           home_away: 'home'
         },
         away_team: {
           id: 2,
-          name: 'Australia',
+          name: 'Away Team',
           home_away: 'away'
         },
         team_batting_first: {
           id: 1,
-          name: 'England',
+          name: 'Home Team',
           home_away: 'home'
         }
       };
