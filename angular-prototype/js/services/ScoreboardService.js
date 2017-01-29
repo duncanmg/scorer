@@ -16,7 +16,9 @@ angular.module("scorer").factory('Scoreboard', ['Storage', 'Settings', '$rootSco
 
       scoreboard: initial_scoreboard,
 
-      /** @function */
+      /** @function change_ends
+       * @memberOf Scoreboard
+       */
       change_ends: function(num_runs) {
 
         if (num_runs % 2 === 0) {
@@ -31,13 +33,18 @@ angular.module("scorer").factory('Scoreboard', ['Storage', 'Settings', '$rootSco
           this.scoreboard.right_bat.striker = false;
         }
       },
-      /** @function */
+      /**
+       *  @function change_bowlers
+       *  @memberOf Scoreboard
+       */
       change_bowlers: function() {
         var tmp = this.scoreboard.bowler;
         this.scoreboard.bowler = this.scoreboard.next_bowler;
         this.scoreboard.next_bowler = tmp;
       },
-      /** @function */
+      /** @function alert_game_over
+       *  @memberOf Scoreboard
+       */
       alert_game_over: function() {
         if (this.scoreboard.game_over === true) {
           alert("The game is over!");
@@ -45,7 +52,9 @@ angular.module("scorer").factory('Scoreboard', ['Storage', 'Settings', '$rootSco
         }
         return this.alert_innings_over();
       },
-      /** @function */
+      /** @function alert_innings_over
+       *  @memberOf Scoreboard
+       */
       alert_innings_over: function() {
         if (this.scoreboard.game_over === false && this.scoreboard.innings_over === true) {
           alert("The innings is over!");
@@ -54,7 +63,9 @@ angular.module("scorer").factory('Scoreboard', ['Storage', 'Settings', '$rootSco
         }
         return false;
       },
-      /** @function */
+      /** @function alert_no_bowler
+       *  @memberOf Scoreboard
+       */
       alert_no_bowler: function() {
         if (!this.scoreboard.bowler.name) {
           alert("Please select a bowler.");
@@ -62,7 +73,9 @@ angular.module("scorer").factory('Scoreboard', ['Storage', 'Settings', '$rootSco
         }
         return false;
       },
-      /** @function */
+      /** @function bowls
+       *  @memberOf Scoreboard
+       */
       bowls: function(type, runs) {
 
         if (this.alert_game_over()) {
@@ -103,7 +116,9 @@ angular.module("scorer").factory('Scoreboard', ['Storage', 'Settings', '$rootSco
 
         this.save();
       },
-      /** @function */
+      /** @function set_game_over
+       *  @memberOf Scoreboard
+       */
       set_game_over: function() {
         this.set_innings_over();
         if (this.scoreboard.last_innings > 0 && this.scoreboard.total > this.scoreboard.last_innings) {
@@ -113,7 +128,9 @@ angular.module("scorer").factory('Scoreboard', ['Storage', 'Settings', '$rootSco
           this.scoreboard.game_over = true;
         }
       },
-      /** @function */
+      /** @function set_innings_over
+       *  @memberOf Scoreboard
+       */
       set_innings_over: function() {
         if (this.scoreboard.wickets >= 10) {
           this.scoreboard.innings_over = true;
@@ -126,7 +143,9 @@ angular.module("scorer").factory('Scoreboard', ['Storage', 'Settings', '$rootSco
 
         return this.scoreboard.innings_over;
       },
-      /** @function */
+      /** @function over
+       *  @memberOf Scoreboard
+       */
       over: function() {
         if (this.scoreboard.balls >= 6) {
           this.scoreboard.balls = 0;
@@ -140,7 +159,9 @@ angular.module("scorer").factory('Scoreboard', ['Storage', 'Settings', '$rootSco
           this.scoreboard.overs_and_balls = this.scoreboard.overs + '.' + this.scoreboard.balls;
         }
       },
-      /** @function */
+      /** @function add_runs_to_striker
+       *  @memberOf Scoreboard
+       */
       add_runs_to_striker: function(runs) {
         if (this.scoreboard.left_bat.striker) {
           this.scoreboard.left_bat.runs += runs;
@@ -148,7 +169,9 @@ angular.module("scorer").factory('Scoreboard', ['Storage', 'Settings', '$rootSco
           this.scoreboard.right_bat.runs += runs;
         }
       },
-      /** @function */
+      /** @function ball
+       *  @memberOf Scoreboard
+       */
       ball: function(runs) {
 
         this.scoreboard.total += runs;
@@ -159,7 +182,9 @@ angular.module("scorer").factory('Scoreboard', ['Storage', 'Settings', '$rootSco
         this.add_ball(this.scoreboard.left_bat.striker ? this.scoreboard.left_bat : this.scoreboard.right_bat, runs, 0, false, true);
 
       },
-      /** @function */
+      /** @function wicket
+       *  @memberOf Scoreboard
+       */
       wicket: function() {
         this.scoreboard.balls++;
         this.scoreboard.wickets += 1;
@@ -185,7 +210,9 @@ angular.module("scorer").factory('Scoreboard', ['Storage', 'Settings', '$rootSco
         this.set_batsmen_details();
         this.save();
       },
-      /** @function */
+      /** @function add_extra
+       *  @memberOf Scoreboard
+       */
       add_extra: function(extra) {
         if (this.alert_game_over()) {
           return false;
@@ -194,7 +221,9 @@ angular.module("scorer").factory('Scoreboard', ['Storage', 'Settings', '$rootSco
         this.set_game_over();
         this.save();
       },
-      /** @function */
+      /** @function add_extras
+       *  @memberOf Scoreboard
+       */
       add_extras: {
         no_ball: function(obj, extra) {
           obj.scoreboard.total += (extra.runs + extra.extras);
@@ -228,11 +257,15 @@ angular.module("scorer").factory('Scoreboard', ['Storage', 'Settings', '$rootSco
           obj.over();
         }
       },
-      /** @function */
+      /** @function save
+       *  @memberOf Scoreboard
+       */
       save: function() {
         Storage.put_scoreboard(this.scoreboard);
       },
-      /** @function */
+      /** @function new_match
+       *  @memberOf Scoreboard
+       */
       new_match: function() {
         this.scoreboard = new blank_scoreboard();
         Storage.put_scoreboard(this.scoreboard);
@@ -240,7 +273,9 @@ angular.module("scorer").factory('Scoreboard', ['Storage', 'Settings', '$rootSco
         Players.clear_bowlers('home');
         Players.clear_bowlers('away');
       },
-      /** @function */
+      /** @function new_innings
+       *  @memberOf Scoreboard
+       */
       new_innings: function() {
         Storage.put('last_innings', this.scoreboard);
         var last_innings_runs = this.scoreboard.total;
@@ -253,7 +288,9 @@ angular.module("scorer").factory('Scoreboard', ['Storage', 'Settings', '$rootSco
         this.scoreboard.batting_team = this.scoreboard.batting_team == "home" ? "away" : "home";
         this.set_batsmen_details();
       },
-      /** @function */
+      /** @function set_batting_team
+       *  @memberOf Scoreboard
+       */
       set_batting_team: function(batting_team) {
         if (batting_team != this.scoreboard.batting_team) {
           this.scoreboard.batting_team = batting_team;
@@ -263,7 +300,9 @@ angular.module("scorer").factory('Scoreboard', ['Storage', 'Settings', '$rootSco
           //alert("Done");
         }
       },
-      /** @function */
+      /** @function set_batsmen_details
+       *  @memberOf Scoreboard
+       */
       set_batsmen_details: function() {
 
         var check = function(batsman, players) {
@@ -287,7 +326,9 @@ angular.module("scorer").factory('Scoreboard', ['Storage', 'Settings', '$rootSco
 
       },
       // ***********************************************************************
-      /** @function */
+      /** @function set_bowler_details
+       * @memberOf Scoreboard
+       */
       set_bowler_details: function() {
 
         /** @function */
@@ -299,7 +340,7 @@ angular.module("scorer").factory('Scoreboard', ['Storage', 'Settings', '$rootSco
           }
           return false;
         };
-        /** @function */
+        /** @function @memberOf Scoreboard*/
         var set_bowler = function(bowlers, bowler) {
           if (!bowlers.length) {
             return {};
@@ -324,7 +365,9 @@ angular.module("scorer").factory('Scoreboard', ['Storage', 'Settings', '$rootSco
         this.scoreboard.next_bowler = set_bowler(bowlers, this.scoreboard.next_bowler);
       },
       // ***********************************************************************
-      /** @function */
+      /** @function reset
+       *  @memberOf Scoreboard
+       */
       reset: function() {
         Players.set_team('home');
         Players.reset();
@@ -338,9 +381,15 @@ angular.module("scorer").factory('Scoreboard', ['Storage', 'Settings', '$rootSco
         this.set_bowler_details();
 
       },
+      /** @function add_over
+       *   @memberOf Scoreboard
+       */
       add_over: function(over_no, bowler_obj) {
         this.scoreboard.overs_history.push(new Over(over_no, bowler_obj));
       },
+      /** @function add_ball
+       *   @memberOf Scoreboard
+       */
       add_ball: function(striker, runs, extras, wkt, valid) {
         if (!this.scoreboard.overs_history.length) {
           this.add_over(1, this.scoreboard.bowler);
@@ -356,8 +405,9 @@ angular.module("scorer").factory('Scoreboard', ['Storage', 'Settings', '$rootSco
         }
         this.scoreboard.overs_history[this.scoreboard.overs_history.length - 1].total_balls += 1;
       },
-      /** @method
-       *  @name is_ready */
+      /** @function is_ready
+       *  @memberOf Scoreboard
+       */
       is_ready: function() {
         if (!this.scoreboard.overs_history.length) {
           return false;
@@ -367,7 +417,9 @@ angular.module("scorer").factory('Scoreboard', ['Storage', 'Settings', '$rootSco
         }
         return true;
       },
-      /** @function */
+      /** @function clear
+       *  @memberOf Scoreboard
+       */
       clear: function() {
         this.scoreboard.overs_history = [];
       }
@@ -380,6 +432,5 @@ angular.module("scorer").factory('Scoreboard', ['Storage', 'Settings', '$rootSco
     });
 
     return Scoreboard;
-    /** @class Storage */
   }
 ]);
