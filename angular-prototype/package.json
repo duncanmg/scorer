@@ -24,11 +24,13 @@
     "gulp-bump": "^2.5.1",
     "gulp-concat": "^2.6.1",
     "gulp-header": "^1.8.8",
+    "gulp-jasmine": "^2.4.2",
     "gulp-jsdoc3": "^1.0.1",
     "gulp-jshint": "^2.0.4",
     "gulp-load-plugins": "^1.4.0",
     "gulp-rename": "^1.2.2",
     "gulp-uglify": "^2.0.0",
-    "jshint": "^2.9.4"
+    "jshint": "^2.9.4",
+    "karma": "^1.4.1"
   }
 }
