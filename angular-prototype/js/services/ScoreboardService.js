@@ -267,7 +267,7 @@ angular.module("scorer").factory('Scoreboard', ['Storage', 'Settings', '$rootSco
        *  @memberOf Scoreboard
        */
       new_match: function() {
-        this.scoreboard = new blank_scoreboard();
+        this.scoreboard = new ScoreboardTemplate(Settings);
         Storage.put_scoreboard(this.scoreboard);
         this.set_batsmen_details();
         Players.clear_bowlers('home');
