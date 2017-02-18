@@ -6,6 +6,10 @@ var header = require('gulp-header');
 var uglify = require('gulp-uglify');
 var rename = require('gulp-rename');
 var jsdoc = require('gulp-jsdoc3');
+var jasmine = require('gulp-jasmine');
+
+var gulp = require('gulp');
+var Server = require('karma').Server;
 
 gulp.task('lint', function()
 {
@@ -23,9 +27,9 @@ gulp.task('scripts', function() {
       .pipe(header(headerValue))
       .pipe(gulp.dest('public/javascripts'))
       .pipe(rename('combined.min.js'))
-      .pipe(uglify().on('error', function(e){
-            console.log(e);
-         }))
+      //.pipe(uglify().on('error', function(e){
+      //      console.log(e);
+      //   }))
       .pipe(header(headerValue))
       .pipe(gulp.dest('public/javascripts'));
 });
@@ -36,8 +40,19 @@ gulp.task('jsdoc', function (cb) {
         .pipe(jsdoc(config, cb));
 });
 
-gulp.task('watch', function() {
-   gulp.watch(['js/*.js','js/controllers/*.js', 'js/services/*.js'], ['lint', 'scripts', 'jsdoc']);
+/**
+ * Run test once and exit
+ */
+gulp.task('test', function (done) {
+  new Server({
+    // configFile: __dirname + '/karma.conf.js',
+    configFile: __dirname + '/node_modules/karma/karma.conf.js',
+    singleRun: true
+  }, done).start();
 });
 
-gulp.task('default', ['lint', 'scripts', 'jsdoc', 'watch']);
+gulp.task('watch', function() {
+   gulp.watch(['js/*.js','js/controllers/*.js', 'js/services/*.js'], ['lint', 'scripts', 'jsdoc', 'test']);
+});
+
+gulp.task('default', ['lint', 'scripts', 'jsdoc', 'test', 'watch']);
