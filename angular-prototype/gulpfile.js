@@ -45,8 +45,8 @@ gulp.task('jsdoc', function (cb) {
  */
 gulp.task('test', function (done) {
   new Server({
-    // configFile: __dirname + '/karma.conf.js',
-    configFile: __dirname + '/node_modules/karma/karma.conf.js',
+    configFile: __dirname + '/karma.conf.js',
+    // configFile: __dirname + '/node_modules/karma/karma.conf.js',
     singleRun: true
   }, done).start();
 });
