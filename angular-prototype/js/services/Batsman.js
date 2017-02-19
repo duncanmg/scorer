@@ -9,6 +9,12 @@ angular.module("scorer").factory('Batsman', [function() {
    *
    * @constructor Batsman
    * @this {Batsman}
+   * @property {integer} no
+   * @property {boolean} striker
+   * @property {integer} runs
+   * @property {boolean} bowler
+   * @property {boolean} bowling
+   *
    * @return {Batsman} The new Batsman object.
    */
   var Batsman = function() {
