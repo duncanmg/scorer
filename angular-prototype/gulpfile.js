@@ -52,7 +52,7 @@ gulp.task('test', function (done) {
 });
 
 gulp.task('watch', function() {
-   gulp.watch(['js/*.js','js/controllers/*.js', 'js/services/*.js'], ['lint', 'scripts', 'jsdoc', 'test']);
+   gulp.watch(['js/*.js','js/controllers/*.js', 'js/services/*.js', 'tests/unit/*.js'], ['lint', 'scripts', 'jsdoc', 'test']);
 });
 
 gulp.task('default', ['lint', 'scripts', 'jsdoc', 'test', 'watch']);
