@@ -27,6 +27,11 @@ angular.module("scorer").factory('Ball', [function() {
       typeof(extras) === 'undefined' || typeof(wkt) === 'undefined' ||
       typeof(valid) === 'undefined') {
       alert("Ball requires 5 parameters");
+      return false;
+    }
+    if (typeof(striker) != 'object') {
+      alert("Striker must be a Batman object.");
+      return false;
     }
     this.striker = jQuery.extend(true, {}, striker);
     this.runs = runs;
