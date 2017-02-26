@@ -20,7 +20,7 @@ angular.module("scorer").factory('Settings', ['Storage', '$rootScope', function(
           name: 'Pairs'
         }],
         num_overs: 40,
-        num_innings: 1,
+        num_innings: 2,
         home_team: {
           id: 1,
           name: 'Home Team',

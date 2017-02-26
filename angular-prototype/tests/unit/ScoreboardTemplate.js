@@ -21,7 +21,7 @@ describe("ScoreboardTemplateTest", function() {
 
   beforeEach(inject(function(ScoreboardTemplate) {
     //console.log(JSON.stringify(MockSettings));
-    template = new ScoreboardTemplate(MockSettings);
+    template = ScoreboardTemplate;
   }));
 
   it("A ScoreboardTemplateTest object has been created.",
@@ -29,11 +29,20 @@ describe("ScoreboardTemplateTest", function() {
       expect(typeof(template)).toEqual('object');
     });
 
+  it("The ScoreboardTemplate objects has 2 innings.", function() {
+    console.log(JSON.stringify(template));
+    expect(template.innings.length).toEqual(2);
+  });
+
   it("A ScoreboardTemplate object has some of the correct attributes.", function() {
 
-    expect(template.left_bat.no).toEqual(1);
-    expect(template.game_over).toEqual(false);
-    expect(template.num_overs).toEqual(10);
+    expect(template.innings[0].left_bat.no).toBeDefined();
+    expect(template.innings[0].game_over).toBeDefined();
+    expect(template.innings[0].num_overs).toBeDefined();
+
+    expect(template.innings[1].left_bat.no).toBeDefined();
+    expect(template.innings[1].game_over).toBeDefined();
+    expect(template.innings[1].num_overs).toBeDefined();
 
   });
 
