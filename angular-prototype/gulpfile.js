@@ -34,9 +34,10 @@ gulp.task('scripts', function() {
       .pipe(gulp.dest('public/javascripts'));
 });
 
+// Search paths are in jsdoc.json
 gulp.task('jsdoc', function (cb) {
     var config = require('./jsdoc.json');
-    gulp.src(['README.md', './js/*.js', './js/**/*.js'], {read: false})
+    gulp.src(['README.md'], {read: false})
         .pipe(jsdoc(config, cb));
 });
 
