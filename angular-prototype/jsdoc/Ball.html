@@ -31,16 +31,23 @@
 		<ul class="nav navbar-nav">
 			
 			<li class="dropdown">
+				<a href="namespaces.list.html" class="dropdown-toggle" data-toggle="dropdown">Namespaces<b class="caret"></b></a>
+				<ul class="dropdown-menu ">
+					<li><a href="scorer.html">scorer</a></li>
+				</ul>
+			</li>
+			
+			<li class="dropdown">
 				<a href="classes.list.html" class="dropdown-toggle" data-toggle="dropdown">Classes<b class="caret"></b></a>
 				<ul class="dropdown-menu ">
-					<li><a href="Ball.html">Ball</a></li><li><a href="Batsman.html">Batsman</a></li><li><a href="blank_scoreboard.html">blank_scoreboard</a></li><li><a href="Over.html">Over</a></li><li><a href="Scoreboard.html">Scoreboard</a></li><li><a href="ScoreboardTemplate.html">ScoreboardTemplate</a></li><li><a href="Storage.html">Storage</a></li>
+					<li><a href="Ball.html">Ball</a></li><li><a href="Batsman.html">Batsman</a></li><li><a href="blank_scoreboard.html">blank_scoreboard</a></li><li><a href="Over.html">Over</a></li><li><a href="scorer.BallFactory.html">scorer.BallFactory</a></li><li><a href="scorer.Batsman.html">scorer.Batsman</a></li><li><a href="scorer.EditPlayerController.html">scorer.EditPlayerController</a></li><li><a href="scorer.HistoryController.html">scorer.HistoryController</a></li><li><a href="scorer.Innings.html">scorer.Innings</a></li><li><a href="scorer.NewMatchController.html">scorer.NewMatchController</a></li><li><a href="scorer.OthersController.html">scorer.OthersController</a></li><li><a href="scorer.OthersFactory.html">scorer.OthersFactory</a></li><li><a href="scorer.OverFactory.html">scorer.OverFactory</a></li><li><a href="scorer.PlayersController.html">scorer.PlayersController</a></li><li><a href="scorer.PlayersFactory.html">scorer.PlayersFactory</a></li><li><a href="scorer.Scoreboard.html">scorer.Scoreboard</a></li><li><a href="scorer.ScoreboardTemplate.html">scorer.ScoreboardTemplate</a></li><li><a href="scorer.ScorerController.html">scorer.ScorerController</a></li><li><a href="scorer.SettingsController.html">scorer.SettingsController</a></li><li><a href="scorer.StorageFactory.html">scorer.StorageFactory</a></li><li><a href="Storage.html">Storage</a></li>
 				</ul>
 			</li>
 			
 			<li class="dropdown">
 				<a href="global.html" class="dropdown-toggle" data-toggle="dropdown">Global<b class="caret"></b></a>
 				<ul class="dropdown-menu ">
-					<li><a href="global.html#is_ready">is_ready</a></li>
+					<li><a href="global.html#@memberOfScoreboard">@memberOf Scoreboard</a></li>
 				</ul>
 			</li>
 			
@@ -91,7 +98,7 @@
         
 <hr>
 <dt>
-    <h4 class="name" id="Ball"><span class="type-signature"></span>new Ball(striker, runs, extras, valid)</h4>
+    <h4 class="name" id="Ball"><span class="type-signature"></span>new Ball(striker, runs, extras, wkt, valid)</h4>
     
     
 </dt>
@@ -200,6 +207,30 @@
             
 
             <td class="description last">The number of extras.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>wkt</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">integer</span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Was a wicket taken? 1 = Yes, 0 = No</td>
         </tr>
 
     
@@ -476,23 +507,292 @@
         
 <hr>
 <dt>
-    <h4 class="name" id="Ball"><span class="type-signature"></span>new Ball()</h4>
+    <h4 class="name" id="Ball"><span class="type-signature"></span>new Ball(striker, runs, extras, wkt, valid)</h4>
     
     
 </dt>
 <dd>
 
     
-
+    <div class="description">
+        Creates an instance of Ball
+    </div>
     
 
     
 
     
+
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params table table-striped">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>striker</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="Batsman.html">Batsman</a></span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The batsman who was on strike.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>runs</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">integer</span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The number runs scored off the bat.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>extras</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">integer</span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The number of extras.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>wkt</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">integer</span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Was a wicket taken? 1 = Yes, 0 = No</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>valid</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">integer</span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">= Was the ball valid? 1 = Yes, 0 = No.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
     
 
     
 <dl class="details">
+    
+
+    <h5 class="subsection-title">Properties:</h5>
+
+    <dl>
+
+<table class="props table table-striped">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>striker</code></td>
+            
+
+            <td class="type">
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>runs</code></td>
+            
+
+            <td class="type">
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>extras</code></td>
+            
+
+            <td class="type">
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>wkt</code></td>
+            
+
+            <td class="type">
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>valid</code></td>
+            
+
+            <td class="type">
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+</dl>
+
     
 
 	
@@ -542,6 +842,30 @@
     
 
     
+    <h5>Returns:</h5>
+    
+            
+<div class="param-desc">
+    The new Ball object.
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type"><a href="Ball.html">Ball</a></span>
+
+
+
+    </dd>
+</dl>
+
+
+        
 
     
 </dd>
@@ -610,7 +934,7 @@
 <span class="jsdoc-message">
 	Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.3</a>
 	
-		on 2017-01-29T15:57:26+00:00
+		on 2017-03-11T16:26:58+00:00
 	
 	using the <a href="https://github.com/docstrap/docstrap">DocStrap template</a>.
 </span>
