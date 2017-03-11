@@ -1,0 +1,5 @@
+/**
+* @namespace controller
+* @memberOf scorer
+*
+*/

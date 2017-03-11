@@ -1,0 +1,5 @@
+/**
+* @namespace factory
+* @memberOf scorer
+*
+*/
