@@ -1,3 +1,7 @@
+/**
+ * @class Others
+ * @memberOf scorer.factory
+ */
 angular.module("scorer").factory('Others', ['Scoreboard', 'Storage', function(Scoreboard, Storage) {
 
   var board = Scoreboard;

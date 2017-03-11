@@ -1,6 +1,8 @@
 angular.module("scorer").factory('Over', [function() {
 /** Creates an instance of Over
  *
+ * @class Over
+ * @memberOf scorer.factory
  * @constructor Over
  * @over {Over}
  * @param {integer} over_no - The over number.

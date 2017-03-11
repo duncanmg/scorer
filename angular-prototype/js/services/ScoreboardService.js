@@ -1,6 +1,6 @@
 /**
- * @name Scoreboard
- * @class
+ * @class Scoreboard
+ * @memberOf scorer.factory
  */
 angular.module("scorer").factory('Scoreboard', ['Storage', 'Settings', '$rootScope',
   'Players', 'Over', 'Batsman', 'Ball', 'ScoreboardTemplate',
@@ -350,8 +350,10 @@ angular.module("scorer").factory('Scoreboard', ['Storage', 'Settings', '$rootSco
         };
 
         var players = this.scoreboard.batting_team == "home" ? this.home_players.players : this.away_players.players;
-        this.left_bat = check(this.scoreboard.left_bat, players);
-        this.right_bat = check(this.scoreboard.right_bat, players);
+        console.log("set_batsmen_details");
+        console.log(JSON.stringify(this.scoreboard));
+        this.left_bat = check(this.scoreboard.innings.left_bat, players);
+        this.right_bat = check(this.scoreboard.innings.right_bat, players);
         // alert(JSON.stringify(this.scoreboard.right_bat));
 
       };
@@ -468,7 +470,7 @@ angular.module("scorer").factory('Scoreboard', ['Storage', 'Settings', '$rootSco
 
     $rootScope.$on('settings_changed', function(event, args) {
       s.scoreboard.num_overs = args.num_overs;
-      alert('Hi ' + Scoreboard.scoreboard.num_overs);
+      alert('Hi ' + s.scoreboard.num_overs);
       s.set_batting_team(args.team_batting_first.home_away);
     });
 

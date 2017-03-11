@@ -1,3 +1,7 @@
+/**
+ * @class EditPlayerController
+ * @memberOf scorer.controller
+ */
 angular.module('scorer')
   .controller('EditPlayerController', ['$scope', '$stateParams', '$state', 'Players', 'team', function($scope, $stateParams, $state, Players, team) {
     'use strict';

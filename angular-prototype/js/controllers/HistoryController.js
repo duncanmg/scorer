@@ -1,3 +1,7 @@
+/**
+ * @class HistoryController
+ * @memberOf scorer.controller
+ */
 angular.module('scorer').controller('HistoryController', ['$scope', '$stateParams', '$state', 'Scoreboard', function($scope, $stateParams, $state, Scoreboard) {
 
   'use strict';

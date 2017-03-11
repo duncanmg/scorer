@@ -1,3 +1,7 @@
+/**
+ * @class PlayersController
+ * @memberOf scorer.controller
+ */
 angular.module('scorer')
   .controller('PlayersController', ['$scope', '$stateParams', '$state', 'Players', function($scope, $stateParams, $state, Players) {
 

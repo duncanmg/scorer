@@ -1,12 +1,12 @@
 /**
- * @name Innings
- * @class
+ * @class Innings
+ * @memberOf scorer.factory
+ * @constructor Innings
  */
 angular.module("scorer").factory('Innings', [
   function() {
     var Innings = function(Settings) {
 
-      /** @constructor blank_scoreboard */
       this.overs_history = [];
       this.last_overs_history = [];
       this.total = 0;

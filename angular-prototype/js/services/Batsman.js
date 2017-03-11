@@ -1,12 +1,11 @@
-/**
- * @name Batsman
- * @class
- */
+
 angular.module("scorer").factory('Batsman', [function() {
 
   /**
    * Creates an instance of Batsman
    *
+   * @class Batsman
+   * @memberOf scorer.factory
    * @constructor Batsman
    * @this {Batsman}
    * @property {integer} no

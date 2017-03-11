@@ -1,3 +1,7 @@
+/**
+ * @class Players
+ * @memberOf scorer.factory
+ */
 angular.module("scorer").factory('Players', ['Storage', '$rootScope', function(Storage, $rootScope) {
 
   'use strict';

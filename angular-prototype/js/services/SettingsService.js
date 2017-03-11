@@ -1,3 +1,7 @@
+/**
+ * @class Settings
+ * @memberOf scorer.factory
+ */
 angular.module("scorer").factory('Settings', ['Storage', '$rootScope', function(Storage, $rootScope) {
 
   var get_settings = function() {

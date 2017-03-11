@@ -1,11 +1,10 @@
 /**
-  * @class scorer.Controllers.ScorerController
-  * @memberOf scorer.Controllers
-  */
+ * @class ScorerController
+ * @memberOf scorer.controller
+ */
 angular.module('scorer').controller('ScorerController', ['$scope', '$stateParams', '$state', 'Scoreboard', function($scope, $stateParams, $state, Scoreboard) {
 
     'use strict';
-
 
     var board = Scoreboard;
     $scope.scoreboard = board.scoreboard;
@@ -21,6 +20,10 @@ angular.module('scorer').controller('ScorerController', ['$scope', '$stateParams
 
     $('#navbar').collapse('hide');
   }])
+  /**
+   * @class OthersController
+   * @memberOf scorer.controller
+   */
   .controller('OthersController', ['$scope', '$stateParams', '$state', 'Scoreboard', 'Others', function($scope, $stateParams, $state, Scoreboard, Others) {
 
     var board = Scoreboard;
@@ -41,6 +44,10 @@ angular.module('scorer').controller('ScorerController', ['$scope', '$stateParams
     $('#navbar').collapse('hide');
 
   }])
+  /**
+   * @class SettingsController
+   * @memberOf scorer.controller
+   */
   .controller('SettingsController', ['$scope', '$stateParams', '$state', 'Scoreboard', 'Storage', 'Settings', function($scope, $stateParams, $state, Scoreboard, Storage, Settings) {
 
     var settings = Settings;
@@ -59,7 +66,12 @@ angular.module('scorer').controller('ScorerController', ['$scope', '$stateParams
 
     $('#navbar').collapse('hide');
 
-  }]).controller('NewMatchController', ['$scope', '$stateParams', '$state', 'Scoreboard', function($scope, $stateParams, $state, Scoreboard) {
+  }])
+  /**
+   * @class NewMatchController
+   * @memberOf scorer.controller
+   */
+  .controller('NewMatchController', ['$scope', '$stateParams', '$state', 'Scoreboard', function($scope, $stateParams, $state, Scoreboard) {
     $('#navbar').collapse('hide');
     var board = Scoreboard;
     board.new_match();

@@ -1,18 +1,20 @@
 /**
- * @name Ball
- * @class
+ *
+
  */
 angular.module("scorer").factory('Ball', [function() {
 
   /** Creates an instance of Ball
    *
+   * @class Ball
+   * @memberOf scorer.factory
    * @constructor Ball
    * @ball {Ball}
    * @param {Batsman} striker - The batsman who was on strike.
    * @param {integer} runs - The number runs scored off the bat.
    * @param {integer} extras - The number of extras.
    * @param {integer} wkt - Was a wicket taken? 1 = Yes, 0 = No
-   * @param {integer} valid = Was the ball valid? 1 = Yes, 0 = No.
+   * @param {integer} valid - Was the ball valid? 1 = Yes, 0 = No.
    * @return {Ball} The new Ball object.
    *
    * @property striker

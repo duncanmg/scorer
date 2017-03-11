@@ -1,6 +1,6 @@
 /**
- * @name ScoreboardTemplate
- * @class
+ * @class ScoreboardTemplate
+ * @memberOf scorer.service
  */
 angular.module("scorer").service('ScoreboardTemplate', ['Settings', 'Innings',
   function(Settings, Innings) {

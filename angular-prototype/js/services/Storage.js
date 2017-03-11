@@ -1,6 +1,6 @@
 /**
- * @name Storage
- * @class
+ * @class Storage
+ * @memberOf scorer.factory
  */
 angular.module("scorer").factory('Storage', function() {
 
