@@ -373,7 +373,7 @@ angular.module("scorer").factory('Scoreboard', ['Storage', 'Settings', '$rootSco
           }
           return false;
         };
-        /** @function @memberOf Scoreboard*/
+        /** @function */
         var set_bowler = function(bowlers, bowler) {
           if (!bowlers.length) {
             return {};
