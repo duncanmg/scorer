@@ -7,19 +7,21 @@ angular.module("scorer").factory('Scoreboard', ['Storage', 'Settings', '$rootSco
 
     if (!initial_scoreboard) {
       console.log("Initialise");
-      initial_scoreboard = ScoreboardTemplate;
+      initial_scoreboard = new ScoreboardTemplate(Settings);
+      initial_scoreboard.fred = 1;
     }
 
     /**
      * @class Scoreboard
      * @memberOf scorer.factory
      * @constructor Scoreboard
-     * @param {ScoreboardTemplate} ScoreboardTemplate
+     * @param {ScoreboardTemplate} scoreboard_template
      */
-    var Scoreboard = function(ScoreboardTemplate) {
+    var Scoreboard = function(scoreboard_template) {
 
-      this.scoreboard = ScoreboardTemplate.innings[0];
-      this.next_innings = ScoreboardTemplate.innings[1];
+      var s = jQuery.extend(true, {}, scoreboard_template);
+      this.scoreboard = s.innings[0];
+      this.next_innings = s.innings[1];
 
       console.log('scoreboard ' + JSON.stringify(this.scoreboard));
 
@@ -300,8 +302,16 @@ angular.module("scorer").factory('Scoreboard', ['Storage', 'Settings', '$rootSco
        *  @memberOf scorer.factory.Scoreboard
        */
       this.new_match = function() {
-        var s = new Scoreboard(ScoreboardTemplate);
-        // this = s;
+        var s = new ScoreboardTemplate(Settings);
+        console.log("new_match s.innings[0].overs_history");
+        console.log(JSON.stringify(s.innings[0].overs_history));
+        console.log("new_match this.scoreboard.overs_history");
+        console.log(JSON.stringify(this.scoreboard.overs_history));
+        this.scoreboard = s.innings[0];
+        this.next_innings = s.innings[1];
+        console.log("new_match");
+        console.log(JSON.stringify(this));
+        this.save();
       };
 
       /** @function new_innings
