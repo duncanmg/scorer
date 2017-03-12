@@ -23,7 +23,7 @@ describe("ScoreboardTest", function() {
     });
 
   it("A Scoreboard object has some of the correct attributes.", function() {
-    console.log(JSON.stringify(scoreboard.scoreboard));
+    //console.log(JSON.stringify(scoreboard.scoreboard));
     expect(scoreboard.scoreboard.num_overs).toEqual(40);
     expect(scoreboard.scoreboard.batting_team).toEqual("home");
     expect(scoreboard.scoreboard.overs_history.length).toEqual(0);
