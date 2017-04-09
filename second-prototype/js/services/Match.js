@@ -32,7 +32,7 @@ angular.module("scorer").factory('Match', ['Storage', function(Storage) {
      */
     this.set_batting_team = function(batting_team) {
        // http://stackoverflow.com/questions/1068834/object-comparison-in-javascript
-       if (JSON.stringify(this.home_team) === JSON.stringify(batting_team){
+       if (JSON.stringify(this.home_team) === JSON.stringify(batting_team)){
          this.batting_team = this.home_team;
          this.bowling_team = this.away_team;
        }
@@ -50,7 +50,7 @@ angular.module("scorer").factory('Match', ['Storage', function(Storage) {
      */
     this.set_bowler_end_1 = function(bowler) {
        this.bowler_end_1 = bowler;
-    }
+    };
 
     /**
      * @function set_bowler_end_2
@@ -60,7 +60,7 @@ angular.module("scorer").factory('Match', ['Storage', function(Storage) {
      */
     this.set_bowler_end_2 = function(bowler) {
        this.bowler_end_2 = bowler;
-    }
+    };
 
     /**
      * @function set_batsman_end_1
@@ -70,7 +70,7 @@ angular.module("scorer").factory('Match', ['Storage', function(Storage) {
      */
     this.set_batsman_end_1 = function(batsman) {
        this.batsman_end_1 = batsman;
-    }
+    };
 
     /**
      * @function set_batsman_end_2
@@ -80,8 +80,8 @@ angular.module("scorer").factory('Match', ['Storage', function(Storage) {
      */
     this.set_batsman_end_2 = function(batsman) {
        this.batsman_end_2 = batsman;
-    }
-    
+    };
+
   };
 
-]);
+}]);

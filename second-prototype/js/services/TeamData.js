@@ -18,6 +18,6 @@ angular.module("scorer").factory('TeamData', [ function() {
 
   return function(label) {
     this.players=setup(label);
-  }
+  };
 
 }]);

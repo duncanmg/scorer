@@ -19,13 +19,13 @@ angular.module("scorer").factory('Storage', function() {
       } catch (e) {
         return false;
       }
-    },
+    };
 
     // Private function.
     var put = function(key, value) {
       sessionStorage[key] = JSON.stringify(value);
       return true;
-    }
+    };
 
     /**
       * @function get_match
@@ -90,4 +90,3 @@ angular.module("scorer").factory('Storage', function() {
   };
 
 });
-
