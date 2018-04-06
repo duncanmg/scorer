@@ -94,6 +94,10 @@ angular.module("scorer").factory('Storage', [function() {
       return this.get('scoreboard');
     };
 
+    this.put_scoreboard = function() {
+      return this.put('scoreboard');
+    };
+
 
   };
 
