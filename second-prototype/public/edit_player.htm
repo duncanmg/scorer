@@ -1,0 +1,69 @@
+<div class="row">
+  <div class="col-sm-2 col-md-2 main hidden-xs hidden-sm">&nbsp;</div>
+  <div class="col-sm-8 col-md-8 scoreboard">
+    <h2 class="sub-header hidden-xs hidden-sm">Edit Player</h2>
+    <h5 class="sub-header visible-xs-* visible-sm-* hidden-md hidden-lg">Edit Player</h5>
+    <div class="table-responsive">
+      <form>
+        <table class="table table-small others">
+
+          <tbody>
+            <tr>
+              <td class="others">
+                <button type="button" class="btn btn-default btn-left" ng-click="accept()">
+                            <span class="glyphicon glyphicon-ok-circle"></span>
+                </button>
+                <button type="button" class="btn btn-default btn-right" ng-click="reject()">
+                            <span class="glyphicon glyphicon-remove-circle"></span>
+                </button>
+              </td>
+            </tr>
+            <tr>
+              <td class="others">
+                <div class="form-group">
+                  <label for="name">Name</label>
+                  <input type="text" class="form-control" id="name" placeholder="eg Bradman" ng-model="player.name">
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <td class="others">
+                <div class="form-group">
+                  <label for="description">Description</label>
+                  <textarea class="form-control" id="description" placeholder="eg Jolly green giant" ng-model="player.description" rows="3"></textarea>
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <td class="others">
+                <div class="form-group">
+                  <div class="input-group">
+                    <button class="btn btn-default btn-left" ng-click="toggle_bowling(player)" ng-disabled="player.bowling">Start Bowling</span></button>
+                    <button class="btn btn-default btn-left" ng-click="toggle_bowling(player)" ng-disabled="! player.bowling">Stop Bowling</span></button>
+                    <!--<button class="btn btn-default btn-right" ng-click="players.up(player)"><span class="glyphicon glyphicon-arrow-up"></span></button>-->
+                  </div>
+                </div>
+              </td>
+            </tr>
+            <!-- *********************************************************** -->
+            <tr>
+              <td>
+                <button type="button" class="btn btn-default btn-left" ng-click="accept()">
+                              <span class="glyphicon glyphicon-ok-circle"></span>
+                </button>
+                <button type="button" class="btn btn-default btn-right" ng-click="reject()">
+                              <span class="glyphicon glyphicon-remove-circle"></span>
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </form>
+    </div>
+  </div>
+  <div class="col-sm-2 col-md-2 main hidden-xs hidden-sm">&nbsp;</div>
+</div>
+
+
+<div id="hidden_when_xs_sm" class="col-sm-2 col-md-2 main hidden-xs hidden-sm">&nbsp;</div>
+</div>
