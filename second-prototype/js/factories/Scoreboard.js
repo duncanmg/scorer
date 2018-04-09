@@ -54,6 +54,8 @@ angular.module("scorer").factory('Scoreboard', ['Storage', 'Settings', '$rootSco
         var tmp = this.scoreboard.bowler;
         this.scoreboard.bowler = this.scoreboard.next_bowler;
         this.scoreboard.next_bowler = tmp;
+        console.log("After change_bowlers: bowler " + JSON.stringify(this.scoreboard.bowler));
+        console.log("After change_bowlers: next " + JSON.stringify(this.scoreboard.next_bowler));
       };
 
       /** @function alert_game_over
