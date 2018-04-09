@@ -1,7 +1,9 @@
 angular.module("scorer").factory('Scoreboard', ['Storage', 'Settings', '$rootScope',
   'Players', 'Over', 'Batsman', 'Ball', 'ScoreboardTemplate',
-  function(Storage, Settings, $rootScope, Players, Over, Batsman, Ball, ScoreboardTemplate) {
+  function(Storage, Settings, $rootScope, Players, Over, Batsman, Ball,
+    ScoreboardTemplate, DeliveryManager) {
 
+    var delivery_manager = new DeliveryManager();
     var storage = new Storage();
     var initial_scoreboard = storage.get_scoreboard();
     console.log(JSON.stringify(ScoreboardTemplate));
