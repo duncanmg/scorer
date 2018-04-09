@@ -241,6 +241,7 @@ angular.module("scorer").factory('Scoreboard', ['Storage', 'Settings', '$rootSco
       };
 
       /** @function add_extra
+       *
        *  @memberOf scorer.factory.Scoreboard
        *  @param {Extra} extra - The Extra object for the ball.
        */
@@ -258,7 +259,7 @@ angular.module("scorer").factory('Scoreboard', ['Storage', 'Settings', '$rootSco
        *  @param {Scoreboard} obj - ?????
        *  @param {Extra} extra - The Extra object for the ball.
        */
-      add_extras = {
+      this.add_extras = {
         no_ball: function(obj, extra) {
           obj.scoreboard.total += (extra.runs + extra.extras);
           obj.add_runs_to_striker(extra.runs);
