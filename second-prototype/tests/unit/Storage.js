@@ -9,7 +9,7 @@ describe("StorageTest", function() {
   }));
 
   beforeEach(inject(function(Storage) {
-    storage = Storage;
+    storage = new Storage();
   }));
 
   it("A Storage object has been created.",
