@@ -22,10 +22,8 @@ angular.module("scorer").factory('Wide', [
       this.record = function(scoreboard, details) {
         scoreboard.extras += 1;
         scoreboard.total += 1;
-        scoreboard.add_ball(scoreboard.left_bat.striker
-          ? scoreboard.left_bat
-          : scoreboard.right_bat, 0, 1, false, false);
-
+        scoreboard.add_ball(scoreboard.left_bat.striker ? scoreboard.left_bat :
+          scoreboard.right_bat, 0, 1, false, false);
       };
 
     };
