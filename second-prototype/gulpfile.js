@@ -13,7 +13,7 @@ var Server = require('karma').Server;
 
 gulp.task('lint', function()
 {
-   return gulp.src(['js/*.js','js/controllers/*.js', 'js/services/*.js', 'js/factories/*.js'])
+   return gulp.src(['js/*.js','js/controllers/*.js', 'js/services/*.js', 'js/factories/**/*.js'])
 
       .pipe(jshint())
 
@@ -22,7 +22,7 @@ gulp.task('lint', function()
 
 gulp.task('scripts', function() {
    var headerValue = "\n// Evaluated by gulp\n\n";
-   return gulp.src(['js/*.js','js/controllers/*.js', 'js/services/*.js', 'js/factories/*.js'])
+   return gulp.src(['js/*.js','js/controllers/*.js', 'js/services/*.js', 'js/factories/**/*.js'])
       .pipe(concat('combined.js'))
       .pipe(header(headerValue))
       .pipe(gulp.dest('public/javascripts'))
@@ -53,7 +53,7 @@ gulp.task('test', function (done) {
 });
 
 gulp.task('watch', function() {
-   gulp.watch(['js/*.js','js/controllers/*.js', 'js/services/*.js', 'tests/unit/*.js', 'js/factories/*.js'], ['lint', 'scripts', 'jsdoc', 'test']);
+   gulp.watch(['js/*.js','js/controllers/*.js', 'js/services/*.js', 'tests/unit/**/*.js', 'js/factories/**/*.js'], ['lint', 'scripts', 'jsdoc', 'test']);
 });
 
 gulp.task('default', ['lint', 'scripts', 'jsdoc', 'test', 'watch']);

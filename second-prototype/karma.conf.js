@@ -22,7 +22,8 @@ module.exports = function(config) {
       "javascripts/angular-resource.min.js",
       '../node_modules/angular-mocks/angular-mocks.js',
       'javascripts/combined.js',
-      '../tests/unit/*.js'
+      '../tests/unit/*.js',
+      '../tests/unit/delivery_types/*.js'
     ],
 
 
