@@ -29,7 +29,19 @@ angular.module("scorer").factory('Scoreboard', ['Storage', 'Settings', '$rootSco
       console.log('scoreboard ' + JSON.stringify(this.scoreboard));
 
       /**
+       * @namespace scorer.factory.Scoreboard
+       * @property {number} scoreboard - The current innings. Always innings[0] of the ScoreboardTemplate object.
+       * @property {array} next_innings - The next innings. Always innings[1] of the ScoreboardTemplate object.
+       * @property {Players} home_players -
+       * @property {Players} away_players -
+       * @property {boolean} is_ready -
+       */
+
+      /**
        * @function change_ends
+       * @description Accept the number of times the batsmen ran and calculate whether
+       * the batsmen changed ends. If they did, toggle the values of scoreboard.left_bat.striker
+       * and scoreboard.right_bat.striker.
        * @memberOf scorer.factory.Scoreboard
        * @param {integer} num_runs - Number of times the batsmen ran on the last ball.
        */
@@ -50,6 +62,7 @@ angular.module("scorer").factory('Scoreboard', ['Storage', 'Settings', '$rootSco
 
       /**
        *  @function change_bowlers
+       *  @description Swop the objects in scoreboard.bowler and scoreboard.next_bowler.
        *  @memberOf scorer.factory.Scoreboard
        */
       this.change_bowlers = function() {
@@ -61,6 +74,7 @@ angular.module("scorer").factory('Scoreboard', ['Storage', 'Settings', '$rootSco
       };
 
       /** @function alert_game_over
+       *  @description Alert if the scoreboard.game_over flag is true.
        *  @memberOf scorer.factory.Scoreboard
        */
       this.alert_game_over = function() {
@@ -72,6 +86,8 @@ angular.module("scorer").factory('Scoreboard', ['Storage', 'Settings', '$rootSco
       };
 
       /** @function alert_innings_over
+       *  @description Alert if the scoreboard.gamer_over flag is false and the
+       *  scoreboard.innings_overs flag is true.
        *  @memberOf scorer.factory.Scoreboard
        *  @return {boolean}
        */

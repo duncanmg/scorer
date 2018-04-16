@@ -6,22 +6,29 @@ describe("ByeTest", function() {
   var scoreboard;
 
   beforeEach(module(function($provide) {
-    console.log('provide');
-    $provide.factory('Scoreboard', function() {
-      var obj = function() {
-        this.extras = 0;
-        this.total = 0;
-        this.balls = [];
-        this.left_bat = {};
-        this.right_bat = {};
-        this.left_bat.striker = false;
-        this.add_ball = function(ball) {
-           this.balls.push(ball);
-        };
+  console.log('provide');
+  $provide.factory('Scoreboard', function() {
+    var obj = function() {
+      this.extras = 0;
+      this.total = 0;
+      this.balls = [];
+      this.overs_history = [];
+      this.left_bat = {};
+      this.right_bat = {};
+      this.left_bat.striker = false;
+      this.add_ball = function(ball) {
+        this.balls.push(ball);
+        this.scoreboard.overs_history[this.scoreboard.overs_history.length - 1].balls.push(new Ball(
+          striker, runs, extras, wkt, valid));
+        if (valid) {
+          this.scoreboard.overs_history[this.scoreboard.overs_history.length - 1].valid_balls += 1;
+        }
+        this.scoreboard.overs_history[this.scoreboard.overs_history.length - 1].total_balls += 1;
       };
-      return obj;
-    });
-  }));
+    };
+    return obj;
+  });
+}));
 
   beforeEach(inject(function(Bye, Scoreboard) {
     console.log('inject');
