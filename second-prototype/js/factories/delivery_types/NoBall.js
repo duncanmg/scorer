@@ -4,7 +4,7 @@ angular.module("scorer").factory('NoBall', [
     /** Creates an instance of NoBall
      *
     * @class NoBall
-       * @memberOf scorer.factory.DeliveryType
+      * @memberOf scorer.factory.DeliveryType
       * @classdesc - Returns an instance of a correct delivery class..
       * @constructor NoBall
 

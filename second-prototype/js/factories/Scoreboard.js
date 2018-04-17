@@ -19,6 +19,12 @@ angular.module("scorer").factory('Scoreboard', ['Storage', 'Settings', '$rootSco
      * @memberOf scorer.factory
      * @constructor Scoreboard
      * @param {ScoreboardTemplate} scoreboard_template
+     * @property {number} scoreboard - The current innings. Always innings[0] of the ScoreboardTemplate object.
+     * @property {array} next_innings - The next innings. Always innings[1] of the ScoreboardTemplate object.
+     * @property {Players} home_players -
+     * @property {Players} away_players -
+     * @property {boolean} is_ready -
+     * @property {Players} home_players -
      */
     var Scoreboard = function(scoreboard_template) {
 
@@ -29,16 +35,7 @@ angular.module("scorer").factory('Scoreboard', ['Storage', 'Settings', '$rootSco
       console.log('scoreboard ' + JSON.stringify(this.scoreboard));
 
       /**
-       * @namespace scorer.factory.Scoreboard
-       * @property {number} scoreboard - The current innings. Always innings[0] of the ScoreboardTemplate object.
-       * @property {array} next_innings - The next innings. Always innings[1] of the ScoreboardTemplate object.
-       * @property {Players} home_players -
-       * @property {Players} away_players -
-       * @property {boolean} is_ready -
-       */
-
-      /**
-       * @function change_ends
+       * @function #change_ends
        * @description Accept the number of times the batsmen ran and calculate whether
        * the batsmen changed ends. If they did, toggle the values of scoreboard.left_bat.striker
        * and scoreboard.right_bat.striker.
@@ -101,6 +98,7 @@ angular.module("scorer").factory('Scoreboard', ['Storage', 'Settings', '$rootSco
       };
 
       /** @function alert_no_bowler
+       *  @description Alert if the bowler is not set.
        *  @memberOf scorer.factory.Scoreboard
        *  @return boolean
        */
@@ -113,6 +111,7 @@ angular.module("scorer").factory('Scoreboard', ['Storage', 'Settings', '$rootSco
       };
 
       /** @function bowls
+       *  @description Called when a delivery is anything except "other".
        *  @memberOf scorer.factory.Scoreboard
        *  @return {boolean}
        */
@@ -158,6 +157,8 @@ angular.module("scorer").factory('Scoreboard', ['Storage', 'Settings', '$rootSco
       };
 
       /** @function set_game_over
+       *  @description Calls set_innings_over and then set game_over if there are no
+       *  more innings.
        *  @memberOf scorer.factory.Scoreboard
        */
       this.set_game_over = function() {
@@ -171,6 +172,8 @@ angular.module("scorer").factory('Scoreboard', ['Storage', 'Settings', '$rootSco
       };
 
       /** @function set_innings_over
+       *  @description Set the innings over flag if 10 wickets have been taken
+       *  or the last over has been completed.
        *  @memberOf scorer.factory.Scoreboard
        * return {boolean}
        */
@@ -188,6 +191,8 @@ angular.module("scorer").factory('Scoreboard', ['Storage', 'Settings', '$rootSco
       };
 
       /** @function over
+       *  @description Test if the over has been completed. If it has, then
+       * prepare for the next one.
        *  @memberOf scorer.factory.Scoreboard
        */
       this.over = function() {
@@ -205,6 +210,7 @@ angular.module("scorer").factory('Scoreboard', ['Storage', 'Settings', '$rootSco
       };
 
       /** @function add_runs_to_striker
+       *  @description Add the runs to the batsman's score.
        *  @memberOf scorer.factory.Scoreboard
        *  @param {integer} runs - Number of runs to be added.
        */
@@ -217,6 +223,7 @@ angular.module("scorer").factory('Scoreboard', ['Storage', 'Settings', '$rootSco
       };
 
       /** @function ball
+       *  @description Handle valid ball/delivery.
        *  @memberOf scorer.factory.Scoreboard
        *  @param {integer} - Number of runs scored off the ball.
        */
@@ -232,6 +239,7 @@ angular.module("scorer").factory('Scoreboard', ['Storage', 'Settings', '$rootSco
       };
 
       /** @function wicket
+       *  @description Called when a wicket is taken.
        *  @memberOf scorer.factory.Scoreboard
        */
       this.wicket = function() {
@@ -261,7 +269,7 @@ angular.module("scorer").factory('Scoreboard', ['Storage', 'Settings', '$rootSco
       };
 
       /** @function add_extra
-       *
+       *  @description Called when an extra is bowled.
        *  @memberOf scorer.factory.Scoreboard
        *  @param {Extra} extra - The Extra object for the ball.
        */
@@ -275,6 +283,7 @@ angular.module("scorer").factory('Scoreboard', ['Storage', 'Settings', '$rootSco
       };
 
       /** @function add_extras
+       *  @description Does the hard work for add_extra().
        *  @memberOf scorer.factory.Scoreboard
        *  @param {Scoreboard} obj - ?????
        *  @param {Extra} extra - The Extra object for the ball.
@@ -314,6 +323,7 @@ angular.module("scorer").factory('Scoreboard', ['Storage', 'Settings', '$rootSco
       };
 
       /** @function save
+       *  @description Save the current scoreboard object.
        *  @memberOf scorer.factory.Scoreboard
        */
       this.save = function() {
@@ -321,6 +331,7 @@ angular.module("scorer").factory('Scoreboard', ['Storage', 'Settings', '$rootSco
       };
 
       /** @function new_match
+       *  @description Initialise a new match.
        *  @memberOf scorer.factory.Scoreboard
        */
       this.new_match = function() {
@@ -337,6 +348,7 @@ angular.module("scorer").factory('Scoreboard', ['Storage', 'Settings', '$rootSco
       };
 
       /** @function new_innings
+       *  @description Start a new innings.
        *  @memberOf scorer.factory.Scoreboard
        */
       this.new_innings = function() {
@@ -359,6 +371,7 @@ angular.module("scorer").factory('Scoreboard', ['Storage', 'Settings', '$rootSco
       };
 
       /** @function set_batting_team
+       * @description Set the batting team.
        *  @memberOf scorer.factory.Scoreboard
        *  @param {Players} - batting_team - The batting team.
        */
@@ -373,6 +386,7 @@ angular.module("scorer").factory('Scoreboard', ['Storage', 'Settings', '$rootSco
       };
 
       /** @function set_batsmen_details
+       *  @description Set the batsman's details based on the list of players.
        *  @memberOf scorer.factory.Scoreboard
        */
       this.set_batsmen_details = function() {
@@ -402,6 +416,7 @@ angular.module("scorer").factory('Scoreboard', ['Storage', 'Settings', '$rootSco
 
       // ***********************************************************************
       /** @function set_bowler_details
+       * @description Manage the bowler details based on the list of players.
        * @memberOf scorer.factory.Scoreboard
        */
       this.set_bowler_details = function() {
@@ -442,6 +457,7 @@ angular.module("scorer").factory('Scoreboard', ['Storage', 'Settings', '$rootSco
 
       // ***********************************************************************
       /** @function reset
+       * @description Reset the list of players.
        *  @memberOf scorer.factory.Scoreboard
        */
       this.reset = function() {
@@ -459,6 +475,7 @@ angular.module("scorer").factory('Scoreboard', ['Storage', 'Settings', '$rootSco
       };
 
       /** @function add_over
+       * @description Add an over.
        *  @memberOf scorer.factory.Scoreboard
        *  @param {integer} over_no - The number of the over.
        *  @param {Player}  bowler_obj - The bowler of the over.
@@ -468,6 +485,7 @@ angular.module("scorer").factory('Scoreboard', ['Storage', 'Settings', '$rootSco
       };
 
       /** @function add_ball
+       * @description Add a ball
        *  @memberOf scorer.factory.Scoreboard
        *  @param striker
        *  @param runs
@@ -492,6 +510,7 @@ angular.module("scorer").factory('Scoreboard', ['Storage', 'Settings', '$rootSco
       };
 
       /** @function is_ready
+       * @description True if the set up is complete.
        *  @memberOf scorer.factory.Scoreboard
        *  @return {boolean}
        */
@@ -506,6 +525,7 @@ angular.module("scorer").factory('Scoreboard', ['Storage', 'Settings', '$rootSco
       };
 
       /** @function clear
+       *  @description Clear the overs history.
        *  @memberOf scorer.factory.Scoreboard
        */
       this.clear = function() {

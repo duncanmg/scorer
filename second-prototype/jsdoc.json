@@ -1,4 +1,4 @@
-{"source": { "include":[ "./js/services", "./js/controllers","./js", "./js/factories" ] ,
+{"source": { "include":[ "./js/services", "./js/controllers","./js", "./js/factories", "./js/factories/delivery_types" ] ,
  "includePattern": ".+\\.js(doc)?$"},
 "opts":{"destination":"./jsdoc/"},
 "templates":{"theme":"united"}
