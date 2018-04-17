@@ -23,6 +23,9 @@ angular.module("scorer").factory('ScoreboardTemplate', ['Settings', 'Innings',
      * balls = 6.3. 7 overs and no balls = 7.
      * @property {type} left_bat - The batsman on the left hand side of the board.
      * @property {type} right_bat - The batsman on the right hand side of the board.
+     * @property {number} target - The total runs required to win the match.
+     * @property {string} batting_team - Signifies the batting team. "home" or "away".
+     * 
      *
      */
 
