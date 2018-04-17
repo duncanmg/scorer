@@ -1,8 +1,8 @@
-describe("ByeTest", function() {
+describe("WicketTest", function() {
 
   beforeEach(module('scorer'));
 
-  var bye;
+  var wicket;
   var scoreboard;
 
   beforeEach(module(function($provide) {
@@ -15,6 +15,7 @@ describe("ByeTest", function() {
         this.overs_history = [];
         this.left_bat = {};
         this.right_bat = {};
+        this.wickets = 0;
         this.left_bat.striker = false;
         this.add_ball = function(striker, runs, extras, wkt, valid) {
           return true;
@@ -27,23 +28,24 @@ describe("ByeTest", function() {
     });
   }));
 
-  beforeEach(inject(function(Bye, Scoreboard) {
+  beforeEach(inject(function(Wicket, Scoreboard) {
     // console.log('inject');
-    bye = new Bye();
+    wicket = new Wicket();
     scoreboard = new Scoreboard();
   }));
 
-  it("A Bye object can be created.", function() {
-    expect(typeof(bye)).toEqual('object');
+  it("A Wicket object can be created.", function() {
+    expect(typeof(wicket)).toEqual('object');
   });
 
   it("The record method works.", function() {
     // alert(ball);
-    expect(typeof(bye)).toEqual('object');
-    bye.record(scoreboard, {});
-    expect(scoreboard.total).toEqual(1);
-    expect(scoreboard.extras).toEqual(1);
+    expect(typeof(wicket)).toEqual('object');
+    wicket.record(scoreboard, {});
+    expect(scoreboard.total).toEqual(0);
+    expect(scoreboard.extras).toEqual(0);
     expect(scoreboard.balls).toEqual(1);
+    expect(scoreboard.wickets).toEqual(1);
   });
 
 });

@@ -6,7 +6,7 @@ describe("WideTest", function() {
   var scoreboard;
 
   beforeEach(module(function($provide) {
-    console.log('provide');
+    //console.log('provide');
     $provide.factory('Scoreboard', function() {
       var obj = function() {
         this.extras = 0;
@@ -24,7 +24,7 @@ describe("WideTest", function() {
   }));
 
   beforeEach(inject(function(Wide, Scoreboard) {
-    console.log('inject');
+    //console.log('inject');
     wide = new Wide();
     scoreboard = new Scoreboard();
   }));

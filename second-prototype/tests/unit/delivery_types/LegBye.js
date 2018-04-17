@@ -1,8 +1,8 @@
-describe("NoBallTest", function() {
+describe("LegByeTest", function() {
 
   beforeEach(module('scorer'));
 
-  var no_ball;
+  var leg_bye;
   var scoreboard;
 
   beforeEach(module(function($provide) {
@@ -11,35 +11,39 @@ describe("NoBallTest", function() {
       var obj = function() {
         this.extras = 0;
         this.total = 0;
-        this.balls = [];
+        this.balls = 0;
+        this.overs_history = [];
         this.left_bat = {};
         this.right_bat = {};
         this.left_bat.striker = false;
-        this.add_ball = function(ball) {
-           this.balls.push(ball);
+        this.add_ball = function(striker, runs, extras, wkt, valid) {
+          return true;
+        };
+        this.change_ends = function(runs) {
+          return true;
         };
       };
       return obj;
     });
   }));
 
-  beforeEach(inject(function(NoBall, Scoreboard) {
+  beforeEach(inject(function(LegBye, Scoreboard) {
     // console.log('inject');
-    no_ball = new NoBall();
+    leg_bye = new LegBye();
     scoreboard = new Scoreboard();
   }));
 
-  it("A NoBall object can be created.", function() {
-    expect(typeof(no_ball)).toEqual('object');
+  it("A LegBye object can be created.", function() {
+    expect(typeof(leg_bye)).toEqual('object');
   });
 
   it("The record method works.", function() {
     // alert(ball);
-    expect(typeof(no_ball)).toEqual('object');
-    no_ball.record(scoreboard, {});
+    expect(typeof(leg_bye)).toEqual('object');
+    leg_bye.record(scoreboard, {});
     expect(scoreboard.total).toEqual(1);
     expect(scoreboard.extras).toEqual(1);
-    expect(scoreboard.balls.length).toEqual(1);
+    expect(scoreboard.balls).toEqual(1);
   });
 
 });

@@ -20,8 +20,33 @@ angular.module("scorer").factory('Wicket', [
        * @param type
        */
       this.record = function(scoreboard, details) {
-         scoreboard.wicket();
+        console.log("record wicket");
+        this.wwicket(scoreboard,details);
       };
+
+      this.wwicket = function(scoreboard, details) {
+        console.log("wicket.wicket");
+        scoreboard.balls++;
+        scoreboard.wickets += 1;
+
+        scoreboard.add_ball(scoreboard.left_bat.striker ? scoreboard.left_bat :
+          scoreboard.right_bat, 0, 0, true, true);
+        // var next_batsman_no = (scoreboard.left_bat.no > scoreboard.right_bat.no) ?
+        //   scoreboard.left_bat.no + 1 :
+        //   scoreboard.right_bat.no + 1;
+        //
+        // if (scoreboard.left_bat.striker === true) {
+        //   scoreboard.left_bat = new Batsman();
+        //   scoreboard.left_bat.no = next_batsman_no;
+        //   scoreboard.left_bat.striker = true;
+        //
+        // } else {
+        //   scoreboard.right_bat = new Batsman();
+        //   scoreboard.right_bat.no = next_batsman_no;
+        //   scoreboard.right_bat.striker = true;
+        // }
+      };
+
 
     };
 
