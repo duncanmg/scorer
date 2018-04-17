@@ -1,4 +1,5 @@
 {"source": { "include":[ "./js/services", "./js/controllers","./js", "./js/factories" ] ,
  "includePattern": ".+\\.js(doc)?$"},
-"opts":{"destination":"./jsdoc/"}
+"opts":{"destination":"./jsdoc/"},
+"templates":{"theme":"united"}
 }
