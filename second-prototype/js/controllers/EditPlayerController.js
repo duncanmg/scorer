@@ -19,9 +19,12 @@ angular.module('scorer')
     }
 
     $scope.toggle_bowling = function(player) {
+      console.log('toggle_bowling');
       if (player.bowling) {
+        console.log('About to call stop bowling');
         Players.stop_bowling(player);
       } else {
+        console.log('About to call start_bowling');
         if (!Players.start_bowling(player)) {
           alert("You already have two bowlers");
           return false;

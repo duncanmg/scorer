@@ -176,20 +176,24 @@ angular.module("scorer").factory('Players', ['Storage', '$rootScope', function(S
       });
     },
     start_bowling: function(player) {
+      console.log("In start_bowling");
       var bowling = this.get_bowling();
       if (bowling.length >= 2) {
         return false;
       }
       // alert(1);
+      console.log("Still in start_bowling");
       var bowlers = this.get_bowlers();
       // alert(JSON.stringify(bowlers));
       var next_bowler_no = bowlers.length ? bowlers[bowlers.length - 1].bowler + 1 : 1;
-      // alert("next_bowler_no " + next_bowler_no);
+      console.log("next_bowler_no " + next_bowler_no);
       var i = this.lookup(player);
       if (i >= 0) {
         this.players[i].bowler = next_bowler_no;
         this.players[i].bowling = true;
+        console.log("i=" + i + " .bowler=" + next_bowler_no);
       }
+      console.log("End start_bowling");
       return true;
     },
     stop_bowling: function(player) {

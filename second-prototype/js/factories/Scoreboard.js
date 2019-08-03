@@ -59,7 +59,7 @@ angular.module("scorer").factory('Scoreboard', ['Storage', 'Settings', '$rootSco
 
       /**
        *  @function change_bowlers
-       *  @description Swop the objects in scoreboard.bowler and scoreboard.next_bowler.
+       *  @description Swop the objects in scoreboard.bowler and scoreboard.next_bowler. Called at the end of each over.
        *  @memberOf scorer.factory.Scoreboard
        */
       this.change_bowlers = function() {
@@ -421,24 +421,34 @@ angular.module("scorer").factory('Scoreboard', ['Storage', 'Settings', '$rootSco
        */
       this.set_bowler_details = function() {
 
-        /** @function */
+        /** @function is_bowling
+         * @description Accep a list of bowler objects and a bowler. Return true
+         * if the bowler is current bowling.
+         */
         var is_bowling = function(bowlers, bowler) {
           for (var i = 0; i < bowlers.length; i++) {
             if (bowlers[i].id == bowler.id) {
+              console.log("set_bowler_details is_bowling true for bowler.id " + bowler.id);
               return bowlers[i];
             }
           }
+          console.log("set_bowler_details is_bowling false for bowler.id " + bowler.id);
           return false;
         };
-        /** @function */
+
+        /** @function set_bowler
+         * @description Accept a list of bowlers and a bowler. */
         var set_bowler = function(bowlers, bowler) {
           if (!bowlers.length) {
             return {};
           }
 
           if (!bowler.id) {
-            return bowlers.shift();
+            // No bowler id. Just return first bowler in list.
+            console.log("set_bowler_details set_bowler. Return first bowler in list.");
+            return bowlers.shift;
           } else if (!is_bowling(bowlers, bowler)) {
+            // Bowler is not currently bowling. Return empty object.
             return {};
           } else {
             return bowlers[0].id == bowler.id ? bowlers.shift() : bowlers.pop();
@@ -447,12 +457,30 @@ angular.module("scorer").factory('Scoreboard', ['Storage', 'Settings', '$rootSco
         };
 
         var bowling_team = this.scoreboard.batting_team == "home" ? this.away_players : this.home_players;
-        var bowlers = bowling_team.get_bowlers();
 
-        this.scoreboard.bowler = set_bowler(bowlers, this.scoreboard.bowler);
+        // Bowlers is a sorted list of the players in the bowling list who
+        // are currently bowling. Rebuilt each time, so it
+        // can be modified safely. Two entries max!
+        var bowlers = bowling_team.get_bowling();
 
-        //alert("next set_bowler: " + bowlers.length + " : " + JSON.stringify(this.scoreboard.next_bowler));
+        console.log("set_bowler_details: bowlers list:" + JSON.stringify(bowlers));
+
+        this.scoreboard.bowler = set_bowler(bowlers, this.scoreboard.bowler)
+        console.log("set_bowler_details: bowler  : " + JSON.stringify(this.scoreboard.bowler));
+
         this.scoreboard.next_bowler = set_bowler(bowlers, this.scoreboard.next_bowler);
+        console.log("set_bowler_details: next_bowler : " + JSON.stringify(this.scoreboard.next_bowler));
+
+        if (!this.scoreboard.bowler.id) {
+          this.scoreboard.bowler = set_bowler(bowlers, this.scoreboard.bowler)
+          console.log("set_bowler_details: bowler  : " + JSON.stringify(this.scoreboard.bowler));
+        }
+
+        if (!this.scoreboard.next_bowler.id) {
+          this.scoreboard.next_bowler = set_bowler(bowlers, this.scoreboard.next_bowler);
+          console.log("set_bowler_details: next_bowler : " + JSON.stringify(this.scoreboard.next_bowler));
+        }
+
       };
 
       // ***********************************************************************
@@ -481,6 +509,8 @@ angular.module("scorer").factory('Scoreboard', ['Storage', 'Settings', '$rootSco
        *  @param {Player}  bowler_obj - The bowler of the over.
        */
       this.add_over = function(over_no, bowler_obj) {
+        console.log("add_over " + over_no);
+        console.log("bowler_obj " + JSON.stringify(bowler_obj));
         this.scoreboard.overs_history.push(new Over(over_no, bowler_obj));
       };
 
