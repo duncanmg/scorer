@@ -1,5 +1,7 @@
 /**
  * @class Players
+ * @description Puts two Players objects in storage, then returns itself. Seems very strange.
+ * Broadcasts "home_players" and "away_players".
  * @memberOf scorer.factory
  */
 angular.module("scorer").factory('Players', ['Storage', '$rootScope', function(Storage, $rootScope) {
@@ -224,6 +226,12 @@ angular.module("scorer").factory('Players', ['Storage', '$rootScope', function(S
       }
       return bowling;
     },
+
+    /** @function reset
+     * @description Reads the Players object from storage and writes it to
+     * this.players. Initializes this.players if there is nothing in storage.
+     * @memberOf scorer.factory.Players
+     */
     reset: function() {
       if (this.team) {
         var p = storage.get(this.team);
@@ -232,17 +240,36 @@ angular.module("scorer").factory('Players', ['Storage', '$rootScope', function(S
         this.renumber();
       }
     },
+
+    /** @function accept
+     * @description Stores the Players object with the key in the "team"
+     * attribute (ie "home" or "away") and call broadcast_players
+     * @memberOf scorer.factory.Players
+     */
     accept: function() {
       storage.put(this.team, this.players);
       // alert('put '+this.team+' '+JSON.stringify(this.players));
       this.broadcast_players();
     },
+
+    /** @function broadcast_players
+     * @description Called when the Players object in storage is updated.
+     * Broadcasts both the "home_players" and "away_players" objects.
+     * @memberOf scorer.factory.Players
+     */
     broadcast_players: function() {
       $rootScope.$broadcast('players_changed', {
         'home_players': storage.get('home'),
         'away_players': storage.get('away')
       });
     },
+
+    /** @function set_team
+     * @description Identifies this object as representing the home team
+     * or the way team.
+     * @param {string} team - "home" or "away"
+     * @memberOf scorer.factory.Players
+     */
     set_team: function(team) {
       // alert(team);
       this.team = team;

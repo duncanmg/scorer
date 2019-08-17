@@ -8,6 +8,9 @@ describe("ScoreboardTest", function() {
       num_overs: 40,
       batting_team: {
         id: 1
+      },
+      bowling_team: {
+        id: 2
       }
     };
   }));
@@ -28,6 +31,11 @@ describe("ScoreboardTest", function() {
     expect(scoreboard.scoreboard.batting_team).toEqual("home");
     expect(scoreboard.scoreboard.overs_history.length).toEqual(0);
 
+  });
+
+  it("Scoreboard object.Set bowler details", function() {
+    // expect(typeof(scoreboard.away_players)).toEqual('object');
+    // expect(scoreboard.set_bowler_details()).toEqual(7);
   });
 
 });

@@ -422,7 +422,7 @@ angular.module("scorer").factory('Scoreboard', ['Storage', 'Settings', '$rootSco
       this.set_bowler_details = function() {
 
         /** @function is_bowling
-         * @description Accep a list of bowler objects and a bowler. Return true
+         * @description Accept a list of bowler objects and a bowler. Return true
          * if the bowler is current bowling.
          */
         var is_bowling = function(bowlers, bowler) {
@@ -465,14 +465,14 @@ angular.module("scorer").factory('Scoreboard', ['Storage', 'Settings', '$rootSco
 
         console.log("set_bowler_details: bowlers list:" + JSON.stringify(bowlers));
 
-        this.scoreboard.bowler = set_bowler(bowlers, this.scoreboard.bowler)
+        this.scoreboard.bowler = set_bowler(bowlers, this.scoreboard.bowler);
         console.log("set_bowler_details: bowler  : " + JSON.stringify(this.scoreboard.bowler));
 
         this.scoreboard.next_bowler = set_bowler(bowlers, this.scoreboard.next_bowler);
         console.log("set_bowler_details: next_bowler : " + JSON.stringify(this.scoreboard.next_bowler));
 
         if (!this.scoreboard.bowler.id) {
-          this.scoreboard.bowler = set_bowler(bowlers, this.scoreboard.bowler)
+          this.scoreboard.bowler = set_bowler(bowlers, this.scoreboard.bowler);
           console.log("set_bowler_details: bowler  : " + JSON.stringify(this.scoreboard.bowler));
         }
 
