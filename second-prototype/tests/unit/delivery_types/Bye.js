@@ -11,7 +11,7 @@ describe("ByeTest", function() {
       var obj = function() {
         this.extras = 0;
         this.total = 0;
-        this.balls = 0;
+        this.balls = 2;
         this.overs_history = [];
         this.left_bat = {};
         this.right_bat = {};
@@ -43,7 +43,7 @@ describe("ByeTest", function() {
     bye.record(scoreboard, {});
     expect(scoreboard.total).toEqual(1);
     expect(scoreboard.extras).toEqual(1);
-    expect(scoreboard.balls).toEqual(1);
+    expect(scoreboard.balls).toEqual(3);
   });
 
 });
