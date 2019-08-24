@@ -485,7 +485,8 @@ angular.module("scorer").factory('Scoreboard', ['Storage', 'Settings', '$rootSco
 
       // ***********************************************************************
       /** @function reset
-       * @description Reset the list of players.
+       *  @description Reset the list of players. This means reading the latest data
+       *  from storage and setting home_players and away_players.
        *  @memberOf scorer.factory.Scoreboard
        */
       this.reset = function() {
