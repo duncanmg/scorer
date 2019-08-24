@@ -456,7 +456,8 @@ angular.module("scorer").factory('Scoreboard', ['Storage', 'Settings', '$rootSco
           return bowler;
         };
 
-        var bowling_team = this.scoreboard.batting_team == "home" ? this.away_players : this.home_players;
+        var bowling_team = this.scoreboard.batting_team == "home" ?
+          this.away_players : this.home_players;
 
         // Bowlers is a sorted list of the players in the bowling list who
         // are currently bowling. Rebuilt each time, so it
