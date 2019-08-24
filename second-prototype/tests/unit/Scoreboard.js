@@ -2,22 +2,36 @@ describe("ScoreboardTest", function() {
   beforeEach(module('scorer'));
 
   var mockTemplate;
+  var mockPlayers;
 
   beforeEach(module(function($provide) {
-    mockTemplate = {
-      num_overs: 40,
-      batting_team: {
-        id: 1
-      },
-      bowling_team: {
-        id: 2
-      }
-    };
+
+    $provide.factory('ScoreboardTemplate', function() {
+      var mockTemplate = function() {
+
+        this.innings = [{
+
+          num_overs: 41,
+          batting_team: 'home',
+          bowling_team: 'away',
+          overs_history: [],
+          bowler: {
+            id: 1
+          }
+        }, {}];
+      };
+
+      return mockTemplate;
+    });
   }));
 
   beforeEach(inject(function(Scoreboard) {
     //console.log(JSON.stringify(MockSettings));
     scoreboard = Scoreboard;
+  }));
+
+  beforeEach(inject(function(Players) {
+    // ....
   }));
 
   it("A Scoreboard object has been created.",
@@ -26,16 +40,26 @@ describe("ScoreboardTest", function() {
     });
 
   it("A Scoreboard object has some of the correct attributes.", function() {
-    //console.log(JSON.stringify(scoreboard.scoreboard));
-    expect(scoreboard.scoreboard.num_overs).toEqual(40);
+
+    expect(scoreboard.scoreboard.num_overs).toEqual(41);
     expect(scoreboard.scoreboard.batting_team).toEqual("home");
     expect(scoreboard.scoreboard.overs_history.length).toEqual(0);
-
+    expect(scoreboard.scoreboard.bowler.id).toEqual(1);
   });
 
   it("Scoreboard object.Set bowler details", function() {
-    // expect(typeof(scoreboard.away_players)).toEqual('object');
-    // expect(scoreboard.set_bowler_details()).toEqual(7);
+    console.log('HP home_players ' + JSON.stringify(scoreboard.home_players));
+    scoreboard.away_players = {
+      get_bowling: function() {
+        return [];
+      }
+    };
+    scoreboard.home_players = {};
+    scoreboard.set_bowler_details();
+
+    //expect(typeof(scoreboard.away_players)).toEqual('object');
+    //expect(this.scoreboard.bowler).toEqual({});
+    //expect(this.scoreboard.next_bowler).toEqual(7);
   });
 
 });
