@@ -7,6 +7,8 @@ angular.module("scorer").factory('Scoreboard', ['Storage', 'Settings', '$rootSco
     var storage = new Storage();
     var initial_scoreboard = storage.get_scoreboard();
     console.log(JSON.stringify(ScoreboardTemplate));
+    console.log(JSON.stringify('In Scoreboard, Players=' +
+      JSON.stringify(Players)));
 
     if (!initial_scoreboard) {
       console.log("Initialise");
@@ -440,19 +442,25 @@ angular.module("scorer").factory('Scoreboard', ['Storage', 'Settings', '$rootSco
          * @description Accept a list of bowlers and a bowler. */
         var set_bowler = function(bowlers, bowler) {
           if (!bowlers.length) {
+            console.log('WARN set_bowler_details. No bowlers!');
             return {};
           }
 
           if (!bowler.id) {
             // No bowler id. Just return first bowler in list.
-            console.log("set_bowler_details set_bowler. Return first bowler in list.");
+            console.log("INFO set_bowler_details. Return first bowler in list.");
             return bowlers.shift;
           } else if (!is_bowling(bowlers, bowler)) {
-            // Bowler is not currently bowling. Return empty object.
+            console.log("WARN set_bowler_details. Bowler " + bowler.id +
+              " is not bowling.");
             return {};
           } else {
-            return bowlers[0].id == bowler.id ? bowlers.shift() : bowlers.pop();
+            var b = bowlers[0].id == bowler.id ?
+              bowlers.shift() : bowlers.pop();
+            console.log("INFO set_bowler_details. Return bowler " + b.id);
+            return b;
           }
+          console.log("INFO set_bowler_details. Return bowler " + bowler.id);
           return bowler;
         };
 
@@ -491,17 +499,23 @@ angular.module("scorer").factory('Scoreboard', ['Storage', 'Settings', '$rootSco
        *  @memberOf scorer.factory.Scoreboard
        */
       this.reset = function() {
+        console.log('1 reset');
+        console.log('2 reset');
+        console.log('Players: ' + JSON.stringify(Players));
         Players.set_team('home');
         Players.reset();
+        console.log('4 reset');
         this.home_players = jQuery.extend(true, {}, Players);
 
         Players.set_team('away');
         Players.reset();
+        console.log('5 reset');
         this.away_players = jQuery.extend(true, {}, Players);
 
         this.set_batsmen_details();
+        console.log('6 reset');
         this.set_bowler_details();
-
+        console.log('End reset');
       };
 
       /** @function add_over
