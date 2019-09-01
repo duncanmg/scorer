@@ -423,6 +423,8 @@ angular.module("scorer").factory('Scoreboard', ['Storage', 'Settings', '$rootSco
        */
       this.set_bowler_details = function() {
 
+        console.log('Start set_bowler_details');
+        
         /** @function is_bowling
          * @description Accept a list of bowler objects and a bowler. Return true
          * if the bowler is current bowling.
