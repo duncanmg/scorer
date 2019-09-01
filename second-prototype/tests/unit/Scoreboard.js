@@ -28,6 +28,25 @@ describe("ScoreboardTest", function() {
   //   });
   // }));
 
+  // This doesn't work.
+  // beforeEach(module(function($provide) {
+  //
+  //   $provide.factory('Players', ['Players',function(Players) {
+  //     var players = Players;
+  //
+  //     console.log('TRTRTRTRTRTR    TTRTRTRT');
+  //
+  //     // player.start_bowling({
+  //     //   id: 1
+  //     // });
+  //     // players.start_bowling({
+  //     //   id: 2
+  //     // });
+  //
+  //     return players;
+  //   }]);
+  // }));
+
   beforeEach(inject(function(Scoreboard) {
     //console.log(JSON.stringify(MockSettings));
     scoreboard = Scoreboard;
@@ -67,12 +86,25 @@ describe("ScoreboardTest", function() {
 
     scoreboard.set_batting_team('home');
     scoreboard.reset();
-    
+
+    // scoreboard.away_players.start_bowling({
+    //   id: 1
+    // });
+    //
+    // scoreboard.away_players.start_bowling({
+    //   id: 2
+    // });
+
+    console.log('++');
     scoreboard.set_bowler_details();
 
     expect(typeof(scoreboard.away_players)).toEqual('object');
-    expect(this.scoreboard.bowler).toEqual({});
-    //expect(this.scoreboard.next_bowler).toEqual(7);
+
+    expect(scoreboard.scoreboard.bowler).toEqual({});
+    expect(scoreboard.scoreboard.next_bowler).toEqual({});
+
+    //expect(scoreboard.scoreboard.bowler.id).toEqual(1);
+    //expect(scoreboard.scoreboard.next_bowler.id).toEqual(2);
   });
 
 });
