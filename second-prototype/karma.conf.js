@@ -23,7 +23,8 @@ module.exports = function(config) {
       '../node_modules/angular-mocks/angular-mocks.js',
       'javascripts/combined.js',
       '../tests/unit/*.js',
-      '../tests/unit/delivery_types/*.js'
+      '../tests/unit/delivery_types/*.js',
+      '../tests/unit/Sc/*.js'
     ],
 
 
