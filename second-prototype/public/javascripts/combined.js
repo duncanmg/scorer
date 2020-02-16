@@ -78,6 +78,12 @@ angular.module("scorer", ['ui.router', 'ngResource']).config(function($stateProv
 
 });
 
+/*jslint vars:true, plusplus:true, devel:true, nomen:true, indent:4, maxerr:50*/
+
+    var sc = {
+    s : 1,
+    t : 2
+};
 /**
  * @class EditPlayerController
  * @memberOf scorer.controller
@@ -99,9 +105,12 @@ angular.module('scorer')
     }
 
     $scope.toggle_bowling = function(player) {
+      console.log('toggle_bowling');
       if (player.bowling) {
+        console.log('About to call stop bowling');
         Players.stop_bowling(player);
       } else {
+        console.log('About to call start_bowling');
         if (!Players.start_bowling(player)) {
           alert("You already have two bowlers");
           return false;
@@ -137,9 +146,10 @@ angular.module('scorer').controller('HistoryController', ['$scope', '$stateParam
 
   var parse_history = function(history) {
     var h = history.slice();
+    console.log("........................History.......................");
     //console.log("h=" + JSON.stringify(h));
     h.reverse();
-    //console.log("h reversed=" + JSON.stringify(h));
+    console.log("h reversed=" + JSON.stringify(h));
     for (var i = 0; i < h.length; i++) {
       h[i] = jQuery.extend(true, {}, h[i]);
       h[i].balls.reverse();
@@ -388,6 +398,115 @@ angular.module("scorer").factory('Batsman', [function() {
 
   return Batsman;
 }]);
+
+/**
+ *
+
+ */
+angular.module("scorer").factory('DeliveryManager', ['DeliveryType', function(DeliveryType) {
+
+  /** Creates an instance of DeliveryManager
+   *
+   * @class DeliveryManager
+   * @memberOf scorer.factory
+   * @classdesc - Handles changing the score, changing batsmen, changing ends.
+   * @constructor DeliveryManager
+   * @param {Match} match - The Match object.
+   * @return {DeliveryManager} The new DeliveryManager object.
+   * @description - Handles changing the score, changing batsmen, changing ends.
+   */
+  var DeliveryManager = function(DeliveryType) {
+
+     this.deliveryType = new DeliveryType();
+
+     /** @function bowls
+      *  @memberOf scorer.factory.Scoreboard
+      *  @return {boolean}
+      */
+     this.bowls = function(deliveryType, runs) {
+
+       if (this.alert_game_over()) {
+         return false;
+       }
+
+       if (this.alert_no_bowler()) {
+         return false;
+       }
+
+       this.deliveryType(deliveryType).record(runs);
+
+       this.over();
+
+       this.set_game_over();
+
+       this.save();
+     };
+
+
+  };
+
+  return DeliveryManager;
+}]);
+
+angular.module("scorer").factory('DeliveryType', ['Wicket', 'Bye', 'LegBye', 'NoBall', 'Wide', 'Delivery',
+  function(Wicket, Bye, LegBye, NoBall, Wide, Delivery) {
+
+    /** Creates an instance of DeliveryManager
+     *
+     * @class DeliveryType
+     * @memberOf scorer.factory
+     * @classdesc - Returns an instance of a correct delivery class..
+     * @constructor DeliveryType
+     * @param {Wicket}
+     * @param {Bye}
+     * @param {LegBye}
+     * @param {NoBall}
+     * @param {Wide}
+     * @param {Delivery}
+     * @return The an instance of the appropriate Delivery class.
+     * @description -
+     */
+    var DeliveryType = function(Wicket, Bye, LegBye, NoBall, Wide, Delivery) {
+
+      console.log('DeliveryType called');
+      this.Wicket = Wicket;
+      this.Bye = Bye;
+      this.LegBye = LegBye;
+      this.NoBall = NoBall;
+      this.Wide = Wide;
+      this.Delivery = Delivery;
+
+      /**
+       * @function get
+       * @memberOf scorer.factory.DeliveryType
+       * @param {string} type - type of delivery.
+       */
+      this.get = function(type) {
+        switch (type) {
+          case 'wicket':
+            return (new this.Wicket());
+          case 'bye':
+            return (new this.Bye());
+          case 'leg_bye':
+            return (new this.LegBye());
+          case 'no_ball':
+            return (new this.NoBall());
+          case 'wide':
+            return (new this.Wide());
+          case 'ball':
+            return new this.Delivery();
+          default:
+            console.log('Invalid delivery type ' + type);
+        }
+      };
+      this.test = function() {
+        console.log('DeliveryType went BANG');
+      };
+    };
+
+    return DeliveryType;
+  }
+]);
 
 /**
  * @class Innings
@@ -643,6 +762,8 @@ return Over;
 
 /**
  * @class Players
+ * @description Puts two Players objects in storage, then returns itself. Seems very strange.
+ * Broadcasts "home_players" and "away_players".
  * @memberOf scorer.factory
  */
 angular.module("scorer").factory('Players', ['Storage', '$rootScope', function(Storage, $rootScope) {
@@ -746,6 +867,16 @@ angular.module("scorer").factory('Players', ['Storage', '$rootScope', function(S
 
     players: [],
 
+    // ***********************************************************************
+    /** @function lookup
+     * @description Accept a Player object and returns its position in the
+     * Players list.
+     * @memberOf scorer.factory.Players
+     * @param {Player} player
+     * @returns {Int} Position of Player in list of Players. 0 based.
+     *
+     */
+
     lookup: function(player) {
       for (var i = 0; i < this.players.length; i++) {
         if (this.players[i].id == player.id) {
@@ -818,23 +949,41 @@ angular.module("scorer").factory('Players', ['Storage', '$rootScope', function(S
         return a.batting_no - b.batting_no;
       });
     },
+    // ***********************************************************************
+    /** @function start_bowling
+     * @description Accept a Player object and add it to the list of current
+     * bowlers as the next bowler.
+     * Returns false if two players are already bowling.
+     * Returns true on success.
+     * @memberOf scorer.factory.Players
+     * @param {Player} player
+     * @returns {Boolean}
+     *
+     */
     start_bowling: function(player) {
+      console.log("--");
+      console.log("In start_bowling");
       var bowling = this.get_bowling();
       if (bowling.length >= 2) {
         return false;
       }
       // alert(1);
+      console.log("Still in start_bowling");
       var bowlers = this.get_bowlers();
       // alert(JSON.stringify(bowlers));
-      var next_bowler_no = bowlers.length ? bowlers[bowlers.length - 1].bowler + 1 : 1;
-      // alert("next_bowler_no " + next_bowler_no);
+      var next_bowler_no = bowlers.length ?
+        bowlers[bowlers.length - 1].bowler + 1 : 1;
+      console.log("next_bowler_no " + next_bowler_no);
       var i = this.lookup(player);
       if (i >= 0) {
         this.players[i].bowler = next_bowler_no;
         this.players[i].bowling = true;
+        console.log("i=" + i + " .bowler=" + next_bowler_no);
       }
+      console.log("End start_bowling");
       return true;
     },
+
     stop_bowling: function(player) {
       var i = this.lookup(player);
       if (i >= 0) {
@@ -863,6 +1012,12 @@ angular.module("scorer").factory('Players', ['Storage', '$rootScope', function(S
       }
       return bowling;
     },
+
+    /** @function reset
+     * @description Reads the Players object from storage and writes it to
+     * this.players. Initializes this.players if there is nothing in storage.
+     * @memberOf scorer.factory.Players
+     */
     reset: function() {
       if (this.team) {
         var p = storage.get(this.team);
@@ -871,17 +1026,36 @@ angular.module("scorer").factory('Players', ['Storage', '$rootScope', function(S
         this.renumber();
       }
     },
+
+    /** @function accept
+     * @description Stores the Players object with the key in the "team"
+     * attribute (ie "home" or "away") and call broadcast_players
+     * @memberOf scorer.factory.Players
+     */
     accept: function() {
       storage.put(this.team, this.players);
       // alert('put '+this.team+' '+JSON.stringify(this.players));
       this.broadcast_players();
     },
+
+    /** @function broadcast_players
+     * @description Called when the Players object in storage is updated.
+     * Broadcasts both the "home_players" and "away_players" objects.
+     * @memberOf scorer.factory.Players
+     */
     broadcast_players: function() {
       $rootScope.$broadcast('players_changed', {
         'home_players': storage.get('home'),
         'away_players': storage.get('away')
       });
     },
+
+    /** @function set_team
+     * @description Identifies this object as representing the home team
+     * or the way team.
+     * @param {string} team - "home" or "away"
+     * @memberOf scorer.factory.Players
+     */
     set_team: function(team) {
       // alert(team);
       this.team = team;
@@ -918,13 +1092,47 @@ angular.module("scorer").factory('Players', ['Storage', '$rootScope', function(S
 
 }]);
 
-angular.module("scorer").factory('Scoreboard', ['Storage', 'Settings', '$rootScope',
-  'Players', 'Over', 'Batsman', 'Ball', 'ScoreboardTemplate',
-  function(Storage, Settings, $rootScope, Players, Over, Batsman, Ball, ScoreboardTemplate) {
+/**
+ *
+ * https://www.jvandemo.com/how-to-properly-integrate-non-angularjs-libraries-in-your-angularjs-application/
+ */
 
+angular.module("scorer").factory('Sc', ['$window', function($window) {
+
+  /** Creates an instance of Sc
+   *
+   * @class Sc
+   * @memberOf scorer.factory
+   * @description Factory which returns an Sc object. Properly integrates
+   * lib/sc.js
+   * @constructor Sc
+   */
+
+  if (window.sc) {
+    return window.sc;
+  } else {
+    console.log('ERROR window.sc is not available.');
+  }
+
+}]);
+
+/**
+ * @class Scoreboard
+ * @memberOf scorer.factory
+ * @description Factory which returns an Sc.Scoreboard object.
+ *
+ */
+angular.module("scorer").factory('Scoreboard', ['Sc', 'Storage', 'Settings', '$rootScope',
+  'Players', 'Over', 'Batsman', 'Ball', 'ScoreboardTemplate',
+  function(Sc, Storage, Settings, $rootScope, Players, Over, Batsman, Ball,
+    ScoreboardTemplate) {
+
+    // var delivery_manager = new DeliveryManager();
     var storage = new Storage();
     var initial_scoreboard = storage.get_scoreboard();
     console.log(JSON.stringify(ScoreboardTemplate));
+    console.log(JSON.stringify('In Scoreboard, Players=' +
+      JSON.stringify(Players)));
 
     if (!initial_scoreboard) {
       console.log("Initialise");
@@ -932,493 +1140,11 @@ angular.module("scorer").factory('Scoreboard', ['Storage', 'Settings', '$rootSco
       initial_scoreboard.fred = 1;
     }
 
-    /**
-     * @class Scoreboard
-     * @memberOf scorer.factory
-     * @constructor Scoreboard
-     * @param {ScoreboardTemplate} scoreboard_template
-     */
-    var Scoreboard = function(scoreboard_template) {
 
-      var s = jQuery.extend(true, {}, scoreboard_template);
-      this.scoreboard = s.innings[0];
-      this.next_innings = s.innings[1];
-
-      console.log('scoreboard ' + JSON.stringify(this.scoreboard));
-
-      /**
-       * @function change_ends
-       * @memberOf scorer.factory.Scoreboard
-       * @param {integer} num_runs - Number of times the batsmen ran on the last ball.
-       */
-      this.change_ends = function(num_runs) {
-
-        if (num_runs % 2 === 0) {
-          return true;
-        }
-
-        if (this.scoreboard.left_bat.striker === true) {
-          this.scoreboard.left_bat.striker = false;
-          this.scoreboard.right_bat.striker = true;
-        } else {
-          this.scoreboard.left_bat.striker = true;
-          this.scoreboard.right_bat.striker = false;
-        }
-      };
-
-      /**
-       *  @function change_bowlers
-       *  @memberOf scorer.factory.Scoreboard
-       */
-      this.change_bowlers = function() {
-        var tmp = this.scoreboard.bowler;
-        this.scoreboard.bowler = this.scoreboard.next_bowler;
-        this.scoreboard.next_bowler = tmp;
-        console.log("After change_bowlers: bowler " + JSON.stringify(this.scoreboard.bowler));
-        console.log("After change_bowlers: next " + JSON.stringify(this.scoreboard.next_bowler));
-      };
-
-      /** @function alert_game_over
-       *  @memberOf scorer.factory.Scoreboard
-       */
-      this.alert_game_over = function() {
-        if (this.scoreboard.game_over === true) {
-          alert("The game is over!");
-          return true;
-        }
-        return this.alert_innings_over();
-      };
-
-      /** @function alert_innings_over
-       *  @memberOf scorer.factory.Scoreboard
-       *  @return {boolean}
-       */
-      this.alert_innings_over = function() {
-        if (this.scoreboard.game_over === false && this.scoreboard.innings_over === true) {
-          alert("The innings is over!");
-          this.new_innings();
-          return true;
-        }
-        return false;
-      };
-
-      /** @function alert_no_bowler
-       *  @memberOf scorer.factory.Scoreboard
-       *  @return boolean
-       */
-      this.alert_no_bowler = function() {
-        if (!this.scoreboard.bowler.name) {
-          alert("Please select a bowler.");
-          return true;
-        }
-        return false;
-      };
-
-      /** @function bowls
-       *  @memberOf scorer.factory.Scoreboard
-       *  @return {boolean}
-       */
-      this.bowls = function(type, runs) {
-
-        if (this.alert_game_over()) {
-          return false;
-        }
-
-        if (this.alert_no_bowler()) {
-          return false;
-        }
-
-        switch (type) {
-          case 'wicket':
-            this.wicket();
-            break;
-          case 'bye':
-          case 'leg_bye':
-            this.scoreboard.balls += 1;
-            this.add_ball(this.scoreboard.left_bat.striker ? this.scoreboard.left_bat : this.scoreboard.right_bat, 0, 1, false, true);
-            this.change_ends(1);
-            this.scoreboard.extras += 1;
-            this.scoreboard.total += 1;
-            break;
-          case 'no_ball':
-          case 'wide':
-            this.scoreboard.extras += 1;
-            this.scoreboard.total += 1;
-            this.add_ball(this.scoreboard.left_bat.striker ? this.scoreboard.left_bat : this.scoreboard.right_bat, 0, 1, false, false);
-            break;
-          case 'ball':
-            this.ball(runs);
-            this.change_ends(runs);
-            break;
-        }
-
-        this.over();
-
-        this.set_game_over();
-
-        this.save();
-      };
-
-      /** @function set_game_over
-       *  @memberOf scorer.factory.Scoreboard
-       */
-      this.set_game_over = function() {
-        this.set_innings_over();
-        if (this.scoreboard.last_innings > 0 && this.scoreboard.total > this.scoreboard.last_innings) {
-          this.scoreboard.game_over = true;
-        }
-        if (this.scoreboard.innings_over && this.scoreboard.innings_no > 1) {
-          this.scoreboard.game_over = true;
-        }
-      };
-
-      /** @function set_innings_over
-       *  @memberOf scorer.factory.Scoreboard
-       * return {boolean}
-       */
-      this.set_innings_over = function() {
-        if (this.scoreboard.wickets >= 10) {
-          this.scoreboard.innings_over = true;
-        }
-        //alert(this.scoreboard.num_overs + ' : ' + this.scoreboard.overs);
-        if (this.scoreboard.num_overs && this.scoreboard.overs >= this.scoreboard.num_overs) {
-          //alert(1);
-          this.scoreboard.innings_over = true;
-        }
-
-        return this.scoreboard.innings_over;
-      };
-
-      /** @function over
-       *  @memberOf scorer.factory.Scoreboard
-       */
-      this.over = function() {
-        if (this.scoreboard.balls >= 6) {
-          this.scoreboard.balls = 0;
-          this.scoreboard.overs += 1;
-          this.scoreboard.overs_and_balls = this.scoreboard.overs;
-          this.change_ends();
-          this.change_bowlers();
-          // alert("About to add over " + parseInt(this.scoreboard.overs + 1));
-          this.add_over(parseInt(this.scoreboard.overs) + 1, this.scoreboard.bowler);
-        } else {
-          this.scoreboard.overs_and_balls = this.scoreboard.overs + '.' + this.scoreboard.balls;
-        }
-      };
-
-      /** @function add_runs_to_striker
-       *  @memberOf scorer.factory.Scoreboard
-       *  @param {integer} runs - Number of runs to be added.
-       */
-      this.add_runs_to_striker = function(runs) {
-        if (this.scoreboard.left_bat.striker) {
-          this.scoreboard.left_bat.runs += runs;
-        } else {
-          this.scoreboard.right_bat.runs += runs;
-        }
-      };
-
-      /** @function ball
-       *  @memberOf scorer.factory.Scoreboard
-       *  @param {integer} - Number of runs scored off the ball.
-       */
-      this.ball = function(runs) {
-
-        this.scoreboard.total += runs;
-        this.scoreboard.balls++;
-
-        this.add_runs_to_striker(runs);
-
-        this.add_ball(this.scoreboard.left_bat.striker ? this.scoreboard.left_bat : this.scoreboard.right_bat, runs, 0, false, true);
-
-      };
-
-      /** @function wicket
-       *  @memberOf scorer.factory.Scoreboard
-       */
-      this.wicket = function() {
-        this.scoreboard.balls++;
-        this.scoreboard.wickets += 1;
-
-        if (this.set_game_over()) {
-          return true;
-        }
-        this.add_ball(this.scoreboard.left_bat.striker ? this.scoreboard.left_bat : this.scoreboard.right_bat, 0, 0, true, true);
-        var next_batsman_no = (this.scoreboard.left_bat.no > this.scoreboard.right_bat.no) ?
-          this.scoreboard.left_bat.no + 1 :
-          this.scoreboard.right_bat.no + 1;
-
-        if (this.scoreboard.left_bat.striker === true) {
-          this.scoreboard.left_bat = new Batsman();
-          this.scoreboard.left_bat.no = next_batsman_no;
-          this.scoreboard.left_bat.striker = true;
-
-        } else {
-          this.scoreboard.right_bat = new Batsman();
-          this.scoreboard.right_bat.no = next_batsman_no;
-          this.scoreboard.right_bat.striker = true;
-        }
-        this.set_batsmen_details();
-        this.save();
-      };
-
-      /** @function add_extra
-       *
-       *  @memberOf scorer.factory.Scoreboard
-       *  @param {Extra} extra - The Extra object for the ball.
-       */
-      this.add_extra = function(extra) {
-        if (this.alert_game_over()) {
-          return false;
-        }
-        this.add_extras[extra.type](this, extra);
-        this.set_game_over();
-        this.save();
-      };
-
-      /** @function add_extras
-       *  @memberOf scorer.factory.Scoreboard
-       *  @param {Scoreboard} obj - ?????
-       *  @param {Extra} extra - The Extra object for the ball.
-       */
-      this.add_extras = {
-        no_ball: function(obj, extra) {
-          obj.scoreboard.total += (extra.runs + extra.extras);
-          obj.add_runs_to_striker(extra.runs);
-          obj.change_ends(extra.runs + extra.extras - 1);
-          obj.add_ball(obj.scoreboard.left_bat.striker ?
-            obj.scoreboard.left_bat : obj.scoreboard.right_bat, extra.runs, extra.extras, false, false);
-        },
-        wide: function(obj, extra) {
-          obj.scoreboard.total += extra.extras;
-          obj.add_ball(obj.scoreboard.left_bat.striker ?
-            obj.scoreboard.left_bat : obj.scoreboard.right_bat, 0, extra.extras, false, false);
-          if (extra.extras > 1) {
-            obj.change_ends(extra.extras - 1);
-          }
-        },
-        leg_bye: function(obj, extra) {
-          obj.scoreboard.balls++;
-          obj.scoreboard.total += extra.extras;
-          obj.add_ball(obj.scoreboard.left_bat.striker ?
-            obj.scoreboard.left_bat : obj.scoreboard.right_bat, 0, extra.extras, false, true);
-          obj.change_ends(extra.extras);
-          obj.over();
-        },
-        bye: function(obj, extra) {
-          obj.scoreboard.balls++;
-          obj.scoreboard.total += extra.extras;
-          obj.add_ball(obj.scoreboard.left_bat.striker ?
-            obj.scoreboard.left_bat : obj.scoreboard.right_bat, 0, extra.extras, false, true);
-          obj.change_ends(extra.extras);
-          obj.over();
-        }
-      };
-
-      /** @function save
-       *  @memberOf scorer.factory.Scoreboard
-       */
-      this.save = function() {
-        storage.put_scoreboard(this.scoreboard);
-      };
-
-      /** @function new_match
-       *  @memberOf scorer.factory.Scoreboard
-       */
-      this.new_match = function() {
-        var s = new ScoreboardTemplate(Settings);
-        console.log("new_match s.innings[0].overs_history");
-        console.log(JSON.stringify(s.innings[0].overs_history));
-        console.log("new_match this.scoreboard.overs_history");
-        console.log(JSON.stringify(this.scoreboard.overs_history));
-        this.scoreboard = s.innings[0];
-        this.next_innings = s.innings[1];
-        console.log("new_match");
-        console.log(JSON.stringify(this));
-        this.save();
-      };
-
-      /** @function new_innings
-       *  @memberOf scorer.factory.Scoreboard
-       */
-      this.new_innings = function() {
-
-        storage.put('last_innings', this.scoreboard);
-        var last_innings_runs = this.scoreboard.total;
-        var last_overs_history = this.scoreboard.overs_history;
-        var num_overs = this.scoreboard.num_overs;
-
-        this.scoreboard = this.next_innings;
-
-        this.scoreboard.last_innings = last_innings_runs;
-        this.scoreboard.last_overs_history = last_overs_history;
-        this.scoreboard.target = last_innings_runs + 1;
-        this.scoreboard.innings_no += 1;
-        this.scoreboard.batting_team = this.scoreboard.batting_team == "home" ? "away" : "home";
-        this.scoreboard.num_overs = num_overs;
-
-        this.set_batsmen_details();
-      };
-
-      /** @function set_batting_team
-       *  @memberOf scorer.factory.Scoreboard
-       *  @param {Players} - batting_team - The batting team.
-       */
-      this.set_batting_team = function(batting_team) {
-        if (batting_team != this.scoreboard.batting_team) {
-          this.scoreboard.batting_team = batting_team;
-          this.set_batsmen_details();
-          //alert("About to set_bowler_details");
-          this.set_bowler_details();
-          //alert("Done");
-        }
-      };
-
-      /** @function set_batsmen_details
-       *  @memberOf scorer.factory.Scoreboard
-       */
-      this.set_batsmen_details = function() {
-
-        var check = function(batsman, players) {
-          for (var i = 0; i < players.length; i++) {
-            if (batsman.no == players[i].batting_no) {
-              batsman.name = players[i].name;
-              batsman.id = players[i].id;
-              batsman.description = players[i].description;
-              batsman.bowling = players[i].bowling;
-              batsman.bowler = players[i].bowler;
-              return batsman;
-            }
-          }
-          return false;
-        };
-
-        var players = this.scoreboard.batting_team == "home" ? this.home_players.players : this.away_players.players;
-        console.log("set_batsmen_details");
-        console.log(JSON.stringify(this.scoreboard));
-        this.left_bat = check(this.scoreboard.left_bat, players);
-        this.right_bat = check(this.scoreboard.right_bat, players);
-        // alert(JSON.stringify(this.scoreboard.right_bat));
-
-      };
-
-      // ***********************************************************************
-      /** @function set_bowler_details
-       * @memberOf scorer.factory.Scoreboard
-       */
-      this.set_bowler_details = function() {
-
-        /** @function */
-        var is_bowling = function(bowlers, bowler) {
-          for (var i = 0; i < bowlers.length; i++) {
-            if (bowlers[i].id == bowler.id) {
-              return bowlers[i];
-            }
-          }
-          return false;
-        };
-        /** @function */
-        var set_bowler = function(bowlers, bowler) {
-          if (!bowlers.length) {
-            return {};
-          }
-
-          if (!bowler.id) {
-            return bowlers.shift();
-          } else if (!is_bowling(bowlers, bowler)) {
-            return {};
-          } else {
-            return bowlers[0].id == bowler.id ? bowlers.shift() : bowlers.pop();
-          }
-          return bowler;
-        };
-
-        var bowling_team = this.scoreboard.batting_team == "home" ? this.away_players : this.home_players;
-        var bowlers = bowling_team.get_bowlers();
-
-        this.scoreboard.bowler = set_bowler(bowlers, this.scoreboard.bowler);
-
-        //alert("next set_bowler: " + bowlers.length + " : " + JSON.stringify(this.scoreboard.next_bowler));
-        this.scoreboard.next_bowler = set_bowler(bowlers, this.scoreboard.next_bowler);
-      };
-
-      // ***********************************************************************
-      /** @function reset
-       *  @memberOf scorer.factory.Scoreboard
-       */
-      this.reset = function() {
-        Players.set_team('home');
-        Players.reset();
-        this.home_players = jQuery.extend(true, {}, Players);
-
-        Players.set_team('away');
-        Players.reset();
-        this.away_players = jQuery.extend(true, {}, Players);
-
-        this.set_batsmen_details();
-        this.set_bowler_details();
-
-      };
-
-      /** @function add_over
-       *  @memberOf scorer.factory.Scoreboard
-       *  @param {integer} over_no - The number of the over.
-       *  @param {Player}  bowler_obj - The bowler of the over.
-       */
-      this.add_over = function(over_no, bowler_obj) {
-        this.scoreboard.overs_history.push(new Over(over_no, bowler_obj));
-      };
-
-      /** @function add_ball
-       *  @memberOf scorer.factory.Scoreboard
-       *  @param striker
-       *  @param runs
-       *  @param extras
-       *  @param wkt
-       *  @param valid
-       */
-      this.add_ball = function(striker, runs, extras, wkt, valid) {
-        if (!this.scoreboard.overs_history.length) {
-          this.add_over(1, this.scoreboard.bowler);
-        }
-        var over = this.scoreboard.overs_history[this.scoreboard.overs_history.length - 1];
-        if (over.valid_balls >= 6) {
-          alert("The over has finished.");
-        }
-        this.scoreboard.overs_history[this.scoreboard.overs_history.length - 1].balls.push(new Ball(
-          striker, runs, extras, wkt, valid));
-        if (valid) {
-          this.scoreboard.overs_history[this.scoreboard.overs_history.length - 1].valid_balls += 1;
-        }
-        this.scoreboard.overs_history[this.scoreboard.overs_history.length - 1].total_balls += 1;
-      };
-
-      /** @function is_ready
-       *  @memberOf scorer.factory.Scoreboard
-       *  @return {boolean}
-       */
-      this.is_ready = function() {
-        if (!this.scoreboard.overs_history.length) {
-          return false;
-        }
-        if (this.scoreboard.overs_history[this.scoreboard.overs_history.length - 1].valid_balls >= 6) {
-          return false;
-        }
-        return true;
-      };
-
-      /** @function clear
-       *  @memberOf scorer.factory.Scoreboard
-       */
-      this.clear = function() {
-        this.scoreboard.overs_history = [];
-      };
-
-    };
 
     console.log("Initial Scoreboard: " + JSON.stringify(initial_scoreboard));
 
-    var s = new Scoreboard(initial_scoreboard);
+    var s = new Sc.Scoreboard(initial_scoreboard, Players);
 
     $rootScope.$on('settings_changed', function(event, args) {
       s.scoreboard.num_overs = args.num_overs;
@@ -1432,6 +1158,25 @@ angular.module("scorer").factory('Scoreboard', ['Storage', 'Settings', '$rootSco
 /**
  * @class ScoreboardTemplate
  * @memberOf scorer.factory
+ * @property {number} balls - The number of balls bowled in the current over so far.
+ * @property {array} overs_history - Array of all overs bowled in the current innings.
+ * Last element is the current over.
+ * @property {type} bowler - The current bowler
+ * @property {type} next_bowler - The next bowler
+ * @property {boolean} game_over - true if the game is over.
+ * @property {number} extras - Number of extras in innings so far.
+ * @property {number} total - Total runs (including extras) in innings so far.
+ * @property {number} wickets - Total number of wickets taken so far in innings.
+ * @property {boolean} innings_over - True if the innings is over.
+ * @property {number} overs - Number of completed overs so far in innings.
+ * @property {number} num_overs - Number of overs scheduled for innings.
+ * @property {number} overs_and_balls - Pseudo decimal. eg 6 overs and three
+ * balls = 6.3. 7 overs and no balls = 7.
+ * @property {type} left_bat - The batsman on the left hand side of the board.
+ * @property {type} right_bat - The batsman on the right hand side of the board.
+ * @property {number} target - The total runs required to win the match.
+ * @property {string} batting_team - Signifies the batting team. "home" or "away".
+ *
  */
 angular.module("scorer").factory('ScoreboardTemplate', ['Settings', 'Innings',
   function(Settings, Innings) {
@@ -1696,3 +1441,774 @@ angular.module("scorer").factory('TeamData', [ function() {
 * @memberOf scorer
 *
 */
+
+angular.module("scorer").factory('Bye', [
+  function() {
+
+    /** Creates an instance of Bye
+     *
+    * @class Bye
+       * @memberOf scorer.factory.DeliveryType
+      * @classdesc - Returns an instance of a correct delivery class..
+      * @constructor Bye
+
+      * @return {Bye}
+      * @description -
+      */
+    var Bye = function() {
+
+      /**
+       * @function record
+       * @memberOf scorer.factory.DeliveryType.Bye
+       * @param {Scoreboard} The scoreboard
+       * @param type
+       */
+      this.record = function(scoreboard, details) {
+        scoreboard.balls += 1;
+        scoreboard.add_ball(scoreboard.left_bat.striker ?
+          scoreboard.left_bat : scoreboard.right_bat, 0, 1, false, true);
+        scoreboard.change_ends(1);
+        scoreboard.extras += 1;
+        scoreboard.total += 1;
+      };
+
+    };
+
+    return Bye;
+  }
+]);
+
+angular.module("scorer").factory('Delivery', [
+  function() {
+
+    /** Creates an instance of Delivery
+     *
+    * @class Delivery
+       * @memberOf scorer.factory.DeliveryType
+      * @classdesc - Returns an instance of a correct delivery class..
+      * @constructor Delivery
+
+      * @return {Delivery}
+      * @description -
+      */
+    var Delivery = function() {
+
+      /**
+       * @function record
+       * @memberOf scorer.factory.DeliveryType.Delivery
+       * @param {Scoreboard} The scoreboard
+       * @param type
+       */
+      this.record = function(scoreboard, details) {
+        //console.log("OK 1");
+        this.ball(scoreboard,details.runs);
+        //console.log("OK 2");
+        scoreboard.change_ends(details.runs);
+      };
+
+      this.ball = function(scoreboard, runs) {
+        //console.log("ok   xx");
+        scoreboard.total += runs;
+        scoreboard.balls++;
+
+        //console.log("OK 1.1");
+        scoreboard.add_runs_to_striker( runs);
+
+        scoreboard.add_ball(scoreboard.left_bat.striker ? scoreboard.left_bat
+          : scoreboard.right_bat, runs, 0, false, true);
+
+      };
+
+
+
+    };
+
+    return Delivery;
+  }
+]);
+
+angular.module("scorer").factory('LegBye', [
+  function() {
+
+    /** Creates an instance of LegBye
+     *
+    * @class LegBye
+       * @memberOf scorer.factory.DeliveryType
+      * @classdesc - Returns an instance of a correct delivery class..
+      * @constructor LegBye
+
+      * @return {LegBye}
+      * @description -
+      */
+    var LegBye = function() {
+
+      /**
+       * @function record
+       * @memberOf scorer.factory.DeliveryType.LegBye
+       * @param {Scoreboard} The scoreboard
+       * @param type
+       */
+      this.record = function(scoreboard, details) {
+        scoreboard.balls += 1;
+        scoreboard.add_ball(scoreboard.left_bat.striker ?
+          scoreboard.left_bat : scoreboard.right_bat, 0, 1, false, true);
+        scoreboard.change_ends(1);
+        scoreboard.extras += 1;
+        scoreboard.total += 1;
+      };
+
+    };
+
+    return LegBye;
+  }
+]);
+
+angular.module("scorer").factory('NoBall', [
+  function() {
+
+    /** Creates an instance of NoBall
+     *
+    * @class NoBall
+      * @memberOf scorer.factory.DeliveryType
+      * @classdesc - Returns an instance of a correct delivery class..
+      * @constructor NoBall
+
+      * @return {NoBall}
+      * @description -
+      */
+    var NoBall = function() {
+
+      /**
+       * @function record
+       * @memberOf scorer.factory.DeliveryType.NoBall
+       * @param {Scoreboard} The scoreboard
+       * @param type
+       */
+      this.record = function(scoreboard, details) {
+        scoreboard.extras += 1;
+        scoreboard.total += 1;
+        scoreboard.add_ball(scoreboard.left_bat.striker ?
+          scoreboard.left_bat :
+          scoreboard.right_bat, 0, 1, false, false);
+
+      };
+
+    };
+
+    return NoBall;
+  }
+]);
+
+angular.module("scorer").factory('Wicket', [
+  function() {
+
+    /** Creates an instance of Wicket
+     *
+    * @class Wicket
+       * @memberOf scorer.factory.DeliveryType
+      * @classdesc - Returns an instance of a correct delivery class..
+      * @constructor Wicket
+
+      * @return {Wicket}
+      * @description -
+      */
+    var Wicket = function() {
+
+      /**
+       * @function record
+       * @memberOf scorer.factory.DeliveryType.Wicket
+       * @param {Scoreboard} The scoreboard
+       * @param type
+       */
+      this.record = function(scoreboard, details) {
+        console.log("record wicket");
+        this.wwicket(scoreboard,details);
+      };
+
+      this.wwicket = function(scoreboard, details) {
+        console.log("wicket.wicket");
+        scoreboard.balls++;
+        scoreboard.wickets += 1;
+
+        scoreboard.add_ball(scoreboard.left_bat.striker ? scoreboard.left_bat :
+          scoreboard.right_bat, 0, 0, true, true);
+        // var next_batsman_no = (scoreboard.left_bat.no > scoreboard.right_bat.no) ?
+        //   scoreboard.left_bat.no + 1 :
+        //   scoreboard.right_bat.no + 1;
+        //
+        // if (scoreboard.left_bat.striker === true) {
+        //   scoreboard.left_bat = new Batsman();
+        //   scoreboard.left_bat.no = next_batsman_no;
+        //   scoreboard.left_bat.striker = true;
+        //
+        // } else {
+        //   scoreboard.right_bat = new Batsman();
+        //   scoreboard.right_bat.no = next_batsman_no;
+        //   scoreboard.right_bat.striker = true;
+        // }
+      };
+
+
+    };
+
+    return Wicket;
+  }
+]);
+
+angular.module("scorer").factory('Wide', [
+  function() {
+
+    /** Creates an instance of Wide
+     *
+    * @class Wide
+       * @memberOf scorer.factory.DeliveryType
+      * @classdesc - Returns an instance of a correct delivery class..
+      * @constructor Wide
+
+      * @return {Wide}
+      * @description -
+      */
+    var Wide = function() {
+
+      /**
+       * @function record
+       * @memberOf scorer.factory.DeliveryType.Wide
+       * @param {Scoreboard} The scoreboard
+       * @param type
+       */
+      this.record = function(scoreboard, details) {
+        scoreboard.extras += 1;
+        scoreboard.total += 1;
+        scoreboard.add_ball(scoreboard.left_bat.striker ? scoreboard.left_bat :
+          scoreboard.right_bat, 0, 1, false, false);
+      };
+
+    };
+
+    return Wide;
+  }
+]);
+
+/**
+* @namespace DeliveryType
+* @memberOf scorer.factory
+*
+*/
+
+/**
+* @namespace lib
+* @memberOf scorer
+*
+*/
+
+/*jslint vars:true, plusplus:true, devel:true, nomen:true, indent:4, maxerr:50*/
+
+/**
+ * @namespace sc
+ * @memberOf scorer.lib
+ *
+ */
+var sc = {
+  /*jslint vars:true, plusplus:true, devel:true, nomen:true, indent:4, maxerr:50*/
+  test: function() {
+    /*jslint vars:true, plusplus:true, devel:true, nomen:true, indent:4, maxerr:50*/
+    console.log('Hello from sc.test');
+    return 'test';
+  },
+  test_object: function() {
+    this.msg = function() {
+      console.log('Hello from sc.test_object');
+      return 'test_object';
+    };
+  },
+  /**
+   * @class Scoreboard
+   * @memberOf sc
+   * @constructor Scoreboard
+   * @param {ScoreboardTemplate} scoreboard_template
+   * @property {number} scoreboard - The current innings. Always innings[0] of the ScoreboardTemplate object.
+   * @property {array} next_innings - The next innings. Always innings[1] of the ScoreboardTemplate object.
+   * @property {Players} home_players -
+   * @property {Players} away_players -
+   * @property {boolean} is_ready -
+   * @property {Players} home_players -
+   */
+  Scoreboard: function(scoreboard_template, Players) {
+    var s = jQuery.extend(true, {}, scoreboard_template);
+    this.scoreboard = s.innings[0];
+    this.next_innings = s.innings[1];
+    console.log('scoreboard ' + JSON.stringify(this.scoreboard));
+    /**
+     * @function #change_ends
+     * @description Accept the number of times the batsmen ran and calculate whether
+     * the batsmen changed ends. If they did, toggle the values of scoreboard.left_bat.striker
+     * and scoreboard.right_bat.striker.
+     * @memberOf scorer.factory.Scoreboard
+     * @param {integer} num_runs - Number of times the batsmen ran on the last ball.
+     */
+    this.change_ends = function(num_runs) {
+      if (num_runs % 2 === 0) {
+        return true;
+      }
+      if (this.scoreboard.left_bat.striker === true) {
+        this.scoreboard.left_bat.striker = false;
+        this.scoreboard.right_bat.striker = true;
+      } else {
+        this.scoreboard.left_bat.striker = true;
+        this.scoreboard.right_bat.striker = false;
+      }
+    };
+    /**
+     *  @function change_bowlers
+     *  @description Swop the objects in scoreboard.bowler and scoreboard.next_bowler. Called at the end of each over.
+     *  @memberOf scorer.factory.Scoreboard
+     */
+    this.change_bowlers = function() {
+      var tmp = this.scoreboard.bowler;
+      this.scoreboard.bowler = this.scoreboard.next_bowler;
+      this.scoreboard.next_bowler = tmp;
+      console.log("After change_bowlers: bowler " + JSON.stringify(this.scoreboard.bowler));
+      console.log("After change_bowlers: next " + JSON.stringify(this.scoreboard.next_bowler));
+    };
+    /** @function alert_game_over
+     *  @description Alert if the scoreboard.game_over flag is true.
+     *  @memberOf scorer.factory.Scoreboard
+     */
+    this.alert_game_over = function() {
+      if (this.scoreboard.game_over === true) {
+        alert("The game is over!");
+        return true;
+      }
+      return this.alert_innings_over();
+    };
+    /** @function alert_innings_over
+     *  @description Alert if the scoreboard.gamer_over flag is false and the
+     *  scoreboard.innings_overs flag is true.
+     *  @memberOf scorer.factory.Scoreboard
+     *  @return {boolean}
+     */
+    this.alert_innings_over = function() {
+      if (this.scoreboard.game_over === false && this.scoreboard.innings_over === true) {
+        alert("The innings is over!");
+        this.new_innings();
+        return true;
+      }
+      return false;
+    };
+    /** @function alert_no_bowler
+     *  @description Alert if the bowler is not set.
+     *  @memberOf scorer.factory.Scoreboard
+     *  @return boolean
+     */
+    this.alert_no_bowler = function() {
+      if (!this.scoreboard.bowler.name) {
+        alert("Please select a bowler.");
+        return true;
+      }
+      return false;
+    };
+    /** @function bowls
+     *  @description Called when a delivery is anything except "other".
+     *  @memberOf scorer.factory.Scoreboard
+     *  @return {boolean}
+     */
+    this.bowls = function(type, runs) {
+      if (this.alert_game_over()) {
+        return false;
+      }
+      if (this.alert_no_bowler()) {
+        return false;
+      }
+      switch (type) {
+        case 'wicket':
+          this.wicket();
+          break;
+        case 'bye':
+        case 'leg_bye':
+          this.scoreboard.balls += 1;
+          this.add_ball(this.scoreboard.left_bat.striker ? this.scoreboard.left_bat : this.scoreboard.right_bat, 0, 1, false, true);
+          this.change_ends(1);
+          this.scoreboard.extras += 1;
+          this.scoreboard.total += 1;
+          break;
+        case 'no_ball':
+        case 'wide':
+          this.scoreboard.extras += 1;
+          this.scoreboard.total += 1;
+          this.add_ball(this.scoreboard.left_bat.striker ? this.scoreboard.left_bat : this.scoreboard.right_bat, 0, 1, false, false);
+          break;
+        case 'ball':
+          this.ball(runs);
+          this.change_ends(runs);
+          break;
+      }
+      this.over();
+      this.set_game_over();
+      this.save();
+    };
+    /** @function set_game_over
+     *  @description Calls set_innings_over and then set game_over if there are no
+     *  more innings.
+     *  @memberOf scorer.factory.Scoreboard
+     */
+    this.set_game_over = function() {
+      this.set_innings_over();
+      if (this.scoreboard.last_innings > 0 && this.scoreboard.total > this.scoreboard.last_innings) {
+        this.scoreboard.game_over = true;
+      }
+      if (this.scoreboard.innings_over && this.scoreboard.innings_no > 1) {
+        this.scoreboard.game_over = true;
+      }
+    };
+    /** @function set_innings_over
+     *  @description Set the innings over flag if 10 wickets have been taken
+     *  or the last over has been completed.
+     *  @memberOf scorer.factory.Scoreboard
+     * return {boolean}
+     */
+    this.set_innings_over = function() {
+      if (this.scoreboard.wickets >= 10) {
+        this.scoreboard.innings_over = true;
+      }
+      //alert(this.scoreboard.num_overs + ' : ' + this.scoreboard.overs);
+      if (this.scoreboard.num_overs && this.scoreboard.overs >= this.scoreboard.num_overs) {
+        //alert(1);
+        this.scoreboard.innings_over = true;
+      }
+      return this.scoreboard.innings_over;
+    };
+    /** @function over
+     *  @description Test if the over has been completed. If it has, then
+     * prepare for the next one.
+     *  @memberOf scorer.factory.Scoreboard
+     */
+    this.over = function() {
+      if (this.scoreboard.balls >= 6) {
+        this.scoreboard.balls = 0;
+        this.scoreboard.overs += 1;
+        this.scoreboard.overs_and_balls = this.scoreboard.overs;
+        this.change_ends();
+        this.change_bowlers();
+        // alert("About to add over " + parseInt(this.scoreboard.overs + 1));
+        this.add_over(parseInt(this.scoreboard.overs) + 1, this.scoreboard.bowler);
+      } else {
+        this.scoreboard.overs_and_balls = this.scoreboard.overs + '.' + this.scoreboard.balls;
+      }
+    };
+    /** @function add_runs_to_striker
+     *  @description Add the runs to the batsman's score.
+     *  @memberOf scorer.factory.Scoreboard
+     *  @param {integer} runs - Number of runs to be added.
+     */
+    this.add_runs_to_striker = function(runs) {
+      if (this.scoreboard.left_bat.striker) {
+        this.scoreboard.left_bat.runs += runs;
+      } else {
+        this.scoreboard.right_bat.runs += runs;
+      }
+    };
+    /** @function ball
+     *  @description Handle valid ball/delivery.
+     *  @memberOf scorer.factory.Scoreboard
+     *  @param {integer} - Number of runs scored off the ball.
+     */
+    this.ball = function(runs) {
+      this.scoreboard.total += runs;
+      this.scoreboard.balls++;
+      this.add_runs_to_striker(runs);
+      this.add_ball(this.scoreboard.left_bat.striker ? this.scoreboard.left_bat : this.scoreboard.right_bat, runs, 0, false, true);
+    };
+    /** @function wicket
+     *  @description Called when a wicket is taken.
+     *  @memberOf scorer.factory.Scoreboard
+     */
+    this.wicket = function() {
+      this.scoreboard.balls++;
+      this.scoreboard.wickets += 1;
+      if (this.set_game_over()) {
+        return true;
+      }
+      this.add_ball(this.scoreboard.left_bat.striker ? this.scoreboard.left_bat : this.scoreboard.right_bat, 0, 0, true, true);
+      var next_batsman_no = (this.scoreboard.left_bat.no > this.scoreboard.right_bat.no) ? this.scoreboard.left_bat.no + 1 : this.scoreboard.right_bat.no + 1;
+      if (this.scoreboard.left_bat.striker === true) {
+        this.scoreboard.left_bat = new Batsman();
+        this.scoreboard.left_bat.no = next_batsman_no;
+        this.scoreboard.left_bat.striker = true;
+      } else {
+        this.scoreboard.right_bat = new Batsman();
+        this.scoreboard.right_bat.no = next_batsman_no;
+        this.scoreboard.right_bat.striker = true;
+      }
+      this.set_batsmen_details();
+      this.save();
+    };
+    /** @function add_extra
+     *  @description Called when an extra is bowled.
+     *  @memberOf scorer.factory.Scoreboard
+     *  @param {Extra} extra - The Extra object for the ball.
+     */
+    this.add_extra = function(extra) {
+      if (this.alert_game_over()) {
+        return false;
+      }
+      this.add_extras[extra.type](this, extra);
+      this.set_game_over();
+      this.save();
+    };
+    /** @function add_extras
+     *  @description Does the hard work for add_extra().
+     *  @memberOf scorer.factory.Scoreboard
+     *  @param {Scoreboard} obj - ?????
+     *  @param {Extra} extra - The Extra object for the ball.
+     */
+    this.add_extras = {
+      no_ball: function(obj, extra) {
+        obj.scoreboard.total += (extra.runs + extra.extras);
+        obj.add_runs_to_striker(extra.runs);
+        obj.change_ends(extra.runs + extra.extras - 1);
+        obj.add_ball(obj.scoreboard.left_bat.striker ? obj.scoreboard.left_bat : obj.scoreboard.right_bat, extra.runs, extra.extras, false, false);
+      },
+      wide: function(obj, extra) {
+        obj.scoreboard.total += extra.extras;
+        obj.add_ball(obj.scoreboard.left_bat.striker ? obj.scoreboard.left_bat : obj.scoreboard.right_bat, 0, extra.extras, false, false);
+        if (extra.extras > 1) {
+          obj.change_ends(extra.extras - 1);
+        }
+      },
+      leg_bye: function(obj, extra) {
+        obj.scoreboard.balls++;
+        obj.scoreboard.total += extra.extras;
+        obj.add_ball(obj.scoreboard.left_bat.striker ? obj.scoreboard.left_bat : obj.scoreboard.right_bat, 0, extra.extras, false, true);
+        obj.change_ends(extra.extras);
+        obj.over();
+      },
+      bye: function(obj, extra) {
+        obj.scoreboard.balls++;
+        obj.scoreboard.total += extra.extras;
+        obj.add_ball(obj.scoreboard.left_bat.striker ? obj.scoreboard.left_bat : obj.scoreboard.right_bat, 0, extra.extras, false, true);
+        obj.change_ends(extra.extras);
+        obj.over();
+      }
+    };
+    /** @function save
+     *  @description Save the current scoreboard object.
+     *  @memberOf scorer.factory.Scoreboard
+     */
+    this.save = function() {
+      storage.put_scoreboard(this.scoreboard);
+    };
+    /** @function new_match
+     *  @description Initialise a new match.
+     *  @memberOf scorer.factory.Scoreboard
+     */
+    this.new_match = function() {
+      var s = new ScoreboardTemplate(Settings);
+      console.log("new_match s.innings[0].overs_history");
+      console.log(JSON.stringify(s.innings[0].overs_history));
+      console.log("new_match this.scoreboard.overs_history");
+      console.log(JSON.stringify(this.scoreboard.overs_history));
+      this.scoreboard = s.innings[0];
+      this.next_innings = s.innings[1];
+      console.log("new_match");
+      console.log(JSON.stringify(this));
+      this.save();
+    };
+    /** @function new_innings
+     *  @description Start a new innings.
+     *  @memberOf scorer.factory.Scoreboard
+     */
+    this.new_innings = function() {
+      storage.put('last_innings', this.scoreboard);
+      var last_innings_runs = this.scoreboard.total;
+      var last_overs_history = this.scoreboard.overs_history;
+      var num_overs = this.scoreboard.num_overs;
+      this.scoreboard = this.next_innings;
+      this.scoreboard.last_innings = last_innings_runs;
+      this.scoreboard.last_overs_history = last_overs_history;
+      this.scoreboard.target = last_innings_runs + 1;
+      this.scoreboard.innings_no += 1;
+      this.scoreboard.batting_team = this.scoreboard.batting_team == "home" ? "away" : "home";
+      this.scoreboard.num_overs = num_overs;
+      this.set_batsmen_details();
+    };
+    /** @function set_batting_team
+     * @description Set the batting team.
+     *  @memberOf scorer.factory.Scoreboard
+     *  @param {Players} - batting_team - The batting team.
+     */
+    this.set_batting_team = function(batting_team) {
+      if (batting_team != this.scoreboard.batting_team) {
+        this.scoreboard.batting_team = batting_team;
+        this.set_batsmen_details();
+        //alert("About to set_bowler_details");
+        this.set_bowler_details();
+        //alert("Done");
+      }
+    };
+    /** @function set_batsmen_details
+     *  @description Set the batsman's details based on the list of players.
+     *  @memberOf scorer.factory.Scoreboard
+     */
+    this.set_batsmen_details = function() {
+      var check = function(batsman, players) {
+        for (var i = 0; i < players.length; i++) {
+          if (batsman.no == players[i].batting_no) {
+            batsman.name = players[i].name;
+            batsman.id = players[i].id;
+            batsman.description = players[i].description;
+            batsman.bowling = players[i].bowling;
+            batsman.bowler = players[i].bowler;
+            return batsman;
+          }
+        }
+        return false;
+      };
+      var players = this.scoreboard.batting_team == "home" ? this.home_players.players : this.away_players.players;
+      console.log("set_batsmen_details");
+      console.log(JSON.stringify(this.scoreboard));
+      this.left_bat = check(this.scoreboard.left_bat, players);
+      this.right_bat = check(this.scoreboard.right_bat, players);
+      // alert(JSON.stringify(this.scoreboard.right_bat));
+    };
+    // ***********************************************************************
+    /** @function set_bowler_details
+     * @description Manage the bowler details based on the list of players.
+     * @memberOf scorer.factory.Scoreboard
+     */
+    this.set_bowler_details = function() {
+      console.log('Start set_bowler_details');
+      /** @function is_bowling
+       * @description Accept a list of bowler objects and a bowler. Return true
+       * if the bowler is current bowling.
+       */
+      var is_bowling = function(bowlers, bowler) {
+        for (var i = 0; i < bowlers.length; i++) {
+          if (bowlers[i].id == bowler.id) {
+            console.log("set_bowler_details is_bowling true for bowler.id " + bowler.id);
+            return bowlers[i];
+          }
+        }
+        console.log("set_bowler_details is_bowling false for bowler.id " + bowler.id);
+        return false;
+      };
+      /** @function set_bowler
+       * @description Accept a list of bowlers and a bowler. */
+      var set_bowler = function(bowlers, bowler) {
+        if (!bowlers.length) {
+          console.log('WARN set_bowler_details. No bowlers!');
+          return {};
+        }
+        if (!bowler.id) {
+          // No bowler id. Just return first bowler in list.
+          console.log("INFO set_bowler_details. Return first bowler in list.");
+          return bowlers.shift;
+        } else if (!is_bowling(bowlers, bowler)) {
+          console.log("WARN set_bowler_details. Bowler " + bowler.id + " is not bowling.");
+          return {};
+        } else {
+          var b = bowlers[0].id == bowler.id ? bowlers.shift() : bowlers.pop();
+          console.log("INFO set_bowler_details. Return bowler " + b.id);
+          return b;
+        }
+        console.log("INFO set_bowler_details. Return bowler " + bowler.id);
+        return bowler;
+      };
+      var bowling_team = this.scoreboard.batting_team == "home" ? this.away_players : this.home_players;
+      // Bowlers is a sorted list of the players in the bowling list who
+      // are currently bowling. Rebuilt each time, so it
+      // can be modified safely. Two entries max!
+      var bowlers = bowling_team.get_bowling();
+      console.log("set_bowler_details: bowlers list:" + JSON.stringify(bowlers));
+      this.scoreboard.bowler = set_bowler(bowlers, this.scoreboard.bowler);
+      console.log("set_bowler_details: bowler  : " + JSON.stringify(this.scoreboard.bowler));
+      this.scoreboard.next_bowler = set_bowler(bowlers, this.scoreboard.next_bowler);
+      console.log("set_bowler_details: next_bowler : " + JSON.stringify(this.scoreboard.next_bowler));
+      if (!this.scoreboard.bowler.id) {
+        this.scoreboard.bowler = set_bowler(bowlers, this.scoreboard.bowler);
+        console.log("set_bowler_details: bowler  : " + JSON.stringify(this.scoreboard.bowler));
+      }
+      if (!this.scoreboard.next_bowler.id) {
+        this.scoreboard.next_bowler = set_bowler(bowlers, this.scoreboard.next_bowler);
+        console.log("set_bowler_details: next_bowler : " + JSON.stringify(this.scoreboard.next_bowler));
+      }
+    };
+    // ***********************************************************************
+    /** @function reset
+     *  @description Reset the list of players. This means reading the latest data
+     *  from storage and setting home_players and away_players.
+     *  @memberOf scorer.factory.Scoreboard
+     */
+    this.reset = function() {
+      console.log('1 reset');
+      console.log('2 reset');
+      console.log('Players: ' + JSON.stringify(Players));
+      Players.set_team('home');
+      Players.reset();
+      console.log('4 reset');
+      this.home_players = jQuery.extend(true, {}, Players);
+      Players.set_team('away');
+      Players.reset();
+      console.log('5 reset');
+      this.away_players = jQuery.extend(true, {}, Players);
+      this.set_batsmen_details();
+      console.log('6 reset');
+      this.set_bowler_details();
+      console.log('End reset');
+    };
+    /** @function add_over
+     * @description Add an over.
+     *  @memberOf scorer.factory.Scoreboard
+     *  @param {integer} over_no - The number of the over.
+     *  @param {Player}  bowler_obj - The bowler of the over.
+     */
+    this.add_over = function(over_no, bowler_obj) {
+      console.log("add_over " + over_no);
+      console.log("bowler_obj " + JSON.stringify(bowler_obj));
+      this.scoreboard.overs_history.push(new Over(over_no, bowler_obj));
+    };
+    /** @function add_ball
+     * @description Add a ball
+     *  @memberOf scorer.factory.Scoreboard
+     *  @param striker
+     *  @param runs
+     *  @param extras
+     *  @param wkt
+     *  @param valid
+     */
+    this.add_ball = function(striker, runs, extras, wkt, valid) {
+      if (!this.scoreboard.overs_history.length) {
+        this.add_over(1, this.scoreboard.bowler);
+      }
+      var over = this.scoreboard.overs_history[this.scoreboard.overs_history.length - 1];
+      if (over.valid_balls >= 6) {
+        alert("The over has finished.");
+      }
+      this.scoreboard.overs_history[this.scoreboard.overs_history.length - 1].balls.push(new Ball(striker, runs, extras, wkt, valid));
+      if (valid) {
+        this.scoreboard.overs_history[this.scoreboard.overs_history.length - 1].valid_balls += 1;
+      }
+      this.scoreboard.overs_history[this.scoreboard.overs_history.length - 1].total_balls += 1;
+    };
+    /** @function is_ready
+     * @description True if the set up is complete.
+     *  @memberOf scorer.factory.Scoreboard
+     *  @return {boolean}
+     */
+    this.is_ready = function() {
+      if (!this.scoreboard.overs_history.length) {
+        return false;
+      }
+      if (this.scoreboard.overs_history[this.scoreboard.overs_history.length - 1].valid_balls >= 6) {
+        return false;
+      }
+      return true;
+    };
+    /** @function clear
+     *  @description Clear the overs history.
+     *  @memberOf scorer.factory.Scoreboard
+     */
+    this.clear = function() {
+      this.scoreboard.overs_history = [];
+    };
+  },
+};
