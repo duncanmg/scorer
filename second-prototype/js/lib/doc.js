@@ -1,0 +1,5 @@
+/**
+* @namespace lib
+* @memberOf scorer
+*
+*/

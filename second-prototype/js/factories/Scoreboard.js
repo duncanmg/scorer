@@ -26,7 +26,7 @@ angular.module("scorer").factory('Scoreboard', ['Sc', 'Storage', 'Settings', '$r
 
     console.log("Initial Scoreboard: " + JSON.stringify(initial_scoreboard));
 
-    var s = new Sc.Scoreboard(initial_scoreboard, Players);
+    var s = new Sc.Scoreboard(initial_scoreboard, Players, Over);
 
     $rootScope.$on('settings_changed', function(event, args) {
       s.scoreboard.num_overs = args.num_overs;
