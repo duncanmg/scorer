@@ -35,6 +35,7 @@ angular.module("scorer").factory("Innings", [
       this.bowler = {};
       this.next_bowler = {};
       this.game_over = false;
+      this.innings_over = false;
 
       /** @method left_bat
        *  @memberOf scorer.factory.Innings

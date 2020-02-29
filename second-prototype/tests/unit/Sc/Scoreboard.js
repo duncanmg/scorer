@@ -88,4 +88,32 @@ describe("ScScoreboardTest. Real Template", function() {
     sc2.add_over(1, 2);
     expect(sc2.scoreboard.overs_history.length).toEqual(1);
   });
+
+  it("Sc.Command set_innings_over", function() {
+    sc2 = new sc.Scoreboard(template, players, over);
+    expect(typeof sc2).toEqual("object");
+
+    expect(sc2.scoreboard.innings_over).toEqual(false);
+    expect(sc2.scoreboard.game_over).toEqual(false);
+    sc2.scoreboard.wickets = 9;
+    var o = new sc.Command(sc2.scoreboard);
+    o.set_innings_over();
+    expect(sc2.scoreboard.innings_over).toEqual(false);
+    sc2.scoreboard.wickets = 10;
+    o.set_innings_over();
+    expect(sc2.scoreboard.innings_over).toEqual(true);
+    expect(sc2.scoreboard.game_over).toEqual(false);
+  });
+
+  it("An Sc.Commands.Wicket", function() {
+    sc2 = new sc.Scoreboard(template, players, over);
+    expect(typeof sc2).toEqual("object");
+    // console.log("sc2.scoreboard.overs_history " + JSON.stringify(sc2.scoreboard.overs_history));
+    // console.log(sc2.scoreboard.overs_history.length);
+    expect(sc2.scoreboard.wickets).toEqual(0);
+    expect(sc2.scoreboard.balls).toEqual(0);
+    sc2.wicket();
+    expect(sc2.scoreboard.wickets).toEqual(1);
+    expect(sc2.scoreboard.balls).toEqual(1);
+  });
 });

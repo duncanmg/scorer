@@ -278,37 +278,39 @@ var sc = {
      *  @memberOf sc.Scoreboard
      */
     this.wicket = function() {
-      var w = new sc.Commands.Wicket(this.scoreboard);
-      w.run();
-      this.scoreboard.balls++;
-      this.scoreboard.wickets += 1;
-      if (this.set_game_over()) {
-        return true;
-      }
-      this.add_ball(
-        this.scoreboard.left_bat.striker
-          ? this.scoreboard.left_bat
-          : this.scoreboard.right_bat,
-        0,
-        0,
-        true,
-        true
-      );
-      var next_batsman_no =
-        this.scoreboard.left_bat.no > this.scoreboard.right_bat.no
-          ? this.scoreboard.left_bat.no + 1
-          : this.scoreboard.right_bat.no + 1;
-      if (this.scoreboard.left_bat.striker === true) {
-        this.scoreboard.left_bat = new Batsman();
-        this.scoreboard.left_bat.no = next_batsman_no;
-        this.scoreboard.left_bat.striker = true;
-      } else {
-        this.scoreboard.right_bat = new Batsman();
-        this.scoreboard.right_bat.no = next_batsman_no;
-        this.scoreboard.right_bat.striker = true;
-      }
-      this.set_batsmen_details();
-      this.save();
+      console.log("wicket XXXXXXXXXXXXXXXXXXXXXX");
+      //var w = new sc.Commands.Wicket(this.scoreboard);
+      //w.run();
+      var w = sc.Commands.Run(sc.Commands.Wicket, this.scoreboard);
+      // this.scoreboard.balls++;
+      // this.scoreboard.wickets += 1;
+      // if (this.set_game_over()) {
+      //   return true;
+      // }
+      // this.add_ball(
+      //   this.scoreboard.left_bat.striker
+      //     ? this.scoreboard.left_bat
+      //     : this.scoreboard.right_bat,
+      //   0,
+      //   0,
+      //   true,
+      //   true
+      // );
+      // var next_batsman_no =
+      //   this.scoreboard.left_bat.no > this.scoreboard.right_bat.no
+      //     ? this.scoreboard.left_bat.no + 1
+      //     : this.scoreboard.right_bat.no + 1;
+      // if (this.scoreboard.left_bat.striker === true) {
+      //   this.scoreboard.left_bat = new Batsman();
+      //   this.scoreboard.left_bat.no = next_batsman_no;
+      //   this.scoreboard.left_bat.striker = true;
+      // } else {
+      //   this.scoreboard.right_bat = new Batsman();
+      //   this.scoreboard.right_bat.no = next_batsman_no;
+      //   this.scoreboard.right_bat.striker = true;
+      // }
+      // this.set_batsmen_details();
+      //this.save();
     };
 
     /** @function add_extra
@@ -672,8 +674,51 @@ var sc = {
       this.scoreboard.overs_history = [];
     };
   },
-  Command: function() {},
-  //Command.prototype.Batsman = function() {
+  Command: function(data) {
+
+    this.data = data;
+
+    this.test = "test";
+
+    /** @function set_innings_over
+     *  @description Set the innings over flag if 10 wickets have been taken
+     *  or the last over has been completed.
+     *  @memberOf sc.Scoreboard
+     * return {boolean}
+     */
+    this.set_innings_over = function() {
+      if (this.data.wickets >= 10) {
+        this.data.innings_over = true;
+      }
+      //alert(this.scoreboard.num_overs + ' : ' + this.scoreboard.overs);
+      if (this.data.num_overs && this.data.overs >= this.data.num_overs) {
+        //alert(1);
+        this.data.innings_over = true;
+      }
+      return this.data.innings_over;
+    };
+
+    /** @function set_game_over
+     *  @description Calls set_innings_over and then set game_over if there are no
+     *  more innings.
+     *  @memberOf sc.Scoreboard
+     */
+    this.set_game_over = function() {
+      console.log("qqqqq");
+      this.set_innings_over();
+      if (
+        this.data.last_innings > 0 &&
+        this.data.total > this.data.last_innings
+      ) {
+        this.data.game_over = true;
+      }
+      if (this.data.innings_over && this.data.innings_no > 1) {
+        this.data.game_over = true;
+      }
+    };
+  },
+
+  //  Command.prototype.Batsman = function() {
   //  this.no = 0;
   // this.striker = false;
   //  this.runs = 0;
@@ -682,13 +727,24 @@ var sc = {
   //},
   Commands: {
     Wicket: function(data) {
+      sc.Command.call(this);
+      this.data = data;
+      //this.prototype.test = sc.Command.test;
+      // this.prototype = this.c;
+      //console.log('aa'+this.c);
+      // Object.setPrototypeOf(this, new sc.Command());
       this.run = function() {
-        alert("Run!");
-        // data.balls++;
-        // data.wickets += 1;
-        // if (this.set_game_over()) {
-        //   return true;
-        // }
+        console.log(
+          "Wicket.run! XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
+        );
+        console.log(JSON.stringify(this.data));
+        //console.log(JSON.stringify(sc.Command));
+        console.log(this.fruit);
+        data.balls++;
+        data.wickets += 1;
+        if (this.set_game_over()) {
+          return true;
+        }
         // this.add_ball(
         //   data.left_bat.striker ? data.left_bat : data.right_bat,
         //   0,
@@ -711,6 +767,18 @@ var sc = {
         // }
         // this.set_batsmen_details();
       };
+    },
+
+    Run: function(object, args) {
+      object.prototype.set_game_over = function() {
+        console.log("Bang");
+      };
+      object.prototype = Object.create(sc.Command.prototype);
+      object.prototype.Constructor = sc.Command.Wicket;
+      var o = new sc.Commands.Wicket(args);
+
+      o.run();
+      return 1;
     }
     //Wicket.prototype = Command;
   }
