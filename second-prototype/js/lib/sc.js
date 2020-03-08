@@ -674,10 +674,7 @@ var sc = {
       this.scoreboard.overs_history = [];
     };
   },
-  Command: function(data) {
-
-    this.data = data;
-
+  Command: function() {
     this.test = "test";
 
     /** @function set_innings_over
@@ -716,6 +713,10 @@ var sc = {
         this.data.game_over = true;
       }
     };
+
+    this.over_manager = function() {
+      return new sc.OverManager(this.data);
+    };
   },
 
   //  Command.prototype.Batsman = function() {
@@ -727,7 +728,7 @@ var sc = {
   //},
   Commands: {
     Wicket: function(data) {
-      sc.Command.call(this);
+      sc.Command.call(this, data);
       this.data = data;
       //this.prototype.test = sc.Command.test;
       // this.prototype = this.c;
@@ -739,33 +740,46 @@ var sc = {
         );
         console.log(JSON.stringify(this.data));
         //console.log(JSON.stringify(sc.Command));
-        console.log(this.fruit);
         data.balls++;
         data.wickets += 1;
-        if (this.set_game_over()) {
-          return true;
-        }
-        // this.add_ball(
+        // if (this.set_game_over()) {
+        //   return true;
+        // }
+        // this.over_manager().add_ball(
         //   data.left_bat.striker ? data.left_bat : data.right_bat,
         //   0,
         //   0,
         //   true,
         //   true
         // );
-        // var next_batsman_no =
-        //   data.left_bat.no > data.right_bat.no
-        //     ? data.left_bat.no + 1
-        //     : data.right_bat.no + 1;
-        // if (data.left_bat.striker === true) {
-        //   data.left_bat = new Batsman();
-        //   data.left_bat.no = next_batsman_no;
-        //   data.left_bat.striker = true;
-        // } else {
-        //   data.right_bat = new Batsman();
-        //   data.right_bat.no = next_batsman_no;
-        //   data.right_bat.striker = true;
-        // }
+        //
+        // this.set_next_batsman_no(data);
+        //
+        // this.set_striker_as_new(data);
+
         // this.set_batsmen_details();
+      };
+
+      // Allocate the next batsman's number. If current batsmen are
+      // 3 and 6. Next batman will be 7.
+      this.set_next_batsman_no = function(data) {
+        var next_batsman_no =
+          data.left_bat.no > data.right_bat.no
+            ? data.left_bat.no + 1
+            : data.right_bat.no + 1;
+      };
+
+      // Make the next batsman the striker.
+      this.set_striker_as_new = function(data) {
+        if (data.left_bat.striker === true) {
+          data.left_bat = new Batsman();
+          data.left_bat.no = next_batsman_no;
+          data.left_bat.striker = true;
+        } else {
+          data.right_bat = new Batsman();
+          data.right_bat.no = next_batsman_no;
+          data.right_bat.striker = true;
+        }
       };
     },
 
@@ -781,5 +795,50 @@ var sc = {
       return 1;
     }
     //Wicket.prototype = Command;
+  },
+
+  OverManager: function(data) {
+    console.log("Overmanager data " + JSON.stringify(data));
+    this.data = data;
+
+    /** @function add_ball
+     * @description Add a ball
+     *  @memberOf sc.Command
+     *  @param striker
+     *  @param runs
+     *  @param extras
+     *  @param wkt
+     *  @param valid
+     */
+    this.add_ball = function(striker, runs, extras, wkt, valid) {
+      // console.log("add_ball " + JSON.stringify(this.data));
+      // if (!this.data.overs_history.length) {
+      //   alert("xxxxx " + this.add_over);
+      //   this.add_over(1, this.data.bowler);
+      // }
+      // alert(this.data.overs_history.length);
+      // var over = this.data.overs_history[this.data.overs_history.length - 1];
+      // if (over.valid_balls >= 6) {
+      //   alert("The over has finished.");
+      // }
+      // this.data.overs_history[this.data.overs_history.length - 1].balls.push(
+      //   new Ball(striker, runs, extras, wkt, valid)
+      // );
+      // if (valid) {
+      //   this.data.overs_history[
+      //     this.data.overs_history.length - 1
+      //   ].valid_balls += 1;
+      // }
+      // this.data.overs_history[
+      //   this.data.overs_history.length - 1
+      // ].total_balls += 1;
+    };
+
+    this.add_over = function(over_no, bowler_obj) {
+      console.log("add_over " + over_no);
+      console.log("bowler_obj " + JSON.stringify(bowler_obj));
+      this.data.overs_history.push(new data.templates.Over(over_no, bowler_obj));
+      alert("Over");
+    };
   }
 };
