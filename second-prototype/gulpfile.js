@@ -44,7 +44,7 @@ gulp.task('jsdoc', function (cb) {
 /**
  * Run test once and exit
  */
-gulp.task('test', function (done) {
+gulp.task('test', ['lint', 'scripts'], function (done) {
   new Server({
     configFile: __dirname + '/karma.conf.js',
     // configFile: __dirname + '/node_modules/karma/karma.conf.js',
