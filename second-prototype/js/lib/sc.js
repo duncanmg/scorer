@@ -696,22 +696,28 @@ var sc = {
     };
 
     /** @function set_game_over
-     *  @description Calls set_innings_over and then set game_over if there are no
-     *  more innings.
+     *  @description Calls set_innings_over and then sets game_over if the
+     *  second innings has ended.
      *  @memberOf sc.Scoreboard
      */
     this.set_game_over = function() {
-      console.log("qqqqq");
       this.set_innings_over();
-      if (
-        this.data.last_innings > 0 &&
-        this.data.total > this.data.last_innings
-      ) {
-        this.data.game_over = true;
+
+      if (this.data.innings_no <= 1) {
+        return false;
       }
-      if (this.data.innings_over && this.data.innings_no > 1) {
+
+      if (this.data.total > this.data.last_innings) {
         this.data.game_over = true;
+        return true;
       }
+
+      if (this.data.innings_over) {
+        this.data.game_over = true;
+        return true;
+      }
+
+      return false;
     };
 
     this.over_manager = function() {
@@ -742,17 +748,18 @@ var sc = {
         //console.log(JSON.stringify(sc.Command));
         data.balls++;
         data.wickets += 1;
-        // if (this.set_game_over()) {
-        //   return true;
-        // }
-        // this.over_manager().add_ball(
-        //   data.left_bat.striker ? data.left_bat : data.right_bat,
-        //   0,
-        //   0,
-        //   true,
-        //   true
-        // );
-        //
+        if (this.set_game_over()) {
+          return true;
+        }
+
+        this.over_manager().add_ball(
+          data.left_bat.striker ? data.left_bat : data.right_bat,
+          0,
+          0,
+          true,
+          true
+        );
+
         // this.set_next_batsman_no(data);
         //
         // this.set_striker_as_new(data);
@@ -811,34 +818,36 @@ var sc = {
      *  @param valid
      */
     this.add_ball = function(striker, runs, extras, wkt, valid) {
-      // console.log("add_ball " + JSON.stringify(this.data));
-      // if (!this.data.overs_history.length) {
-      //   alert("xxxxx " + this.add_over);
-      //   this.add_over(1, this.data.bowler);
-      // }
-      // alert(this.data.overs_history.length);
-      // var over = this.data.overs_history[this.data.overs_history.length - 1];
-      // if (over.valid_balls >= 6) {
-      //   alert("The over has finished.");
-      // }
-      // this.data.overs_history[this.data.overs_history.length - 1].balls.push(
-      //   new Ball(striker, runs, extras, wkt, valid)
-      // );
-      // if (valid) {
-      //   this.data.overs_history[
-      //     this.data.overs_history.length - 1
-      //   ].valid_balls += 1;
-      // }
-      // this.data.overs_history[
-      //   this.data.overs_history.length - 1
-      // ].total_balls += 1;
+      console.log("add_ball " + JSON.stringify(this.data));
+      if (!this.data.overs_history.length) {
+        // alert("xxxxx " + this.add_over);
+        this.add_over(1, this.data.bowler);
+      }
+      alert(this.data.overs_history.length);
+      var over = this.data.overs_history[this.data.overs_history.length - 1];
+      if (over.valid_balls >= 6) {
+        alert("The over has finished.");
+      }
+      this.data.overs_history[this.data.overs_history.length - 1].balls.push(
+        new data.templates.Ball(striker, runs, extras, wkt, valid)
+      );
+      if (valid) {
+        this.data.overs_history[
+          this.data.overs_history.length - 1
+        ].valid_balls += 1;
+      }
+      this.data.overs_history[
+        this.data.overs_history.length - 1
+      ].total_balls += 1;
     };
 
     this.add_over = function(over_no, bowler_obj) {
-      console.log("add_over " + over_no);
-      console.log("bowler_obj " + JSON.stringify(bowler_obj));
-      this.data.overs_history.push(new data.templates.Over(over_no, bowler_obj));
-      alert("Over");
+      //console.log("add_over " + over_no);
+      //console.log("bowler_obj " + JSON.stringify(bowler_obj));
+      this.data.overs_history.push(
+        new this.data.templates.Over(over_no, bowler_obj)
+      );
+      //alert("Over");
     };
   }
 };

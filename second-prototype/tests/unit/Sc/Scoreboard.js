@@ -95,14 +95,85 @@ describe("ScScoreboardTest. Real Template", function() {
 
     expect(sc2.scoreboard.innings_over).toEqual(false);
     expect(sc2.scoreboard.game_over).toEqual(false);
+
     sc2.scoreboard.wickets = 9;
-    var o = new sc.Command(sc2.scoreboard);
+    var o = new sc.Command();
+    o.data = sc2.scoreboard;
+
     o.set_innings_over();
     expect(sc2.scoreboard.innings_over).toEqual(false);
     sc2.scoreboard.wickets = 10;
     o.set_innings_over();
     expect(sc2.scoreboard.innings_over).toEqual(true);
     expect(sc2.scoreboard.game_over).toEqual(false);
+  });
+
+  it("Sc.Command set_game_over. Not over", function() {
+    sc2 = new sc.Scoreboard(template, players, over);
+    expect(typeof sc2).toEqual("object");
+
+    expect(sc2.scoreboard.innings_over).toEqual(false);
+    expect(sc2.scoreboard.game_over).toEqual(false);
+
+    expect(sc2.scoreboard.last_innings).toEqual(0);
+    expect(sc2.scoreboard.total).toEqual(0);
+    expect(sc2.scoreboard.innings_no).toEqual(1);
+
+    sc2.scoreboard.wickets = 9;
+    var o = new sc.Command();
+    o.data = sc2.scoreboard;
+
+    expect(o.set_game_over()).toEqual(false);
+    expect(sc2.scoreboard.innings_over).toEqual(false);
+    expect(sc2.scoreboard.game_over).toEqual(false);
+  });
+
+  it("Sc.Command set_game_over. Batting team win.", function() {
+    sc2 = new sc.Scoreboard(template, players, over);
+    expect(typeof sc2).toEqual("object");
+
+    expect(sc2.scoreboard.innings_over).toEqual(false);
+    expect(sc2.scoreboard.game_over).toEqual(false);
+
+    expect(sc2.scoreboard.last_innings).toEqual(0);
+    expect(sc2.scoreboard.total).toEqual(0);
+    expect(sc2.scoreboard.innings_no).toEqual(1);
+
+    sc2.scoreboard.wickets = 9;
+    sc2.scoreboard.last_innings = 100;
+    sc2.scoreboard.total = 101;
+    sc2.scoreboard.innings_no = 2;
+
+    var o = new sc.Command();
+    o.data = sc2.scoreboard;
+
+    expect(o.set_game_over()).toEqual(true);
+    expect(sc2.scoreboard.innings_over).toEqual(false);
+    expect(sc2.scoreboard.game_over).toEqual(true);
+  });
+
+  it("Sc.Command set_game_over. Bowling team win.", function() {
+    sc2 = new sc.Scoreboard(template, players, over);
+    expect(typeof sc2).toEqual("object");
+
+    expect(sc2.scoreboard.innings_over).toEqual(false);
+    expect(sc2.scoreboard.game_over).toEqual(false);
+    expect(sc2.scoreboard.innings_no).toEqual(1);
+
+    expect(sc2.scoreboard.last_innings).toEqual(0);
+    expect(sc2.scoreboard.total).toEqual(0);
+
+    sc2.scoreboard.wickets = 10;
+    sc2.scoreboard.last_innings = 100;
+    sc2.scoreboard.total = 90;
+    sc2.scoreboard.innings_no = 2;
+
+    var o = new sc.Command();
+    o.data = sc2.scoreboard;
+
+    expect(o.set_game_over()).toEqual(true);
+    expect(sc2.scoreboard.innings_over).toEqual(true);
+    expect(sc2.scoreboard.game_over).toEqual(true);
   });
 
   it("An Sc.Commands.Wicket", function() {
@@ -115,5 +186,6 @@ describe("ScScoreboardTest. Real Template", function() {
     sc2.wicket();
     expect(sc2.scoreboard.wickets).toEqual(1);
     expect(sc2.scoreboard.balls).toEqual(1);
+    expect(sc2.scoreboard.game_over).toEqual(false);
   });
 });
