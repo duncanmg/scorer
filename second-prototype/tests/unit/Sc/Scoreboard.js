@@ -179,8 +179,6 @@ describe("ScScoreboardTest. Real Template", function() {
   it("An Sc.Commands.Wicket", function() {
     sc2 = new sc.Scoreboard(template, players, over);
     expect(typeof sc2).toEqual("object");
-    // console.log("sc2.scoreboard.overs_history " + JSON.stringify(sc2.scoreboard.overs_history));
-    // console.log(sc2.scoreboard.overs_history.length);
     expect(sc2.scoreboard.wickets).toEqual(0);
     expect(sc2.scoreboard.balls).toEqual(0);
     sc2.wicket();
