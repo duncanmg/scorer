@@ -17,6 +17,9 @@
  * @property {object} game_over
  * @property {object} innings_no
  * @property {object} batting_team
+ * @property {number} left_bat_no
+ * @property {number} right_bat_no
+ * @property {number} next_batsman_no
  * @constructor Innings
  */
 angular.module("scorer").factory("Innings", [
@@ -36,6 +39,9 @@ angular.module("scorer").factory("Innings", [
       this.next_bowler = {};
       this.game_over = false;
       this.innings_over = false;
+      this.left_bat_no = 1;
+      this.right_bat_no = 2;
+      this.next_batsman_no = 3;
 
       /** @method left_bat
        *  @memberOf scorer.factory.Innings
@@ -72,7 +78,7 @@ angular.module("scorer").factory("Innings", [
          * @property total_balls - Number of balls bowled including extras.
          * @property add_ball - Add a ball this.add_ball(striker, runs, extras, wkt, valid)
          */
-        Over : function(over_no, bowler_obj) {
+        Over: function(over_no, bowler_obj) {
           /** @property over_no */
           this.over_no = over_no;
           this.bowler = jQuery.extend({}, bowler_obj); // Shallow copy / clone.
@@ -103,15 +109,19 @@ angular.module("scorer").factory("Innings", [
          * @property wkt
          * @property valid
          */
-        Ball : function(striker, runs, extras, wkt, valid) {
+        Ball: function(striker, runs, extras, wkt, valid) {
           //alert('Bang '+JSON.stringify(arguments));
-          if (typeof(striker) === 'undefined' || typeof(runs) === 'undefined' ||
-            typeof(extras) === 'undefined' || typeof(wkt) === 'undefined' ||
-            typeof(valid) === 'undefined') {
+          if (
+            typeof striker === "undefined" ||
+            typeof runs === "undefined" ||
+            typeof extras === "undefined" ||
+            typeof wkt === "undefined" ||
+            typeof valid === "undefined"
+          ) {
             alert("Ball requires 5 parameters");
             return false;
           }
-          if (typeof(striker) != 'object') {
+          if (typeof striker != "object") {
             alert("Striker must be a Batman object.");
             return false;
           }
@@ -121,6 +131,28 @@ angular.module("scorer").factory("Innings", [
           this.wkt = wkt;
           this.valid = valid;
         },
+        /**
+         * Creates an instance of Batsman
+         *
+         * @class Batsman
+         * @memberOf scorer.factory
+         * @constructor Batsman
+         * @this {Batsman}
+         * @property {integer} no
+         * @property {boolean} striker
+         * @property {integer} runs
+         * @property {boolean} bowler
+         * @property {boolean} bowling
+         *
+         * @return {Batsman} The new Batsman object.
+         */
+        Batsman: function() {
+          this.no = 0;
+          this.striker = false;
+          this.runs = 0;
+          this.bowler = false;
+          this.bowling = false;
+        }
       };
 
       /** @method num_overs
