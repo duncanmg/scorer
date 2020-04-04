@@ -1,5 +1,3 @@
-
-
 describe("ScCommandsTest. Real Template", function() {
   beforeEach(module("scorer"));
 
@@ -147,7 +145,6 @@ describe("ScCommandsTest. Real Template", function() {
   });
 
   it("An Sc.Commands.Wicket set_next_batsman_no", function() {
-
     sc2 = new sc.Scoreboard(template, players, over);
     expect(typeof sc2).toEqual("object");
 
@@ -158,9 +155,54 @@ describe("ScCommandsTest. Real Template", function() {
     sc2.wicket();
     expect(sc2.scoreboard.right_bat.no).toEqual(2);
     expect(sc2.scoreboard.left_bat.no).toEqual(3);
+    expect(sc2.scoreboard.left_bat.striker).toEqual(true);
+    expect(sc2.scoreboard.right_bat.striker).toEqual(false);
     // expect(sc2.scoreboard.next_batsman_no).toEqual(4);
-
   });
 
+  it("An Sc.Commands.StandardBall change_ends", function() {
+    sc2 = new sc.Scoreboard(template, players, over);
+    expect(typeof sc2).toEqual("object");
+    expect(sc2.scoreboard.left_bat.striker).toEqual(true);
+    expect(sc2.scoreboard.right_bat.striker).toEqual(false);
+    expect(sc2.scoreboard.left_bat.runs).toEqual(0);
 
+    sc2.ball(3);
+
+    expect(sc2.scoreboard.left_bat.striker).toEqual(false);
+    expect(sc2.scoreboard.left_bat.runs).toEqual(3);
+    expect(sc2.scoreboard.right_bat.striker).toEqual(true);
+  });
+
+  it("An Sc.Commands.StandardBall, change_ends, right bat is striker", function() {
+    sc2 = new sc.Scoreboard(template, players, over);
+    expect(typeof sc2).toEqual("object");
+
+    sc2.ball(1);
+
+    expect(sc2.scoreboard.left_bat.striker).toEqual(false);
+    expect(sc2.scoreboard.right_bat.striker).toEqual(true);
+    expect(sc2.scoreboard.left_bat.runs).toEqual(1);
+
+    sc2.ball(3);
+
+    expect(sc2.scoreboard.left_bat.striker).toEqual(true);
+    expect(sc2.scoreboard.left_bat.runs).toEqual(1);
+    expect(sc2.scoreboard.right_bat.striker).toEqual(false);
+    expect(sc2.scoreboard.right_bat.runs).toEqual(3);
+  });
+
+  it("An Sc.Commands.StandardBall no change_ends", function() {
+    sc2 = new sc.Scoreboard(template, players, over);
+    expect(typeof sc2).toEqual("object");
+    expect(sc2.scoreboard.left_bat.striker).toEqual(true);
+    expect(sc2.scoreboard.right_bat.striker).toEqual(false);
+    expect(sc2.scoreboard.left_bat.runs).toEqual(0);
+
+    sc2.ball(4);
+
+    expect(sc2.scoreboard.left_bat.striker).toEqual(true);
+    expect(sc2.scoreboard.left_bat.runs).toEqual(4);
+    expect(sc2.scoreboard.right_bat.striker).toEqual(false);
+  });
 });

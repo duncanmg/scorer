@@ -1,6 +1,6 @@
 var sc = sc || {};
 
-(sc.Command = function() {
+sc.Command = function() {
   this.test = "test";
 
   /** @function set_innings_over
@@ -49,80 +49,135 @@ var sc = sc || {};
   this.over_manager = function() {
     return new sc.OverManager(this.data);
   };
-});
 
-//  Command.prototype.Batsman = function() {
-//  this.no = 0;
-// this.striker = false;
-//  this.runs = 0;
-//  this.bowler = false;
-//  this.bowling = false;
-//},
+  this.player_manager = function() {
+    return new sc.PlayerManager();
+  };
+};
+
 sc.Commands = {
-Wicket: function(data) {
-  sc.Command.call(this, data);
-  this.data = data;
+  Wicket: function(data) {
+    sc.Command.call(this, data);
+    this.data = data;
 
-  this.run = function() {
-    console.log(
-      "Wicket.run! XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
-    );
-    console.log(JSON.stringify(this.data));
-    //console.log(JSON.stringify(sc.Command));
-    data.balls++;
-    data.wickets += 1;
-    if (this.set_game_over()) {
-      return true;
+    this.run = function() {
+      // console.log(
+      //   "Wicket.run! XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
+      // );
+      console.log(JSON.stringify(this.data));
+      //console.log(JSON.stringify(sc.Command));
+      data.balls++;
+      data.wickets += 1;
+      if (this.set_game_over()) {
+        return true;
+      }
+
+      this.over_manager().add_ball(
+        data.left_bat.striker ? data.left_bat : data.right_bat,
+        0,
+        0,
+        true,
+        true
+      );
+
+      this.set_striker_as_new(data);
+
+      // console.log('NOT IMPLEMENTED set_batsmen_details');
+      this.player_manager().set_batsmen_details(data);
+    };
+
+    // Allocate the next batsman's number. If current batsmen are
+    // 3 and 6. Next batman will be 7.
+    this.set_next_batsman_no = function(data) {
+      var next_batsman_no =
+        data.left_bat.no > data.right_bat.no
+          ? data.left_bat.no + 1
+          : data.right_bat.no + 1;
+      return next_batsman_no;
+    };
+
+    // Make the next batsman the striker.
+    this.set_striker_as_new = function(data) {
+      if (data.left_bat.striker === true) {
+        data.left_bat = new data.templates.Batsman();
+        data.left_bat.no = this.set_next_batsman_no(data);
+        data.left_bat.striker = true;
+      } else {
+        data.right_bat = new data.templates.Batsman();
+        data.right_bat.no = this.set_next_batsman_no(data);
+        data.right_bat.striker = true;
+      }
+    };
+  },
+
+  StandardBall: function(args) {
+    // console.log(JSON.stringify(args));
+
+    if (!(args instanceof Array) || args.length != 2) {
+      throw new Error(
+        "StandardBall Parameter args must be an array of length 2"
+      );
     }
 
-    this.over_manager().add_ball(
-      data.left_bat.striker ? data.left_bat : data.right_bat,
-      0,
-      0,
-      true,
-      true
-    );
+    this.data = args[0];
+    this.runs = args[1];
 
-    this.set_striker_as_new(data);
-
-    console.log('NOT IMPLEMENTED set_batsmen_details');
-    // this.set_batsmen_details();
-  };
-
-  // Allocate the next batsman's number. If current batsmen are
-  // 3 and 6. Next batman will be 7.
-  this.set_next_batsman_no = function(data) {
-    var next_batsman_no =
-      data.left_bat.no > data.right_bat.no
-        ? data.left_bat.no + 1
-        : data.right_bat.no + 1;
-        return next_batsman_no;
-  };
-
-  // Make the next batsman the striker.
-  this.set_striker_as_new = function(data) {
-    if (data.left_bat.striker === true) {
-      data.left_bat = new data.templates.Batsman();
-      data.left_bat.no = this.set_next_batsman_no(data);
-      data.left_bat.striker = true;
-    } else {
-      data.right_bat = new data.templates.Batsman();
-      data.right_bat.no = this.set_next_batsman_no(data);
-      data.right_bat.striker = true;
+    if (!this.data) {
+      throw new Error("StandardBall Parameter data is mandatory");
     }
-  };
-},
 
-Run: function(object, args) {
-  object.prototype.set_game_over = function() {
-    console.log("Bang");
-  };
-  object.prototype = Object.create(sc.Command.prototype);
-  object.prototype.Constructor = sc.Command.Wicket;
-  var o = new sc.Commands.Wicket(args);
+    if (typeof this.runs === "undefined") {
+      throw new Error("StandardBall Parameter runs is mandatory");
+    }
 
-  o.run();
-  return 1;
-}
-//Wicket.prototype = Command;
+    if (typeof this.data.total === "undefined") {
+      throw new Error("StandardBall data.total must be defined");
+    }
+
+    if (typeof this.data.balls === "undefined") {
+      throw new Error("StandardBall data.balls must be defined");
+    }
+
+    if (typeof this.data.left_bat === "undefined") {
+      throw new Error("StandardBall data.left_bat must be defined");
+    }
+
+    if (typeof this.data.left_bat.striker === "undefined") {
+      throw new Error("StandardBall data.left_bat.striker must be defined");
+    }
+
+    if (typeof this.data.right_bat === "undefined") {
+      throw new Error("StandardBall data.right_bat must be defined");
+    }
+
+    sc.Command.call(this, this.data);
+
+    this.run = function() {
+      this.data.total += this.runs;
+      this.data.balls++;
+
+      this.player_manager().add_runs_to_striker(this.data, this.runs);
+
+      this.over_manager().add_ball(
+        this.data.left_bat.striker ? this.data.left_bat : this.data.right_bat,
+        this.runs,
+        0,
+        false,
+        true
+      );
+
+      this.player_manager().change_ends(this.data, this.runs);
+    };
+  },
+
+  Run: function(object, args) {
+    object.prototype = Object.create(sc.Command.prototype);
+    object.prototype.Constructor = sc.Command.Wicket;
+
+    var o = new object(args);
+
+    o.run();
+    return 1;
+  }
+  //Wicket.prototype = Command;
 };

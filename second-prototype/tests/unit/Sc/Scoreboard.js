@@ -15,7 +15,9 @@ describe("ScScoreboardTest Simple Construction", function() {
   beforeEach(
     inject(function(ScoreboardTemplate) {
       // console.log('Inject Players ' + JSON.stringify(Players));
-      template = { innings: [{}, {}] };
+      template = { innings: [{ templates: {} }, { templates: {} }] };
+      template.innings[0].templates.HomePlayers = [];
+      template.innings[1].templates.AwayPlayers = [];
     })
   );
 
@@ -88,6 +90,4 @@ describe("ScScoreboardTest. Real Template", function() {
     sc2.add_over(1, 2);
     expect(sc2.scoreboard.overs_history.length).toEqual(1);
   });
-
-
 });

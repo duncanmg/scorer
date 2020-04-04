@@ -35,10 +35,19 @@ sc.test_object = function() {
  * @property {boolean} is_ready -
  * @property {Players} home_players -
  */
-(sc.Scoreboard = function(scoreboard_template, Players, Over) {
+sc.Scoreboard = function(scoreboard_template, Players, Over) {
   var s = jQuery.extend(true, {}, scoreboard_template);
+
   this.scoreboard = s.innings[0];
+  this.scoreboard.home_players = [].concat(
+    this.scoreboard.templates.HomePlayers
+  );
+  this.scoreboard.away_players = [].concat(
+    this.scoreboard.templates.AwayPlayers
+  );
+
   this.next_innings = s.innings[1];
+
   console.log("scoreboard " + JSON.stringify(this.scoreboard));
   /**
    * @method change_ends
@@ -262,58 +271,36 @@ sc.test_object = function() {
    *  @param {integer} - Number of runs scored off the ball.
    */
   this.ball = function(runs) {
-    this.scoreboard.total += runs;
-    this.scoreboard.balls++;
-    this.add_runs_to_striker(runs);
-    this.add_ball(
-      this.scoreboard.left_bat.striker
-        ? this.scoreboard.left_bat
-        : this.scoreboard.right_bat,
-      runs,
-      0,
-      false,
-      true
-    );
+    console.log('XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX ball');
+    var s = sc.Commands.Run(sc.Commands.StandardBall, [this.scoreboard, runs]);
   };
+
+  // this.wicket = function() {
+  //   var w = sc.Commands.Run(sc.Commands.StandardBall, this.scoreboard);
+  //
+  //   this.scoreboard.total += runs;
+  //   this.scoreboard.balls++;
+  //   this.add_runs_to_striker(runs);
+  //   this.add_ball(
+  //     this.scoreboard.left_bat.striker
+  //       ? this.scoreboard.left_bat
+  //       : this.scoreboard.right_bat,
+  //     runs,
+  //     0,
+  //     false,
+  //     true
+  //   );
+  // };
 
   /** @function wicket
    *  @description Called when a wicket is taken.
    *  @memberOf sc.Scoreboard
    */
   this.wicket = function() {
-    console.log("wicket XXXXXXXXXXXXXXXXXXXXXX");
-    //var w = new sc.Commands.Wicket(this.scoreboard);
-    //w.run();
     var w = sc.Commands.Run(sc.Commands.Wicket, this.scoreboard);
-    // this.scoreboard.balls++;
-    // this.scoreboard.wickets += 1;
-    // if (this.set_game_over()) {
-    //   return true;
-    // }
-    // this.add_ball(
-    //   this.scoreboard.left_bat.striker
-    //     ? this.scoreboard.left_bat
-    //     : this.scoreboard.right_bat,
-    //   0,
-    //   0,
-    //   true,
-    //   true
-    // );
-    // var next_batsman_no =
-    //   this.scoreboard.left_bat.no > this.scoreboard.right_bat.no
-    //     ? this.scoreboard.left_bat.no + 1
-    //     : this.scoreboard.right_bat.no + 1;
-    // if (this.scoreboard.left_bat.striker === true) {
-    //   this.scoreboard.left_bat = new Batsman();
-    //   this.scoreboard.left_bat.no = next_batsman_no;
-    //   this.scoreboard.left_bat.striker = true;
-    // } else {
-    //   this.scoreboard.right_bat = new Batsman();
-    //   this.scoreboard.right_bat.no = next_batsman_no;
-    //   this.scoreboard.right_bat.striker = true;
-    // }
-    // this.set_batsmen_details();
-    //this.save();
+
+    console.log("NOT IMPLEMENTED save");
+    // this.save();
   };
 
   /** @function add_extra
@@ -673,4 +660,4 @@ sc.test_object = function() {
   this.clear = function() {
     this.scoreboard.overs_history = [];
   };
-});
+};
