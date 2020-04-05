@@ -1,7 +1,7 @@
 var sc = sc || {};
 
 sc.OverManager = function(data) {
-  console.log("OverManager data " + JSON.stringify(data));
+  // console.log("OverManager data " + JSON.stringify(data));
   this.data = data;
 
   if (typeof this.data.overs_history != "object") {

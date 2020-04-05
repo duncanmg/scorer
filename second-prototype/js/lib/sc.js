@@ -48,7 +48,7 @@ sc.Scoreboard = function(scoreboard_template, Players, Over) {
 
   this.next_innings = s.innings[1];
 
-  console.log("scoreboard " + JSON.stringify(this.scoreboard));
+  // console.log("scoreboard " + JSON.stringify(this.scoreboard));
   /**
    * @method change_ends
    * @memberOf sc.Scoreboard
@@ -152,38 +152,20 @@ sc.Scoreboard = function(scoreboard_template, Players, Over) {
         this.wicket();
         break;
       case "bye":
+        sc.Commands.Run(sc.Commands.Bye, this.scoreboard);
+        break;
       case "leg_bye":
-        this.scoreboard.balls += 1;
-        this.add_ball(
-          this.scoreboard.left_bat.striker
-            ? this.scoreboard.left_bat
-            : this.scoreboard.right_bat,
-          0,
-          1,
-          false,
-          true
-        );
-        this.change_ends(1);
-        this.scoreboard.extras += 1;
-        this.scoreboard.total += 1;
+        sc.Commands.Run(sc.Commands.LegBye, this.scoreboard);
         break;
       case "no_ball":
+        sc.Commands.Run(sc.Commands.NoBall, this.scoreboard);
+        break;
       case "wide":
-        this.scoreboard.extras += 1;
-        this.scoreboard.total += 1;
-        this.add_ball(
-          this.scoreboard.left_bat.striker
-            ? this.scoreboard.left_bat
-            : this.scoreboard.right_bat,
-          0,
-          1,
-          false,
-          false
-        );
+        sc.Commands.Run(sc.Commands.Wide, this.scoreboard);
         break;
       case "ball":
         this.ball(runs);
-        this.change_ends(runs);
+        // this.change_ends(runs);
         break;
     }
     this.over();
@@ -271,7 +253,6 @@ sc.Scoreboard = function(scoreboard_template, Players, Over) {
    *  @param {integer} - Number of runs scored off the ball.
    */
   this.ball = function(runs) {
-    console.log('XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX ball');
     var s = sc.Commands.Run(sc.Commands.StandardBall, [this.scoreboard, runs]);
   };
 

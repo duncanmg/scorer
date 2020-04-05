@@ -53,6 +53,36 @@ sc.Command = function() {
   this.player_manager = function() {
     return new sc.PlayerManager();
   };
+
+  this.validator = function(name) {
+
+    var Validator = function(name) {
+      this.name = name;
+      this.msg = this.name + ". A mandatory parameter is missing: ";
+
+      this.check_namespaces_defined = function(obj, element) {
+        var namespaces = element.split(".");
+        var done = "";
+        var context = obj;
+        for (var i = 0; i < namespaces.length; i++) {
+          context = context[namespaces[i]];
+          done = done + "." + namespaces[i];
+          if (!is.existy(context)) {
+            throw new Error(this.msg + done);
+          }
+        }
+      };
+
+      this.check_all_defined = function(obj, list) {
+        for (var x = 0; x < list.length; x++) {
+          var p = list[x];
+          this.check_namespaces_defined(obj, p);
+        }
+      };
+    };
+    return new Validator(name);
+  };
+
 };
 
 sc.Commands = {
@@ -61,11 +91,6 @@ sc.Commands = {
     this.data = data;
 
     this.run = function() {
-      // console.log(
-      //   "Wicket.run! XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
-      // );
-      console.log(JSON.stringify(this.data));
-      //console.log(JSON.stringify(sc.Command));
       data.balls++;
       data.wickets += 1;
       if (this.set_game_over()) {
@@ -82,7 +107,6 @@ sc.Commands = {
 
       this.set_striker_as_new(data);
 
-      // console.log('NOT IMPLEMENTED set_batsmen_details');
       this.player_manager().set_batsmen_details(data);
     };
 
@@ -111,7 +135,6 @@ sc.Commands = {
   },
 
   StandardBall: function(args) {
-    // console.log(JSON.stringify(args));
 
     if (!(args instanceof Array) || args.length != 2) {
       throw new Error(
@@ -167,6 +190,124 @@ sc.Commands = {
       );
 
       this.player_manager().change_ends(this.data, this.runs);
+    };
+  },
+
+  Wide: function(args) {
+    this.data = args;
+
+    sc.Command.call(this, this.data);
+
+    this.validator("Wide").check_all_defined(this, [
+      "data",
+      "data.total",
+      "data.extras",
+      "data.left_bat.striker",
+      "data.right_bat"
+    ]);
+
+    this.run = function() {
+      this.data.extras += 1;
+      this.data.total += 1;
+
+      this.over_manager().add_ball(
+        this.data.left_bat.striker ? this.data.left_bat : this.data.right_bat,
+        0,
+        1,
+        false,
+        false
+      );
+    };
+  },
+  NoBall: function(args) {
+
+    this.data = args;
+
+    sc.Command.call(this, this.data);
+
+    this.validator("NoBall").check_all_defined(this, [
+      "data",
+      "data.total",
+      "data.extras",
+      "data.left_bat.striker",
+      "data.right_bat"
+    ]);
+
+    this.run = function() {
+      this.data.extras += 1;
+      this.data.total += 1;
+
+      this.over_manager().add_ball(
+        this.data.left_bat.striker ? this.data.left_bat : this.data.right_bat,
+        0,
+        1,
+        false,
+        false
+      );
+    };
+  },
+
+  Bye: function(args) {
+
+    this.data = args;
+
+    sc.Command.call(this, this.data);
+
+    this.validator("Bye").check_all_defined(this, [
+      "data",
+      "data.total",
+      "data.extras",
+      "data.balls",
+      "data.left_bat.striker",
+      "data.right_bat"
+    ]);
+
+    this.run = function() {
+      this.data.extras += 1;
+      this.data.total += 1;
+      this.data.balls += 1;
+
+      this.over_manager().add_ball(
+        this.data.left_bat.striker ? this.data.left_bat : this.data.right_bat,
+        0,
+        1,
+        false,
+        true
+      );
+    };
+    this.player_manager().change_ends(this.data, 1);
+  },
+
+  LegBye: function(args) {
+
+    this.name = "LegBye";
+
+    this.data = args;
+
+    sc.Command.call(this, this.data);
+
+    this.validator("Bye").check_all_defined(this, [
+      "data",
+      "data.total",
+      "data.extras",
+      "data.balls",
+      "data.left_bat.striker",
+      "data.right_bat"
+    ]);
+
+    this.run = function() {
+      this.data.extras += 1;
+      this.data.total += 1;
+
+      this.over_manager().add_ball(
+        this.data.left_bat.striker ? this.data.left_bat : this.data.right_bat,
+        0,
+        1,
+        false,
+        false
+      );
+
+      this.player_manager().change_ends(this.data, 1);
     };
   },
 

@@ -8,7 +8,6 @@ describe("ScCommandsTest. Real Template", function() {
 
   beforeEach(
     inject(function(Players) {
-      console.log("Inject Players " + JSON.stringify(Players));
       players = {};
     })
   );
@@ -30,21 +29,6 @@ describe("ScCommandsTest. Real Template", function() {
       over = Over;
     })
   );
-
-  // it("An Sc.Scoreboard object has been created.", function() {
-  //   sc2 = new sc.Scoreboard(template, players, over);
-  //   expect(typeof sc2).toEqual("object");
-  // });
-  //
-  // it("An Sc.Scoreboard has overs_history and add_over.", function() {
-  //   sc2 = new sc.Scoreboard(template, players, over);
-  //   expect(typeof sc2).toEqual("object");
-  //   // console.log("sc2.scoreboard.overs_history " + JSON.stringify(sc2.scoreboard.overs_history));
-  //   // console.log(sc2.scoreboard.overs_history.length);
-  //   expect(sc2.scoreboard.overs_history.length).toEqual(0);
-  //   sc2.add_over(1, 2);
-  //   expect(sc2.scoreboard.overs_history.length).toEqual(1);
-  // });
 
   it("Sc.Command set_innings_over", function() {
     sc2 = new sc.Scoreboard(template, players, over);
@@ -133,6 +117,42 @@ describe("ScCommandsTest. Real Template", function() {
     expect(sc2.scoreboard.game_over).toEqual(true);
   });
 
+  it("Sc.Command validator. Throws.", function() {
+    sc2 = new sc.Scoreboard(template, players, over);
+    expect(typeof sc2).toEqual("object");
+
+    var o = new sc.Command();
+    o.data = sc2.scoreboard;
+
+    var test_succeeds = function(obj, list, name) {
+      try {
+        o.validator("Test").check_all_defined(obj, list);
+        expect("Success").toEqual("Success");
+      } catch (e) {
+        expect("Success").toEqual("Failure " + name + " " + e);
+      }
+    };
+
+    var test_fails = function(obj, list, name) {
+      try {
+        o.validator("Test").check_all_defined(obj, list);
+        expect("Success").toEqual("Failure " + name);
+      } catch (e) {
+        expect("Success").toEqual("Success");
+      }
+    };
+
+    test_succeeds({ test: 1 }, ["test"]);
+
+    test_fails({ test2: 1 }, ["test"]);
+
+    test_fails({}, ["test"]);
+
+    test_succeeds({ test: { t: 1 } }, ["test.t"]);
+
+    test_fails({ test: { t2: 1 } }, ["test.t"]);
+  });
+
   it("An Sc.Commands.Wicket", function() {
     sc2 = new sc.Scoreboard(template, players, over);
     expect(typeof sc2).toEqual("object");
@@ -204,5 +224,77 @@ describe("ScCommandsTest. Real Template", function() {
     expect(sc2.scoreboard.left_bat.striker).toEqual(true);
     expect(sc2.scoreboard.left_bat.runs).toEqual(4);
     expect(sc2.scoreboard.right_bat.striker).toEqual(false);
+  });
+
+  it("An Sc.Commands.Wide", function() {
+    sc2 = new sc.Scoreboard(template, players, over);
+    expect(typeof sc2).toEqual("object");
+    expect(sc2.scoreboard.left_bat.striker).toEqual(true);
+    expect(sc2.scoreboard.right_bat.striker).toEqual(false);
+    expect(sc2.scoreboard.left_bat.runs).toEqual(0);
+    expect(sc2.scoreboard.extras).toEqual(0);
+    expect(sc2.scoreboard.total).toEqual(0);
+
+    sc.Commands.Run(sc.Commands.Wide, sc2.scoreboard);
+
+    expect(sc2.scoreboard.left_bat.striker).toEqual(true);
+    expect(sc2.scoreboard.left_bat.runs).toEqual(0);
+    expect(sc2.scoreboard.right_bat.striker).toEqual(false);
+    expect(sc2.scoreboard.extras).toEqual(1);
+    expect(sc2.scoreboard.total).toEqual(1);
+  });
+
+  it("An Sc.Commands.NoBall", function() {
+    sc2 = new sc.Scoreboard(template, players, over);
+    expect(typeof sc2).toEqual("object");
+    expect(sc2.scoreboard.left_bat.striker).toEqual(true);
+    expect(sc2.scoreboard.right_bat.striker).toEqual(false);
+    expect(sc2.scoreboard.left_bat.runs).toEqual(0);
+    expect(sc2.scoreboard.extras).toEqual(0);
+    expect(sc2.scoreboard.total).toEqual(0);
+
+    sc.Commands.Run(sc.Commands.NoBall, sc2.scoreboard);
+
+    expect(sc2.scoreboard.left_bat.striker).toEqual(true);
+    expect(sc2.scoreboard.left_bat.runs).toEqual(0);
+    expect(sc2.scoreboard.right_bat.striker).toEqual(false);
+    expect(sc2.scoreboard.extras).toEqual(1);
+    expect(sc2.scoreboard.total).toEqual(1);
+  });
+
+  it("An Sc.Commands.Bye", function() {
+    sc2 = new sc.Scoreboard(template, players, over);
+    expect(typeof sc2).toEqual("object");
+    expect(sc2.scoreboard.left_bat.striker).toEqual(true);
+    expect(sc2.scoreboard.right_bat.striker).toEqual(false);
+    expect(sc2.scoreboard.left_bat.runs).toEqual(0);
+    expect(sc2.scoreboard.extras).toEqual(0);
+    expect(sc2.scoreboard.total).toEqual(0);
+
+    sc.Commands.Run(sc.Commands.Bye, sc2.scoreboard);
+
+    expect(sc2.scoreboard.left_bat.striker).toEqual(false);
+    expect(sc2.scoreboard.left_bat.runs).toEqual(0);
+    expect(sc2.scoreboard.right_bat.striker).toEqual(true);
+    expect(sc2.scoreboard.extras).toEqual(1);
+    expect(sc2.scoreboard.total).toEqual(1);
+  });
+
+  it("An Sc.Commands.LegBye", function() {
+    sc2 = new sc.Scoreboard(template, players, over);
+    expect(typeof sc2).toEqual("object");
+    expect(sc2.scoreboard.left_bat.striker).toEqual(true);
+    expect(sc2.scoreboard.right_bat.striker).toEqual(false);
+    expect(sc2.scoreboard.left_bat.runs).toEqual(0);
+    expect(sc2.scoreboard.extras).toEqual(0);
+    expect(sc2.scoreboard.total).toEqual(0);
+
+    sc.Commands.Run(sc.Commands.LegBye, sc2.scoreboard);
+
+    expect(sc2.scoreboard.left_bat.striker).toEqual(false);
+    expect(sc2.scoreboard.left_bat.runs).toEqual(0);
+    expect(sc2.scoreboard.right_bat.striker).toEqual(true);
+    expect(sc2.scoreboard.extras).toEqual(1);
+    expect(sc2.scoreboard.total).toEqual(1);
   });
 });

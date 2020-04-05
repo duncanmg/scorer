@@ -9,7 +9,6 @@ describe("ScPlayerManagerTest", function() {
 
   beforeEach(
     inject(function(Players) {
-      console.log("Inject Players " + JSON.stringify(Players));
       players = {};
     })
   );

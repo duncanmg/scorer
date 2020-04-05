@@ -9,26 +9,19 @@ describe("ScOverManagerTest Simple Construction", function() {
 
   beforeEach(
     inject(function(Players) {
-      // console.log("Inject Players " + JSON.stringify(Players));
       players = {};
     })
   );
 
   beforeEach(
     inject(function(ScoreboardTemplate) {
-      //console.log(
-      //  "Inject ScoreboardTemplate " + JSON.stringify(ScoreboardTemplate)
-      //);
       template = new ScoreboardTemplate();
-      //console.log("template " + JSON.stringify(template));
     })
   );
 
   beforeEach(
     inject(function(Sc) {
-      //console.log("ScOverManagerTest AAAAA");
       sc = new Sc.Scoreboard(template, players);
-      //console.log(JSON.stringify(sc.scoreboard));
       om = new Sc.OverManager(sc.scoreboard);
       om_class = Sc.OverManager;
     })
