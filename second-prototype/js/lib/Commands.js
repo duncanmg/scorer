@@ -55,7 +55,6 @@ sc.Command = function() {
   };
 
   this.validator = function(name) {
-
     var Validator = function(name) {
       this.name = name;
       this.msg = this.name + ". A mandatory parameter is missing: ";
@@ -82,7 +81,6 @@ sc.Command = function() {
     };
     return new Validator(name);
   };
-
 };
 
 sc.Commands = {
@@ -93,6 +91,7 @@ sc.Commands = {
     this.run = function() {
       data.balls++;
       data.wickets += 1;
+
       if (this.set_game_over()) {
         return true;
       }
@@ -135,7 +134,6 @@ sc.Commands = {
   },
 
   StandardBall: function(args) {
-
     if (!(args instanceof Array) || args.length != 2) {
       throw new Error(
         "StandardBall Parameter args must be an array of length 2"
@@ -220,7 +218,6 @@ sc.Commands = {
     };
   },
   NoBall: function(args) {
-
     this.data = args;
 
     sc.Command.call(this, this.data);
@@ -248,7 +245,6 @@ sc.Commands = {
   },
 
   Bye: function(args) {
-
     this.data = args;
 
     sc.Command.call(this, this.data);
@@ -279,7 +275,6 @@ sc.Commands = {
   },
 
   LegBye: function(args) {
-
     this.name = "LegBye";
 
     this.data = args;

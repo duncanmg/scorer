@@ -28,9 +28,20 @@ angular.module("scorer").factory('ScoreboardTemplate', ['Settings', 'Innings',
       this.innings = [];
 
       // console.log("settings: " + JSON.stringify(Settings));
-      var innings = Innings;
+      // var innings = Innings;
       for (var i = 0; i < Settings.settings.num_innings; i++) {
-        this.innings.push(new innings(Settings));
+
+        var innings = new Innings(Settings);
+
+        innings.left_bat = new innings.templates.Batsman();
+        innings.left_bat.no = 1;
+        innings.left_bat.striker = true;
+
+        innings.right_bat = new innings.templates.Batsman();
+        innings.right_bat.no = 2;
+        innings.right_bat.striker = false;
+
+        this.innings.push(innings);
       }
     };
     return obj;

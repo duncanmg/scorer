@@ -119,6 +119,7 @@ describe("ScCommandsTest. Real Template", function() {
 
   it("Sc.Command validator. Throws.", function() {
     sc2 = new sc.Scoreboard(template, players, over);
+    sc2.scoreboard.bowler = new sc2.scoreboard.templates.Bowler();
     expect(typeof sc2).toEqual("object");
 
     var o = new sc.Command();
@@ -155,9 +156,14 @@ describe("ScCommandsTest. Real Template", function() {
 
   it("An Sc.Commands.Wicket", function() {
     sc2 = new sc.Scoreboard(template, players, over);
+    sc2.scoreboard.bowler = new sc2.scoreboard.templates.Bowler();
     expect(typeof sc2).toEqual("object");
+
+    sc2.scoreboard.left_bat = new sc2.scoreboard.templates.Batsman();
+
     expect(sc2.scoreboard.wickets).toEqual(0);
     expect(sc2.scoreboard.balls).toEqual(0);
+
     sc2.wicket();
     expect(sc2.scoreboard.wickets).toEqual(1);
     expect(sc2.scoreboard.balls).toEqual(1);
@@ -166,6 +172,7 @@ describe("ScCommandsTest. Real Template", function() {
 
   it("An Sc.Commands.Wicket set_next_batsman_no", function() {
     sc2 = new sc.Scoreboard(template, players, over);
+    sc2.scoreboard.bowler = new sc2.scoreboard.templates.Bowler();
     expect(typeof sc2).toEqual("object");
 
     expect(sc2.scoreboard.left_bat.no).toEqual(1);
@@ -182,6 +189,7 @@ describe("ScCommandsTest. Real Template", function() {
 
   it("An Sc.Commands.StandardBall change_ends", function() {
     sc2 = new sc.Scoreboard(template, players, over);
+    sc2.scoreboard.bowler = new sc2.scoreboard.templates.Bowler();
     expect(typeof sc2).toEqual("object");
     expect(sc2.scoreboard.left_bat.striker).toEqual(true);
     expect(sc2.scoreboard.right_bat.striker).toEqual(false);
@@ -196,6 +204,7 @@ describe("ScCommandsTest. Real Template", function() {
 
   it("An Sc.Commands.StandardBall, change_ends, right bat is striker", function() {
     sc2 = new sc.Scoreboard(template, players, over);
+    sc2.scoreboard.bowler = new sc2.scoreboard.templates.Bowler();
     expect(typeof sc2).toEqual("object");
 
     sc2.ball(1);
@@ -214,6 +223,7 @@ describe("ScCommandsTest. Real Template", function() {
 
   it("An Sc.Commands.StandardBall no change_ends", function() {
     sc2 = new sc.Scoreboard(template, players, over);
+    sc2.scoreboard.bowler = new sc2.scoreboard.templates.Bowler();
     expect(typeof sc2).toEqual("object");
     expect(sc2.scoreboard.left_bat.striker).toEqual(true);
     expect(sc2.scoreboard.right_bat.striker).toEqual(false);
@@ -228,6 +238,7 @@ describe("ScCommandsTest. Real Template", function() {
 
   it("An Sc.Commands.Wide", function() {
     sc2 = new sc.Scoreboard(template, players, over);
+    sc2.scoreboard.bowler = new sc2.scoreboard.templates.Bowler();
     expect(typeof sc2).toEqual("object");
     expect(sc2.scoreboard.left_bat.striker).toEqual(true);
     expect(sc2.scoreboard.right_bat.striker).toEqual(false);
@@ -246,6 +257,7 @@ describe("ScCommandsTest. Real Template", function() {
 
   it("An Sc.Commands.NoBall", function() {
     sc2 = new sc.Scoreboard(template, players, over);
+    sc2.scoreboard.bowler = new sc2.scoreboard.templates.Bowler();
     expect(typeof sc2).toEqual("object");
     expect(sc2.scoreboard.left_bat.striker).toEqual(true);
     expect(sc2.scoreboard.right_bat.striker).toEqual(false);
@@ -264,6 +276,7 @@ describe("ScCommandsTest. Real Template", function() {
 
   it("An Sc.Commands.Bye", function() {
     sc2 = new sc.Scoreboard(template, players, over);
+    sc2.scoreboard.bowler = new sc2.scoreboard.templates.Bowler();
     expect(typeof sc2).toEqual("object");
     expect(sc2.scoreboard.left_bat.striker).toEqual(true);
     expect(sc2.scoreboard.right_bat.striker).toEqual(false);
@@ -282,6 +295,8 @@ describe("ScCommandsTest. Real Template", function() {
 
   it("An Sc.Commands.LegBye", function() {
     sc2 = new sc.Scoreboard(template, players, over);
+    sc2.scoreboard.bowler = new sc2.scoreboard.templates.Bowler();
+
     expect(typeof sc2).toEqual("object");
     expect(sc2.scoreboard.left_bat.striker).toEqual(true);
     expect(sc2.scoreboard.right_bat.striker).toEqual(false);

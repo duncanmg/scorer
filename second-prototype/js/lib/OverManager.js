@@ -41,6 +41,8 @@ sc.OverManager = function(data) {
       );
     }
 
+    sc.validators.is_batsman(striker);
+
     if (!(wkt == 0 || wkt == 1)) {
       throw new Error("OverManager.add_ball wkt must be 0 or 1");
     }
@@ -64,14 +66,12 @@ sc.OverManager = function(data) {
       );
     }
     if (!this.data.overs_history.length) {
-      // alert("xxxxx " + this.add_over);
       this.add_over(1, this.data.bowler);
     }
 
     var over = this.data.overs_history[this.data.overs_history.length - 1];
-    if (over.valid_balls >= 6) {
-      alert("The over has finished.");
-      return;
+    if (this.over_complete()) {
+      throw new Error("The over has finished.");
     }
 
     this.data.overs_history[this.data.overs_history.length - 1].balls.push(
@@ -102,9 +102,38 @@ sc.OverManager = function(data) {
       throw new Error("OverManager add_over. bowler_obj must be an object");
     }
 
+    sc.validators.is_bowler(bowler_obj);
+
+    if (this.current_over_no()) {
+      if (this.data.bowler.no === bowler_obj.no) {
+        throw new Error("New bowler cannot be same as last bowler");
+      }
+    }
+
+    if (this.current_over_no() + 1 !== over_no) {
+        throw new Error("Over number must increment."
+        + " Current over: " + this.current_over_no());
+    }
+
     this.data.overs_history.push(
       new this.data.templates.Over(over_no, bowler_obj)
     );
+
     //alert("Over");
+  };
+
+  this.current_over = function() {
+    if (this.data.overs_history.length == 0) {
+      throw new Error("No overs have been bowled");
+    }
+    return this.data.overs_history[this.data.overs_history.length - 1];
+  };
+
+  this.current_over_no = function() {
+    return this.data.overs_history.length;
+  };
+
+  this.over_complete = function() {
+    return this.current_over().valid_balls >= 6 ? 1 : 0;
   };
 };

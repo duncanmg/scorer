@@ -153,6 +153,28 @@ angular.module("scorer").factory("Innings", [
           this.bowler = false;
           this.bowling = false;
         },
+        /**
+         * Creates an instance of Bowler
+         *
+         * @class Bowler
+         * @memberOf scorer.factory
+         * @constructor Bowler
+         * @this {Batsman}
+         * @property {integer} no
+         * @property {boolean} striker
+         * @property {integer} runs
+         * @property {boolean} bowler
+         * @property {boolean} bowling
+         *
+         * @return {Bowler} The new Batsman object.
+         */
+        Bowler: function() {
+          this.no = 0;
+          this.striker = false;
+          this.runs = 0;
+          this.bowler = false;
+          this.bowling = false;
+        },
 
         HomePlayers : [{
           id: 1,

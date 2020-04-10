@@ -78,6 +78,7 @@ describe("ScOverManagerTest Simple Construction", function() {
     expect(typeof om).toEqual("object");
 
     expect(om.data.overs_history.length).toEqual(0);
+    var bowler = new om.data.templates.Bowler();
 
     expect(function() {
       om.add_over();
@@ -92,7 +93,77 @@ describe("ScOverManagerTest Simple Construction", function() {
     }).toThrow(new Error("OverManager add_over. bowler_obj must be an object"));
 
     expect(om.data.overs_history.length).toEqual(0);
-    om.add_over(1, {});
+    om.add_over(1, bowler);
     expect(om.data.overs_history.length).toEqual(1);
+  });
+
+  it("An Sc.OverManager add 7 balls.", function() {
+    expect(typeof om).toEqual("object");
+
+    expect(om.current_over_no()).toEqual(0);
+
+    var batsman = new om.data.templates.Batsman();
+    om.data.bowler = new om.data.templates.Bowler();
+
+    om.add_ball(batsman, 4, 1, 0, 0);
+
+    expect(om.current_over().valid_balls).toEqual(0);
+    expect(om.current_over().total_balls).toEqual(1);
+
+    for (var x = 0; x < 6; x++) {
+      om.add_ball(batsman, 4, 1, 0, 1);
+    }
+
+    expect(om.current_over_no()).toEqual(1);
+    expect(om.current_over().valid_balls).toEqual(6);
+    expect(om.current_over().total_balls).toEqual(7);
+
+    expect(function() {
+      om.add_ball(batsman, 4, 1, 0, 1);
+    }).toThrow(new Error("The over has finished."));
+
+    expect(om.current_over_no()).toEqual(1);
+    expect(om.current_over().valid_balls).toEqual(6);
+    expect(om.current_over().total_balls).toEqual(7);
+  });
+
+  it("An Sc.OverManager change over.", function() {
+    expect(typeof om).toEqual("object");
+
+    expect(om.current_over_no()).toEqual(0);
+
+    var batsman = new om.data.templates.Batsman();
+
+    var bowler1 = new om.data.templates.Bowler();
+    var bowler2 = new om.data.templates.Bowler();
+    bowler2.no = 2;
+
+    om.data.bowler = bowler1;
+    var over_no = 1;
+
+    for (var i = 0; i < 5; i++) {
+      for (var x = 0; x < 6; x++) {
+        om.add_ball(batsman, 4, 1, 0, 1);
+      }
+
+      expect(function() {
+        om.add_over(over_no + 1, om.data.bowler);
+      }).toThrow(new Error("New bowler cannot be same as last bowler"));
+
+      var bowler = bowler1.no === om.data.bowler.no ? bowler2 : bowler1;
+
+      expect(function() {
+        om.add_over(over_no, bowler);
+      }).toThrow(
+        new Error("Over number must increment. Current over: " + over_no)
+      );
+
+      over_no++;
+
+      om.add_over(over_no, bowler);
+    }
+
+    expect(om.current_over_no()).toEqual(6);
+    expect(om.current_over().valid_balls).toEqual(0);
   });
 });
