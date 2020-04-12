@@ -27,6 +27,7 @@ module.exports = function(config) {
       '../tests/unit/Sc/*.js'
     ],
 
+    plugins : ['karma-jasmine', 'karma-phantomjs-launcher'],
 
     // list of files to exclude
     exclude: [
