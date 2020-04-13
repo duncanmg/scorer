@@ -52,19 +52,26 @@ sc.PlayerManager = function() {
 
   /**
    *  @function change_bowlers
-   *  @description Swop the objects in scoreboard.bowler and scoreboard.next_bowler. Called at the end of each over.
-   *  @memberOf sc.Scoreboard
+   *  @memberOf sc.PlayerManager
+   *  @param {Object} data
+   *  @description Swop the objects in data.bowler and data.next_bowler.
+   *  Called at the end of each over.
+   *
    */
-  this.change_bowlers = function() {
-    var tmp = this.scoreboard.bowler;
-    this.scoreboard.bowler = this.scoreboard.next_bowler;
-    this.scoreboard.next_bowler = tmp;
+  this.change_bowlers = function(data) {
+    var tmp = data.bowler;
+    sc.validators.is_bowler(data.bowler);
+
+    // If next_bowler is true, it must be a Bowler object.
+    if (data.next_bowler) {
+      sc.validators.is_bowler(data.next_bowler);
+    }
+    data.bowler = data.next_bowler;
+
+    data.next_bowler = tmp;
+    console.log("After change_bowlers: bowler " + JSON.stringify(data.bowler));
     console.log(
-      "After change_bowlers: bowler " + JSON.stringify(this.scoreboard.bowler)
-    );
-    console.log(
-      "After change_bowlers: next " +
-        JSON.stringify(this.scoreboard.next_bowler)
+      "After change_bowlers: next " + JSON.stringify(data.next_bowler)
     );
   };
 

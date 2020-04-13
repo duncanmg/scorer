@@ -211,28 +211,6 @@ sc.Scoreboard = function(scoreboard_template, Players, Over) {
     }
     return this.scoreboard.innings_over;
   };
-  /** @function over
-   *  @description Test if the over has been completed. If it has, then
-   * prepare for the next one.
-   *  @memberOf sc.Scoreboard
-   */
-  this.over = function() {
-    if (this.scoreboard.balls >= 6) {
-      this.scoreboard.balls = 0;
-      this.scoreboard.overs += 1;
-      this.scoreboard.overs_and_balls = this.scoreboard.overs;
-      this.change_ends();
-      this.change_bowlers();
-      // alert("About to add over " + parseInt(this.scoreboard.overs + 1));
-      this.add_over(
-        parseInt(this.scoreboard.overs) + 1,
-        this.scoreboard.bowler
-      );
-    } else {
-      this.scoreboard.overs_and_balls =
-        this.scoreboard.overs + "." + this.scoreboard.balls;
-    }
-  };
 
   /** @function add_runs_to_striker
    *  @description Add the runs to the batsman's score.
@@ -255,23 +233,6 @@ sc.Scoreboard = function(scoreboard_template, Players, Over) {
   this.ball = function(runs) {
     var s = sc.Commands.Run(sc.Commands.StandardBall, [this.scoreboard, runs]);
   };
-
-  // this.wicket = function() {
-  //   var w = sc.Commands.Run(sc.Commands.StandardBall, this.scoreboard);
-  //
-  //   this.scoreboard.total += runs;
-  //   this.scoreboard.balls++;
-  //   this.add_runs_to_striker(runs);
-  //   this.add_ball(
-  //     this.scoreboard.left_bat.striker
-  //       ? this.scoreboard.left_bat
-  //       : this.scoreboard.right_bat,
-  //     runs,
-  //     0,
-  //     false,
-  //     true
-  //   );
-  // };
 
   /** @function wicket
    *  @description Called when a wicket is taken.
@@ -298,73 +259,7 @@ sc.Scoreboard = function(scoreboard_template, Players, Over) {
     this.save();
   };
 
-  /** @function add_extras
-   *  @description Does the hard work for add_extra().
-   *  @memberOf sc.Scoreboard
-   *  @param {Scoreboard} obj - ?????
-   *  @param {Extra} extra - The Extra object for the ball.
-   */
-  this.add_extras = {
-    no_ball: function(obj, extra) {
-      obj.scoreboard.total += extra.runs + extra.extras;
-      obj.add_runs_to_striker(extra.runs);
-      obj.change_ends(extra.runs + extra.extras - 1);
-      obj.add_ball(
-        obj.scoreboard.left_bat.striker
-          ? obj.scoreboard.left_bat
-          : obj.scoreboard.right_bat,
-        extra.runs,
-        extra.extras,
-        false,
-        false
-      );
-    },
-    wide: function(obj, extra) {
-      obj.scoreboard.total += extra.extras;
-      obj.add_ball(
-        obj.scoreboard.left_bat.striker
-          ? obj.scoreboard.left_bat
-          : obj.scoreboard.right_bat,
-        0,
-        extra.extras,
-        false,
-        false
-      );
-      if (extra.extras > 1) {
-        obj.change_ends(extra.extras - 1);
-      }
-    },
-    leg_bye: function(obj, extra) {
-      obj.scoreboard.balls++;
-      obj.scoreboard.total += extra.extras;
-      obj.add_ball(
-        obj.scoreboard.left_bat.striker
-          ? obj.scoreboard.left_bat
-          : obj.scoreboard.right_bat,
-        0,
-        extra.extras,
-        false,
-        true
-      );
-      obj.change_ends(extra.extras);
-      obj.over();
-    },
-    bye: function(obj, extra) {
-      obj.scoreboard.balls++;
-      obj.scoreboard.total += extra.extras;
-      obj.add_ball(
-        obj.scoreboard.left_bat.striker
-          ? obj.scoreboard.left_bat
-          : obj.scoreboard.right_bat,
-        0,
-        extra.extras,
-        false,
-        true
-      );
-      obj.change_ends(extra.extras);
-      obj.over();
-    }
-  };
+
 
   /** @function save
    *  @description Save the current scoreboard object.

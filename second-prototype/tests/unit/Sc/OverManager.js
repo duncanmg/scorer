@@ -136,29 +136,24 @@ describe("ScOverManagerTest Simple Construction", function() {
 
     var bowler1 = new om.data.templates.Bowler();
     var bowler2 = new om.data.templates.Bowler();
+    bowler1.no = 1;
     bowler2.no = 2;
 
     om.data.bowler = bowler1;
+    om.data.next_bowler = bowler2;
+
     var over_no = 1;
 
     for (var i = 0; i < 5; i++) {
+      // console.log(i + ") over_no=" + over_no);
       for (var x = 0; x < 6; x++) {
         om.add_ball(batsman, 4, 1, 0, 1);
       }
 
-      expect(function() {
-        om.add_over(over_no + 1, om.data.bowler);
-      }).toThrow(new Error("New bowler cannot be same as last bowler"));
+      over_no++;
 
       var bowler = bowler1.no === om.data.bowler.no ? bowler2 : bowler1;
-
-      expect(function() {
-        om.add_over(over_no, bowler);
-      }).toThrow(
-        new Error("Over number must increment. Current over: " + over_no)
-      );
-
-      over_no++;
+      om.data.bowler = bowler;
 
       om.add_over(over_no, bowler);
     }
@@ -166,4 +161,5 @@ describe("ScOverManagerTest Simple Construction", function() {
     expect(om.current_over_no()).toEqual(6);
     expect(om.current_over().valid_balls).toEqual(0);
   });
+
 });

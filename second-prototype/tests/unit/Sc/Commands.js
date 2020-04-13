@@ -154,6 +154,63 @@ describe("ScCommandsTest. Real Template", function() {
     test_fails({ test: { t2: 1 } }, ["test.t"]);
   });
 
+  it("Sc.Command over.", function() {
+    sc2 = new sc.Scoreboard(template, players, over);
+    expect(typeof sc2).toEqual("object");
+
+    var o = new sc.Command();
+    o.data = sc2.scoreboard;
+    o.over_manager().add_over(1, new o.data.templates.Bowler());
+
+    expect(o.data.overs).toEqual(0);
+    expect(o.data.overs_and_balls).toEqual(0);
+    o.over();
+
+    expect(o.data.overs).toEqual(0);
+    expect(o.data.overs_and_balls).toEqual(0);
+  });
+
+  it("Sc.Command over. 6 balls", function() {
+    sc2 = new sc.Scoreboard(template, players, over);
+    expect(typeof sc2).toEqual("object");
+
+    var o = new sc.Command();
+    o.data = sc2.scoreboard;
+
+    o.data.bowler = new o.data.templates.Bowler();
+    o.data.next_bowler = new o.data.templates.Bowler();
+    o.data.bowler.no = 11;
+    o.data.next_bowler.no = 10;
+
+    o.over_manager().add_over(1, o.data.bowler);
+
+    for (var i = 0; i < 5; i++) {
+      o.over_manager().add_ball(o.data.left_bat, 0, 0, 0, 1);
+      o.over();
+    }
+
+    expect(o.data.overs).toEqual(0);
+    expect(o.data.overs_and_balls).toEqual("0.5");
+
+    o.over();
+
+    expect(o.data.overs).toEqual(0);
+    expect(o.data.overs_and_balls).toEqual("0.5");
+    expect(o.data.left_bat.striker).toEqual(true);
+    expect(o.data.left_bat.runs).toEqual(0);
+
+    o.over_manager().add_ball(o.data.left_bat, 2, 0, 0, 1);
+    o.over();
+
+    expect(o.data.overs).toEqual(1);
+    expect(o.data.overs_and_balls).toEqual(1);
+    expect(o.data.left_bat.striker).toEqual(false);
+    expect(o.data.bowler.no).toEqual(10);
+    expect(o.data.next_bowler.no).toEqual(11);
+  });
+
+  // **********************************************************
+
   it("An Sc.Commands.Wicket", function() {
     sc2 = new sc.Scoreboard(template, players, over);
     sc2.scoreboard.bowler = new sc2.scoreboard.templates.Bowler();

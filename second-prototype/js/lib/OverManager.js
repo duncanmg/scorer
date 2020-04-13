@@ -1,7 +1,6 @@
 var sc = sc || {};
 
 sc.OverManager = function(data) {
-  // console.log("OverManager data " + JSON.stringify(data));
   this.data = data;
 
   if (typeof this.data.overs_history != "object") {
@@ -17,8 +16,8 @@ sc.OverManager = function(data) {
   }
 
   /** @function add_ball
-   * @description Add a ball
-   *  @memberOf sc.Command
+   *  @description Add a ball
+   *  @memberOf sc.OverManager
    *  @param striker
    *  @param runs
    *  @param extras
@@ -26,8 +25,6 @@ sc.OverManager = function(data) {
    *  @param valid
    */
   this.add_ball = function(striker, runs, extras, wkt, valid) {
-    //console.log("add_ball " + JSON.stringify(this.data));
-    //console.log("runs=" + runs);
     if (arguments.length != 5) {
       throw new Error(
         "OverManager.add_ball requires five arguments. Got " + arguments.length
@@ -65,6 +62,7 @@ sc.OverManager = function(data) {
           typeof striker
       );
     }
+
     if (!this.data.overs_history.length) {
       this.add_over(1, this.data.bowler);
     }
@@ -87,6 +85,10 @@ sc.OverManager = function(data) {
     this.data.overs_history[
       this.data.overs_history.length - 1
     ].total_balls += 1;
+
+    this.data.overs_and_balls = this.overs_and_balls();
+    this.data.balls = this.current_over().valid_balls;
+
   };
 
   this.add_over = function(over_no, bowler_obj) {
@@ -105,20 +107,26 @@ sc.OverManager = function(data) {
     sc.validators.is_bowler(bowler_obj);
 
     if (this.current_over_no()) {
-      if (this.data.bowler.no === bowler_obj.no) {
+      var bowler_of_last_over = this.current_over().bowler.no;
+      if ( bowler_of_last_over === bowler_obj.no) {
         throw new Error("New bowler cannot be same as last bowler");
       }
     }
 
     if (this.current_over_no() + 1 !== over_no) {
-        throw new Error("Over number must increment."
-        + " Current over: " + this.current_over_no());
+      throw new Error(
+        "Over number must increment." +
+          " Current over: " +
+          this.current_over_no()
+      );
     }
 
     this.data.overs_history.push(
       new this.data.templates.Over(over_no, bowler_obj)
     );
 
+    this.data.balls = 0;
+    this.data.overs = this.completed_overs();
     //alert("Over");
   };
 
@@ -135,5 +143,17 @@ sc.OverManager = function(data) {
 
   this.over_complete = function() {
     return this.current_over().valid_balls >= 6 ? 1 : 0;
+  };
+
+  this.completed_overs = function() {
+    var n = this.over_complete() ? this.current_over_no() : this.current_over_no() - 1;
+    return n;
+  };
+
+  this.overs_and_balls = function() {
+    if (this.current_over().valid_balls == 0) {
+      return this.completed_overs();
+    }
+    return this.completed_overs() + "." + this.current_over().valid_balls;
   };
 };
