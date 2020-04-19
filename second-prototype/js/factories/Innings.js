@@ -152,6 +152,8 @@ angular.module("scorer").factory("Innings", [
           this.runs = 0;
           this.bowler = false;
           this.bowling = false;
+          this.name = '';
+          this.id = '';
         },
         /**
          * Creates an instance of Bowler

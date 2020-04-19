@@ -49,8 +49,8 @@ describe("ScPlayerManagerTest", function() {
 
     expect(data.left_bat.no).toEqual(1);
     expect(data.right_bat.no).toEqual(2);
-    expect(data.left_bat.name).toEqual(undefined);
-    expect(data.right_bat.name).toEqual(undefined);
+    expect(data.left_bat.name).toEqual('');
+    expect(data.right_bat.name).toEqual('');
 
     pm.set_batsmen_details(data);
 

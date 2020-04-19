@@ -39,15 +39,16 @@ sc.Scoreboard = function(scoreboard_template, Players, Over) {
   var s = jQuery.extend(true, {}, scoreboard_template);
 
   this.scoreboard = s.innings[0];
-  this.scoreboard.home_players = [].concat(
-    this.scoreboard.templates.HomePlayers
-  );
-  this.scoreboard.away_players = [].concat(
-    this.scoreboard.templates.AwayPlayers
-  );
+
+  this.player_manager= new sc.PlayerManager();
+
+  console.log('XXXXXXXXXXXXXXXXXX Before: '  + JSON.stringify(this.scoreboard.home_players));
+  this.scoreboard.home_players = this.player_manager.init_players(this.scoreboard, "home");
+    console.log('XXXXXXXXXXXXXXXXXX After: '  + JSON.stringify(this.scoreboard.home_players));
+    this.player_manager.init_players(this.scoreboard, "away");
 
   this.next_innings = s.innings[1];
-
+  console.log("Scoreboard start left_bat " + JSON.stringify(this.scoreboard.left_bat));
   // console.log("scoreboard " + JSON.stringify(this.scoreboard));
   /**
    * @method change_ends
@@ -325,122 +326,124 @@ sc.Scoreboard = function(scoreboard_template, Players, Over) {
    *  @description Set the batsman's details based on the list of players.
    *  @memberOf sc.Scoreboard
    */
-  this.set_batsmen_details = function() {
-    var check = function(batsman, players) {
-      for (var i = 0; i < players.length; i++) {
-        if (batsman.no == players[i].batting_no) {
-          batsman.name = players[i].name;
-          batsman.id = players[i].id;
-          batsman.description = players[i].description;
-          batsman.bowling = players[i].bowling;
-          batsman.bowler = players[i].bowler;
-          return batsman;
-        }
-      }
-      return false;
-    };
-
-    var players =
-      this.scoreboard.batting_team == "home"
-        ? this.home_players.players
-        : this.away_players.players;
-    console.log("set_batsmen_details");
-    console.log(JSON.stringify(this.scoreboard));
-    this.left_bat = check(this.scoreboard.left_bat, players);
-    this.right_bat = check(this.scoreboard.right_bat, players);
-    // alert(JSON.stringify(this.scoreboard.right_bat));
-  };
+  // this.set_batsmen_details = function() {
+  //   var check = function(batsman, players) {
+  //     for (var i = 0; i < players.length; i++) {
+  //       if (batsman.no == players[i].batting_no) {
+  //         batsman.name = players[i].name;
+  //         batsman.id = players[i].id;
+  //         batsman.description = players[i].description;
+  //         batsman.bowling = players[i].bowling;
+  //         batsman.bowler = players[i].bowler;
+  //         sc.validators.is_batsman(players[i]);
+  //         sc.validators.is_batsman(batsman);
+  //         return batsman;
+  //       }
+  //     }
+  //     return false;
+  //   };
+  //
+  //   var players =
+  //     this.scoreboard.batting_team == "home"
+  //       ? this.home_players.players
+  //       : this.away_players.players;
+  //   console.log("set_batsmen_details");
+  //   console.log(JSON.stringify(players));
+  //   this.left_bat = check(this.scoreboard.left_bat, players);
+  //   this.right_bat = check(this.scoreboard.right_bat, players);
+  //   // alert(JSON.stringify(this.scoreboard.right_bat));
+  // };
 
   // ***********************************************************************
-  /** @function set_bowler_details
-   * @description Manage the bowler details based on the list of players.
-   * @memberOf sc.Scoreboard
-   */
-  this.set_bowler_details = function() {
-    console.log("Start set_bowler_details");
-    /** @function is_bowling
-     * @description Accept a list of bowler objects and a bowler. Return true
-     * if the bowler is current bowling.
-     */
-    var is_bowling = function(bowlers, bowler) {
-      for (var i = 0; i < bowlers.length; i++) {
-        if (bowlers[i].id == bowler.id) {
-          console.log(
-            "set_bowler_details is_bowling true for bowler.id " + bowler.id
-          );
-          return bowlers[i];
-        }
-      }
-      console.log(
-        "set_bowler_details is_bowling false for bowler.id " + bowler.id
-      );
-      return false;
-    };
-
-    /** @function set_bowler
-     * @description Accept a list of bowlers and a bowler. */
-    var set_bowler = function(bowlers, bowler) {
-      if (!bowlers.length) {
-        console.log("WARN set_bowler_details. No bowlers!");
-        return {};
-      }
-      if (!bowler.id) {
-        // No bowler id. Just return first bowler in list.
-        console.log("INFO set_bowler_details. Return first bowler in list.");
-        return bowlers.shift;
-      } else if (!is_bowling(bowlers, bowler)) {
-        console.log(
-          "WARN set_bowler_details. Bowler " + bowler.id + " is not bowling."
-        );
-        return {};
-      } else {
-        var b = bowlers[0].id == bowler.id ? bowlers.shift() : bowlers.pop();
-        console.log("INFO set_bowler_details. Return bowler " + b.id);
-        return b;
-      }
-      console.log("INFO set_bowler_details. Return bowler " + bowler.id);
-      return bowler;
-    };
-
-    var bowling_team =
-      this.scoreboard.batting_team == "home"
-        ? this.away_players
-        : this.home_players;
-    // Bowlers is a sorted list of the players in the bowling list who
-    // are currently bowling. Rebuilt each time, so it
-    // can be modified safely. Two entries max!
-    var bowlers = bowling_team.get_bowling();
-    console.log("set_bowler_details: bowlers list:" + JSON.stringify(bowlers));
-    this.scoreboard.bowler = set_bowler(bowlers, this.scoreboard.bowler);
-    console.log(
-      "set_bowler_details: bowler  : " + JSON.stringify(this.scoreboard.bowler)
-    );
-    this.scoreboard.next_bowler = set_bowler(
-      bowlers,
-      this.scoreboard.next_bowler
-    );
-    console.log(
-      "set_bowler_details: next_bowler : " +
-        JSON.stringify(this.scoreboard.next_bowler)
-    );
-    if (!this.scoreboard.bowler.id) {
-      this.scoreboard.bowler = set_bowler(bowlers, this.scoreboard.bowler);
-      console.log(
-        "set_bowler_details: bowler  : " +
-          JSON.stringify(this.scoreboard.bowler)
-      );
-    }
-    if (!this.scoreboard.next_bowler.id) {
-      this.scoreboard.next_bowler = set_bowler(
-        bowlers,
-        this.scoreboard.next_bowler
-      );
-      console.log(
-        "set_bowler_details: next_bowler : " +
-          JSON.stringify(this.scoreboard.next_bowler)
-      );
-    }
-  };
+  // /** @function set_bowler_details
+  //  * @description Manage the bowler details based on the list of players.
+  //  * @memberOf sc.Scoreboard
+  //  */
+  // this.set_bowler_details = function() {
+  //   console.log("Start set_bowler_details");
+  //   /** @function is_bowling
+  //    * @description Accept a list of bowler objects and a bowler. Return true
+  //    * if the bowler is current bowling.
+  //    */
+  //   var is_bowling = function(bowlers, bowler) {
+  //     for (var i = 0; i < bowlers.length; i++) {
+  //       if (bowlers[i].id == bowler.id) {
+  //         console.log(
+  //           "set_bowler_details is_bowling true for bowler.id " + bowler.id
+  //         );
+  //         return bowlers[i];
+  //       }
+  //     }
+  //     console.log(
+  //       "set_bowler_details is_bowling false for bowler.id " + bowler.id
+  //     );
+  //     return false;
+  //   };
+  //
+  //   /** @function set_bowler
+  //    * @description Accept a list of bowlers and a bowler. */
+  //   var set_bowler = function(bowlers, bowler) {
+  //     if (!bowlers.length) {
+  //       console.log("WARN set_bowler_details. No bowlers!");
+  //       return {};
+  //     }
+  //     if (!bowler.id) {
+  //       // No bowler id. Just return first bowler in list.
+  //       console.log("INFO set_bowler_details. Return first bowler in list.");
+  //       return bowlers.shift;
+  //     } else if (!is_bowling(bowlers, bowler)) {
+  //       console.log(
+  //         "WARN set_bowler_details. Bowler " + bowler.id + " is not bowling."
+  //       );
+  //       return {};
+  //     } else {
+  //       var b = bowlers[0].id == bowler.id ? bowlers.shift() : bowlers.pop();
+  //       console.log("INFO set_bowler_details. Return bowler " + b.id);
+  //       return b;
+  //     }
+  //     console.log("INFO set_bowler_details. Return bowler " + bowler.id);
+  //     return bowler;
+  //   };
+  //
+  //   var bowling_team =
+  //     this.scoreboard.batting_team == "home"
+  //       ? this.away_players
+  //       : this.home_players;
+  //   // Bowlers is a sorted list of the players in the bowling list who
+  //   // are currently bowling. Rebuilt each time, so it
+  //   // can be modified safely. Two entries max!
+  //   var bowlers = bowling_team.get_bowling();
+  //   console.log("set_bowler_details: bowlers list:" + JSON.stringify(bowlers));
+  //   this.scoreboard.bowler = set_bowler(bowlers, this.scoreboard.bowler);
+  //   console.log(
+  //     "set_bowler_details: bowler  : " + JSON.stringify(this.scoreboard.bowler)
+  //   );
+  //   this.scoreboard.next_bowler = set_bowler(
+  //     bowlers,
+  //     this.scoreboard.next_bowler
+  //   );
+  //   console.log(
+  //     "set_bowler_details: next_bowler : " +
+  //       JSON.stringify(this.scoreboard.next_bowler)
+  //   );
+  //   if (!this.scoreboard.bowler.id) {
+  //     this.scoreboard.bowler = set_bowler(bowlers, this.scoreboard.bowler);
+  //     console.log(
+  //       "set_bowler_details: bowler  : " +
+  //         JSON.stringify(this.scoreboard.bowler)
+  //     );
+  //   }
+  //   if (!this.scoreboard.next_bowler.id) {
+  //     this.scoreboard.next_bowler = set_bowler(
+  //       bowlers,
+  //       this.scoreboard.next_bowler
+  //     );
+  //     console.log(
+  //       "set_bowler_details: next_bowler : " +
+  //         JSON.stringify(this.scoreboard.next_bowler)
+  //     );
+  //   }
+  // };
 
   // ***********************************************************************
   /** @function reset
@@ -455,14 +458,14 @@ sc.Scoreboard = function(scoreboard_template, Players, Over) {
     Players.set_team("home");
     Players.reset();
     console.log("4 reset");
-    this.home_players = jQuery.extend(true, {}, Players);
+    this.scoreboard.home_players = this.player_manager.init_players(this.scoreboard, "home");
     Players.set_team("away");
     Players.reset();
     console.log("5 reset");
-    this.away_players = jQuery.extend(true, {}, Players);
-    this.set_batsmen_details();
+    this.scoreboard.away_players = this.player_manager.init_players(this.scoreboard, "away");
+    this.player_manager.set_batsmen_details(this.scoreboard);
     console.log("6 reset");
-    this.set_bowler_details();
+    this.player_manager.set_bowler_details(this.scoreboard);
     console.log("End reset");
   };
 

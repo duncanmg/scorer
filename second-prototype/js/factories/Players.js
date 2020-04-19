@@ -230,26 +230,26 @@ angular.module("scorer").factory('Players', ['Storage', '$rootScope', function(S
       }
       return false;
     },
-    get_bowlers: function() {
-      var bowlers = [];
-      for (var i = 0; i < this.players.length; i++) {
-        if (this.players[i].bowler) {
-          bowlers.push(this.players[i]);
-        }
-      }
-      bowlers = bowlers.sort(this.sort_by_bowler_no);
-      return bowlers;
-    },
-    get_bowling: function() {
-      var bowlers = this.get_bowlers();
-      var bowling = [];
-      for (var i = 0; i < bowlers.length; i++) {
-        if (bowlers[i].bowling) {
-          bowling.push(bowlers[i]);
-        }
-      }
-      return bowling;
-    },
+    // get_bowlers: function() {
+    //   var bowlers = [];
+    //   for (var i = 0; i < this.players.length; i++) {
+    //     if (this.players[i].bowler) {
+    //       bowlers.push(this.players[i]);
+    //     }
+    //   }
+    //   bowlers = bowlers.sort(this.sort_by_bowler_no);
+    //   return bowlers;
+    // },
+    // get_bowling: function() {
+    //   var bowlers = this.get_bowlers();
+    //   var bowling = [];
+    //   for (var i = 0; i < bowlers.length; i++) {
+    //     if (bowlers[i].bowling) {
+    //       bowling.push(bowlers[i]);
+    //     }
+    //   }
+    //   return bowling;
+    // },
 
     /** @function reset
      * @description Reads the Players object from storage and writes it to

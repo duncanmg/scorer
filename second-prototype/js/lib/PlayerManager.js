@@ -17,6 +17,59 @@ var sc = sc || {};
  */
 
 sc.PlayerManager = function() {
+
+  /**
+   * @function validator
+   * @memberOf sc.Command
+   * @param name {String} A name to be used in the error messages
+   * @description Return a new Validator object.
+   * @return {Validator}
+   */
+  this.validator = function(name) {
+    /**
+     * @class Validator
+     * @memberOf sc.Command.validator
+     * @constructor Validator
+     * @param name {String} A name to be used in the error messages.
+     * @return {Validator}
+     */
+    var Validator = function(name) {
+      this.name = name;
+      this.msg = this.name + ". A mandatory parameter is missing: ";
+
+      this.check_namespaces_defined = function(obj, element) {
+        var namespaces = element.split(".");
+        var done = "";
+        var context = obj;
+        for (var i = 0; i < namespaces.length; i++) {
+          context = context[namespaces[i]];
+          done = done + "." + namespaces[i];
+          if (!is.existy(context)) {
+            throw new Error(this.msg + done);
+          }
+        }
+      };
+
+      /**
+       * @function check_all_defined
+       * @memberOf validator
+       * @description Accepts an object and a list of properties it
+       * should have. Throws an error if any do not exist.
+       * @param obj {Object} The object to be tested.
+       * @param list {Array} List of properties
+       * @return {void}
+       * @throws {Error}
+       */
+      this.check_all_defined = function(obj, list) {
+        for (var x = 0; x < list.length; x++) {
+          var p = list[x];
+          this.check_namespaces_defined(obj, p);
+        }
+      };
+    };
+    return new Validator(name);
+  };
+
   // this.Players = Players;
   // if ( ! this.Players) {
   //   throw new Error( "sc.PlayerManager argument Players is mandatory");
@@ -173,10 +226,14 @@ sc.PlayerManager = function() {
   // ***********************************************************************
   /** @function set_bowler_details
    * @description Manage the bowler details based on the list of players.
-   * @memberOf sc.Scoreboard
+   * @memberOf sc.PlayerManager
    */
-  this.set_bowler_details = function() {
+  this.set_bowler_details = function(data) {
     console.log("Start set_bowler_details");
+
+    this.validator('set_bowler_details').check_all_defined(data, [ 'batting_team', 'home_players',
+    'away_players']);
+
     /** @function is_bowling
      * @description Accept a list of bowler objects and a bowler. Return true
      * if the bowler is current bowling.
@@ -222,42 +279,160 @@ sc.PlayerManager = function() {
     };
 
     var bowling_team =
-      this.scoreboard.batting_team == "home"
-        ? this.away_players
-        : this.home_players;
+      data.batting_team == "home"
+        ? data.away_players
+        : data.home_players;
     // Bowlers is a sorted list of the players in the bowling list who
     // are currently bowling. Rebuilt each time, so it
     // can be modified safely. Two entries max!
-    var bowlers = bowling_team.get_bowling();
+    var bowlers = this.get_bowling(bowling_team);
     console.log("set_bowler_details: bowlers list:" + JSON.stringify(bowlers));
-    this.scoreboard.bowler = set_bowler(bowlers, this.scoreboard.bowler);
+    data.bowler = set_bowler(bowlers, data.bowler);
     console.log(
-      "set_bowler_details: bowler  : " + JSON.stringify(this.scoreboard.bowler)
+      "set_bowler_details: bowler  : " + JSON.stringify(data.bowler)
     );
-    this.scoreboard.next_bowler = set_bowler(
+    data.next_bowler = set_bowler(
       bowlers,
-      this.scoreboard.next_bowler
+     data.next_bowler
     );
     console.log(
       "set_bowler_details: next_bowler : " +
-        JSON.stringify(this.scoreboard.next_bowler)
+        JSON.stringify(data.next_bowler)
     );
-    if (!this.scoreboard.bowler.id) {
-      this.scoreboard.bowler = set_bowler(bowlers, this.scoreboard.bowler);
+    if (!data.bowler.id) {
+      data.bowler = set_bowler(bowlers, data.bowler);
       console.log(
         "set_bowler_details: bowler  : " +
-          JSON.stringify(this.scoreboard.bowler)
+          JSON.stringify(data.bowler)
       );
     }
-    if (!this.scoreboard.next_bowler.id) {
-      this.scoreboard.next_bowler = set_bowler(
+    if (!data.next_bowler.id) {
+      data.next_bowler = set_bowler(
         bowlers,
-        this.scoreboard.next_bowler
+        data.next_bowler
       );
       console.log(
         "set_bowler_details: next_bowler : " +
-          JSON.stringify(this.scoreboard.next_bowler)
+          JSON.stringify(data.next_bowler)
       );
     }
   };
+
+  this.get_bowlers = function(players) {
+    var bowlers = [];
+    for (var i = 0; i < players.length; i++) {
+      if (players[i].bowler) {
+        bowlers.push(players[i]);
+      }
+    }
+    bowlers = bowlers.sort(this.sort_by_bowler_no);
+    return bowlers;
+  };
+
+  this.get_bowling= function(players) {
+    var bowlers = this.get_bowlers(players);
+    var bowling = [];
+    for (var i = 0; i < bowlers.length; i++) {
+      if (bowlers[i].bowling) {
+        bowling.push(bowlers[i]);
+      }
+    }
+    return bowling;
+  };
+
+  this.sort_by_bowler_no = function(a, b) {
+    if (!a.bowler) {
+      a.bowler = 0;
+    }
+    if (!b.bowler) {
+      b.bowler = 0;
+    }
+    return parseInt(a.bowler) - parseInt(b.bowler);
+  }
+
+  /**
+   * @function validator
+   * @memberOf sc.Command
+   * @param name {String} A name to be used in the error messages
+   * @description Return a new Validator object.
+   * @return {Validator}
+   */
+  this.validator = function(name) {
+    /**
+     * @class Validator
+     * @memberOf sc.Command.validator
+     * @constructor Validator
+     * @param name {String} A name to be used in the error messages.
+     * @return {Validator}
+     */
+    var Validator = function(name) {
+      this.name = name;
+      this.msg = this.name + ". A mandatory parameter is missing: ";
+
+      this.check_namespaces_defined = function(obj, element) {
+        var namespaces = element.split(".");
+        var done = "";
+        var context = obj;
+        for (var i = 0; i < namespaces.length; i++) {
+          context = context[namespaces[i]];
+          done = done + "." + namespaces[i];
+          if (!is.existy(context)) {
+            throw new Error(this.msg + done);
+          }
+        }
+      };
+
+      /**
+       * @function check_all_defined
+       * @memberOf validator
+       * @description Accepts an object and a list of properties it
+       * should have. Throws an error if any do not exist.
+       * @param obj {Object} The object to be tested.
+       * @param list {Array} List of properties
+       * @return {void}
+       * @throws {Error}
+       */
+      this.check_all_defined = function(obj, list) {
+        for (var x = 0; x < list.length; x++) {
+          var p = list[x];
+          this.check_namespaces_defined(obj, p);
+        }
+      };
+    };
+    return new Validator(name);
+  };
+
+  this.init_players = function(data, action) {
+
+    if (action != 'home' && action != 'away') {
+      throw new Error('Parameter "action" must be "home" or "away"');
+    }
+
+var doit = function(base, output) {
+  output = [];
+  base.forEach(
+    function(p,i) {
+      // console.log('p=' + JSON.stringify(p));
+      var player = new data.templates.Batsman();
+      var keys = Object.keys(p);
+      keys.forEach(
+        function(k,i) {
+          player[k] = p[k];
+        }
+      );
+      // console.log('push: ' + JSON.stringify(player));
+      output.push(player);
+      // console.log('X output:' + JSON.stringify(output));
+    }
+  );
+  console.log('output:' + JSON.stringify(output));
+  return output;
+}
+if(action=='home'){
+  return doit(data.templates.HomePlayers, data.home_players);
+}
+else{
+  return doit(data.templates.AwayPlayers, data.away_players);
+}
+  }
 };

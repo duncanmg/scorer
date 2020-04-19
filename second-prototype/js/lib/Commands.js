@@ -249,8 +249,12 @@ sc.Commands = {
       this.data.total += this.runs;
       this.data.balls++;
 
+      sc.validators.is_batsman(this.data.left_bat);
+      sc.validators.is_batsman(this.data.right_bat);
+      console.log("StandardBall About to call add_runs_to_striker " + JSON.stringify(this.data.left_bat));
       this.player_manager().add_runs_to_striker(this.data, this.runs);
 
+      console.log("StandardBall About to call add_ball " + JSON.stringify(this.data.left_bat));
       this.over_manager().add_ball(
         this.data.left_bat.striker ? this.data.left_bat : this.data.right_bat,
         this.runs,
