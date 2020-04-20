@@ -5,7 +5,7 @@ sc.validators = {
     var b = batsman;
     var errors = [];
     ['no', 'striker', 'runs', 'name', 'id', 'bowler', 'bowling'].forEach(function (m,i){
-      console.log("Does method " + m +" of Batsman exist: " + is.existy(b[m]));
+      // console.log("Does method " + m +" of Batsman exist: " + is.existy(b[m]));
       if (!is.existy(b[m])) {
         errors.push(m);
       }

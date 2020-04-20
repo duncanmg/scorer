@@ -187,49 +187,49 @@ angular.module("scorer").factory('Players', ['Storage', '$rootScope', function(S
         return a.batting_no - b.batting_no;
       });
     },
-    // ***********************************************************************
-    /** @function start_bowling
-     * @description Accept a Player object and add it to the list of current
-     * bowlers as the next bowler.
-     * Returns false if two players are already bowling.
-     * Returns true on success.
-     * @memberOf scorer.factory.Players
-     * @param {Player} player
-     * @returns {Boolean}
-     *
-     */
-    start_bowling: function(player) {
-      console.log("--");
-      console.log("In start_bowling");
-      var bowling = this.get_bowling();
-      if (bowling.length >= 2) {
-        return false;
-      }
-      // alert(1);
-      console.log("Still in start_bowling");
-      var bowlers = this.get_bowlers();
-      // alert(JSON.stringify(bowlers));
-      var next_bowler_no = bowlers.length ?
-        bowlers[bowlers.length - 1].bowler + 1 : 1;
-      console.log("next_bowler_no " + next_bowler_no);
-      var i = this.lookup(player);
-      if (i >= 0) {
-        this.players[i].bowler = next_bowler_no;
-        this.players[i].bowling = true;
-        console.log("i=" + i + " .bowler=" + next_bowler_no);
-      }
-      console.log("End start_bowling");
-      return true;
-    },
-
-    stop_bowling: function(player) {
-      var i = this.lookup(player);
-      if (i >= 0) {
-        this.players[i].bowling = false;
-        return true;
-      }
-      return false;
-    },
+    // // ***********************************************************************
+    // /** @function start_bowling
+    //  * @description Accept a Player object and add it to the list of current
+    //  * bowlers as the next bowler.
+    //  * Returns false if two players are already bowling.
+    //  * Returns true on success.
+    //  * @memberOf scorer.factory.Players
+    //  * @param {Player} player
+    //  * @returns {Boolean}
+    //  *
+    //  */
+    // start_bowling: function(player) {
+    //   console.log("--");
+    //   console.log("In start_bowling");
+    //   var bowling = this.get_bowling();
+    //   if (bowling.length >= 2) {
+    //     return false;
+    //   }
+    //   // alert(1);
+    //   console.log("Still in start_bowling");
+    //   var bowlers = this.get_bowlers();
+    //   // alert(JSON.stringify(bowlers));
+    //   var next_bowler_no = bowlers.length ?
+    //     bowlers[bowlers.length - 1].bowler + 1 : 1;
+    //   console.log("next_bowler_no " + next_bowler_no);
+    //   var i = this.lookup(player);
+    //   if (i >= 0) {
+    //     this.players[i].bowler = next_bowler_no;
+    //     this.players[i].bowling = true;
+    //     console.log("i=" + i + " .bowler=" + next_bowler_no);
+    //   }
+    //   console.log("End start_bowling");
+    //   return true;
+    // },
+    //
+    // stop_bowling: function(player) {
+    //   var i = this.lookup(player);
+    //   if (i >= 0) {
+    //     this.players[i].bowling = false;
+    //     return true;
+    //   }
+    //   return false;
+    // },
     // get_bowlers: function() {
     //   var bowlers = [];
     //   for (var i = 0; i < this.players.length; i++) {

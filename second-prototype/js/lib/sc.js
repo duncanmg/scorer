@@ -45,7 +45,7 @@ sc.Scoreboard = function(scoreboard_template, Players, Over) {
   console.log('XXXXXXXXXXXXXXXXXX Before: '  + JSON.stringify(this.scoreboard.home_players));
   this.scoreboard.home_players = this.player_manager.init_players(this.scoreboard, "home");
     console.log('XXXXXXXXXXXXXXXXXX After: '  + JSON.stringify(this.scoreboard.home_players));
-    this.player_manager.init_players(this.scoreboard, "away");
+      this.scoreboard.away_players = this.player_manager.init_players(this.scoreboard, "away");
 
   this.next_innings = s.innings[1];
   console.log("Scoreboard start left_bat " + JSON.stringify(this.scoreboard.left_bat));

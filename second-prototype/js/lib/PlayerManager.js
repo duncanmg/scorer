@@ -434,5 +434,15 @@ if(action=='home'){
 else{
   return doit(data.templates.AwayPlayers, data.away_players);
 }
+};
+
+this.lookup = function(players, player) {
+  for (var i = 0; i < players.length; i++) {
+    if (players[i].id == player.id) {
+      return i;
+    }
   }
+  return -1;
+};
+
 };

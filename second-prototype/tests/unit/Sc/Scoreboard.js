@@ -13,7 +13,7 @@ describe("ScScoreboardTest Simple Construction", function() {
 
   beforeEach(
     inject(function(ScoreboardTemplate) {
-      template = { innings: [{ templates: {} }, { templates: {} }] };
+      template = { innings: [{ templates: {HomePlayers:[]} }, { templates: {AwayPlayers:[]} }] };
       template.innings[0].templates.HomePlayers = [];
       template.innings[1].templates.AwayPlayers = [];
     })
@@ -25,13 +25,13 @@ describe("ScScoreboardTest Simple Construction", function() {
     })
   );
 
-  it("An Sc.Scoreboard object has been created.", function() {
-    expect(typeof sc).toEqual("object");
-    expect(typeof sc.Scoreboard).toEqual("function");
-    expect(typeof template).toEqual("object");
-    expect(typeof players).toEqual("object");
-    sc2 = new sc.Scoreboard(template, players);
-  });
+  // it("An Sc.Scoreboard object has been created.", function() {
+  //   expect(typeof sc).toEqual("object");
+  //   expect(typeof sc.Scoreboard).toEqual("function");
+  //   expect(typeof template).toEqual("object");
+  //   expect(typeof players).toEqual("object");
+  //   sc2 = new sc.Scoreboard(template, players);
+  // });
 });
 
 describe("ScScoreboardTest. Real Template", function() {

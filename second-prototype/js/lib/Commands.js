@@ -382,6 +382,65 @@ sc.Commands = {
     };
   },
 
+  StartBowling: function(args) {
+    this.name = "StartBowling";
+
+    this.data = args[0];
+    this.player = args[1];
+
+    sc.Command.call(this, this.data);
+
+    this.validator("StartBowling").check_all_defined(this, [
+      "data",
+      "data.total",
+      "data.extras",
+      "data.balls",
+      "data.left_bat.striker",
+      "data.right_bat"
+    ]);
+
+    this.run = function() {
+
+      console.log("--");
+      console.log("StartBowling.run");
+
+      var bowling = this.player_manager().get_bowling();
+      if (bowling.length >= 2) {
+        return false;
+      }
+      // alert(1);
+      console.log("Still in start_bowling");
+      var bowlers = this.player_manager().get_bowlers();
+      // alert(JSON.stringify(bowlers));
+      var next_bowler_no = bowlers.length ?
+        bowlers[bowlers.length - 1].bowler + 1 : 1;
+
+      console.log("next_bowler_no " + next_bowler_no);
+
+      var i = this.lookup(player);
+      if (i >= 0) {
+        this.players[i].bowler = next_bowler_no;
+        this.players[i].bowling = true;
+        console.log("i=" + i + " .bowler=" + next_bowler_no);
+      }
+      console.log("End start_bowling");
+      return true;
+
+      this.data.extras += 1;
+      this.data.total += 1;
+
+      this.over_manager().add_ball(
+        this.data.left_bat.striker ? this.data.left_bat : this.data.right_bat,
+        0,
+        1,
+        false,
+        false
+      );
+
+      this.player_manager().change_ends(this.data, 1);
+    };
+  },
+
   Run: function(object, args) {
     object.prototype = Object.create(sc.Command.prototype);
     object.prototype.Constructor = sc.Command.Wicket;

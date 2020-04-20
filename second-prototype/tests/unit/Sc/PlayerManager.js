@@ -47,6 +47,9 @@ describe("ScPlayerManagerTest", function() {
     pm = new sc.PlayerManager();
     var data = sc2.scoreboard;
 
+    data.home_players = pm.init_players(data,"home");
+    data.away_players = pm.init_players(data,"away");
+
     expect(data.left_bat.no).toEqual(1);
     expect(data.right_bat.no).toEqual(2);
     expect(data.left_bat.name).toEqual('');
