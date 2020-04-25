@@ -223,6 +223,23 @@ sc.PlayerManager = function() {
     // alert(JSON.stringify(this.scoreboard.right_bat));
   };
 
+  this.get_team_players=function(data, batting_or_bowling) {
+    var team;
+    this.validator('get_team_players').check_all_defined(data, [ 'batting_team', 'home_players',
+    'away_players']);
+      if (batting_or_bowling == 'batting') {
+      team = data.batting_team == "home" ? data.home_players : data.away_players;
+    }
+    else if (batting_or_bowling == 'bowling') {
+      team = data.batting_team == "home" ? data.away_players : data.home_players;
+    }
+    else {
+      throw new Error("Parameter value must be 'batting' or 'bowling'");
+    }
+    console.log("get_team_players returning " + JSON.stringify(team));
+    return team;
+  };
+
   // ***********************************************************************
   /** @function set_bowler_details
    * @description Manage the bowler details based on the list of players.
@@ -319,6 +336,9 @@ sc.PlayerManager = function() {
   };
 
   this.get_bowlers = function(players) {
+    if (!players){
+      throw new Error("get_bowlers requires a list of players");
+    }
     var bowlers = [];
     for (var i = 0; i < players.length; i++) {
       if (players[i].bowler) {
@@ -330,6 +350,10 @@ sc.PlayerManager = function() {
   };
 
   this.get_bowling= function(players) {
+    console.log("get_bowling received " + JSON.stringify(players));
+    if (!players){
+      throw new Error("get_bowling requires a list of players");
+    }
     var bowlers = this.get_bowlers(players);
     var bowling = [];
     for (var i = 0; i < bowlers.length; i++) {

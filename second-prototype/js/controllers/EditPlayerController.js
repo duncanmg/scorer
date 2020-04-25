@@ -3,7 +3,9 @@
  * @memberOf scorer.controller
  */
 angular.module('scorer')
-  .controller('EditPlayerController', ['$scope', '$stateParams', '$state', 'Players', 'team', function($scope, $stateParams, $state, Players, team) {
+  .controller('EditPlayerController',
+  ['$scope', '$stateParams', '$state', 'Scoreboard', 'Sc', 'Players', 'team',
+  function($scope, $stateParams, $state, Scoreboard, Sc, Players, team) {
     'use strict';
 
     $scope.playerId = $stateParams.playerId;
@@ -25,7 +27,7 @@ angular.module('scorer')
         Players.stop_bowling(player);
       } else {
         console.log('About to call start_bowling');
-        if (!Players.start_bowling(player)) {
+        if (!Sc.Commands.Run(Sc.Commands.StartBowling, [Scoreboard.scoreboard, player])) {
           alert("You already have two bowlers");
           return false;
         }

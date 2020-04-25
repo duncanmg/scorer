@@ -2,7 +2,9 @@
  * @class ScorerController
  * @memberOf scorer.controller
  */
-angular.module('scorer').controller('ScorerController', ['$scope', '$stateParams', '$state', 'Scoreboard', function($scope, $stateParams, $state, Scoreboard) {
+angular.module('scorer').controller('ScorerController',
+  ['$scope', '$stateParams', '$state', 'Scoreboard',
+  function($scope, $stateParams, $state, Scoreboard) {
 
     'use strict';
 
