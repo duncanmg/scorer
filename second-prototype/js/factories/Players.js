@@ -9,97 +9,97 @@ angular.module("scorer").factory('Players', ['Storage', '$rootScope', function(S
   'use strict';
   var storage = new Storage();
 
-  var home_players = [{
-    id: 1,
-    name: 'Home Player 1',
-    batting_no: 1
-  }, {
-    id: 2,
-    name: 'Home Player 2',
-    batting_no: 2
-  }, {
-    id: 3,
-    name: 'Home Player 3',
-    batting_no: 3
-  }, {
-    id: 4,
-    name: 'Home Player 4',
-    batting_no: 4
-  }, {
-    id: 5,
-    name: 'Home Player 5',
-    batting_no: 5
-  }, {
-    id: 6,
-    name: 'Home Player 6',
-    batting_no: 6
-  }, {
-    id: 7,
-    name: 'Home Player 7',
-    batting_no: 7
-  }, {
-    id: 8,
-    name: 'Home Player 8',
-    batting_no: 8
-  }, {
-    id: 9,
-    name: 'Home Player 9',
-    batting_no: 9
-  }, {
-    id: 10,
-    name: 'Home Player 10',
-    batting_no: 10
-  }, {
-    id: 11,
-    name: 'Home Player 11',
-    batting_no: 11
-  }];
-
-  var away_players = [{
-    id: 12,
-    name: 'Away Player 1',
-    batting_no: 1
-  }, {
-    id: 13,
-    name: 'Away Player 2',
-    batting_no: 2
-  }, {
-    id: 14,
-    name: 'Away Player 3',
-    batting_no: 3
-  }, {
-    id: 15,
-    name: 'Away Player 4',
-    batting_no: 4
-  }, {
-    id: 16,
-    name: 'Away Player 5',
-    batting_no: 5
-  }, {
-    id: 17,
-    name: 'Away Player 6',
-    batting_no: 6
-  }, {
-    id: 18,
-    name: 'Away Player 7',
-    batting_no: 7
-  }, {
-    id: 19,
-    name: 'Away Player 8',
-    batting_no: 8
-  }, {
-    id: 20,
-    name: 'Away Player 9',
-    batting_no: 9
-  }, {
-    id: 21,
-    name: 'Away Player 10',
-    batting_no: 10
-  }, {
-    id: 22,
-    name: 'Away Player 11',
-    batting_no: 11
-  }];
+  // var home_players = [{
+  //   id: 1,
+  //   name: 'Home Player 1',
+  //   batting_no: 1
+  // }, {
+  //   id: 2,
+  //   name: 'Home Player 2',
+  //   batting_no: 2
+  // }, {
+  //   id: 3,
+  //   name: 'Home Player 3',
+  //   batting_no: 3
+  // }, {
+  //   id: 4,
+  //   name: 'Home Player 4',
+  //   batting_no: 4
+  // }, {
+  //   id: 5,
+  //   name: 'Home Player 5',
+  //   batting_no: 5
+  // }, {
+  //   id: 6,
+  //   name: 'Home Player 6',
+  //   batting_no: 6
+  // }, {
+  //   id: 7,
+  //   name: 'Home Player 7',
+  //   batting_no: 7
+  // }, {
+  //   id: 8,
+  //   name: 'Home Player 8',
+  //   batting_no: 8
+  // }, {
+  //   id: 9,
+  //   name: 'Home Player 9',
+  //   batting_no: 9
+  // }, {
+  //   id: 10,
+  //   name: 'Home Player 10',
+  //   batting_no: 10
+  // }, {
+  //   id: 11,
+  //   name: 'Home Player 11',
+  //   batting_no: 11
+  // }];
+  //
+  // var away_players = [{
+  //   id: 12,
+  //   name: 'Away Player 1',
+  //   batting_no: 1
+  // }, {
+  //   id: 13,
+  //   name: 'Away Player 2',
+  //   batting_no: 2
+  // }, {
+  //   id: 14,
+  //   name: 'Away Player 3',
+  //   batting_no: 3
+  // }, {
+  //   id: 15,
+  //   name: 'Away Player 4',
+  //   batting_no: 4
+  // }, {
+  //   id: 16,
+  //   name: 'Away Player 5',
+  //   batting_no: 5
+  // }, {
+  //   id: 17,
+  //   name: 'Away Player 6',
+  //   batting_no: 6
+  // }, {
+  //   id: 18,
+  //   name: 'Away Player 7',
+  //   batting_no: 7
+  // }, {
+  //   id: 19,
+  //   name: 'Away Player 8',
+  //   batting_no: 8
+  // }, {
+  //   id: 20,
+  //   name: 'Away Player 9',
+  //   batting_no: 9
+  // }, {
+  //   id: 21,
+  //   name: 'Away Player 10',
+  //   batting_no: 10
+  // }, {
+  //   id: 22,
+  //   name: 'Away Player 11',
+  //   batting_no: 11
+  // }];
 
   var obj = {
 
@@ -151,13 +151,16 @@ angular.module("scorer").factory('Players', ['Storage', '$rootScope', function(S
     },
 
     save: function(player) {
+      console.log('1 Players save ' + JSON.stringify(player));
       if (player.batting_no < 1 || player.batting_no > 11) {
         return false;
       }
+      console.log('2 Players save');
       var i = this.lookup(player);
       if (i < 0) {
         return false;
       }
+      console.log('3 Players save');
       //alert(player.batting_no +
       //  ' != ' + (i + 1));
       if (player.batting_no != i + 1) {
@@ -167,9 +170,12 @@ angular.module("scorer").factory('Players', ['Storage', '$rootScope', function(S
         this.players.splice(player.batting_no - 1, 0, player);
         //alert("Added item "+ (player.batting_no - 1));
         this.renumber();
+        console.log('4 Players save');
       } else {
         this.players[i] = player;
+        console.log('5 Players save');
       }
+      console.log('6 Players save');
       storage.put(this.team, this.players);
       this.reset();
     },
@@ -258,10 +264,16 @@ angular.module("scorer").factory('Players', ['Storage', '$rootScope', function(S
      */
     reset: function() {
       if (this.team) {
-        var p = storage.get(this.team);
-        this.players = p ? p : this.team == "home" ? home_players : away_players;
-        this.sort_by_batting_no();
-        this.renumber();
+        var p = storage.get_scoreboard();
+        this.players = this.team == "home" ? p.home_players : p.away_players;
+        // this.players = p ? p : this.team == "home" ? home_players : away_players;
+        if (this.players) {
+          this.sort_by_batting_no();
+          this.renumber();
+        }
+        else {
+          this.players = [];
+        }
       }
     },
 

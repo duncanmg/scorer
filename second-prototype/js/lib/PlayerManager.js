@@ -236,7 +236,7 @@ sc.PlayerManager = function() {
     else {
       throw new Error("Parameter value must be 'batting' or 'bowling'");
     }
-    console.log("get_team_players returning " + JSON.stringify(team));
+    // console.log("get_team_players returning " + JSON.stringify(team));
     return team;
   };
 
@@ -350,7 +350,7 @@ sc.PlayerManager = function() {
   };
 
   this.get_bowling= function(players) {
-    console.log("get_bowling received " + JSON.stringify(players));
+    // console.log("get_bowling received " + JSON.stringify(players));
     if (!players){
       throw new Error("get_bowling requires a list of players");
     }
@@ -449,7 +449,7 @@ var doit = function(base, output) {
       // console.log('X output:' + JSON.stringify(output));
     }
   );
-  console.log('output:' + JSON.stringify(output));
+  // console.log('output:' + JSON.stringify(output));
   return output;
 }
 if(action=='home'){

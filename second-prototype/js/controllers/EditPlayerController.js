@@ -4,8 +4,8 @@
  */
 angular.module('scorer')
   .controller('EditPlayerController',
-  ['$scope', '$stateParams', '$state', 'Scoreboard', 'Sc', 'Players', 'team',
-  function($scope, $stateParams, $state, Scoreboard, Sc, Players, team) {
+  ['$scope', '$stateParams', '$state', 'Scoreboard', 'Sc', 'Players', 'team', 'Storage',
+  function($scope, $stateParams, $state, Scoreboard, Sc, Players, team, Storage) {
     'use strict';
 
     $scope.playerId = $stateParams.playerId;
@@ -22,6 +22,7 @@ angular.module('scorer')
 
     $scope.toggle_bowling = function(player) {
       console.log('toggle_bowling');
+      // console.log(JSON.stringify(Scoreboard.scoreboard));
       if (player.bowling) {
         console.log('About to call stop bowling');
         Players.stop_bowling(player);
@@ -32,12 +33,14 @@ angular.module('scorer')
           return false;
         }
       }
+      console.log('End toggle_bowling: ' + JSON.stringify(Scoreboard.scoreboard.away_players));
       return true;
     };
 
     $scope.accept = function() {
-      //alert($scope.player.id);
-      Players.save($scope.player);
+      console.log('accept');
+      var storage = new Storage();
+      storage.put_scoreboard(Scoreboard.scoreboard);
       $state.go('players', {
         team: $scope.team
       });

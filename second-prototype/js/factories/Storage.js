@@ -10,19 +10,21 @@ angular.module("scorer").factory('Storage', [function() {
 
   return function() {
 
-    // Private function.
+    // Private function. Mapped to this.get later.
     var get = function(key) {
       var value;
       try {
         value = JSON.parse(sessionStorage[key]);
+        console.log('BBBBBBBB Storage get ' + key + ' = ' + JSON.stringify(value));
         return value;
       } catch (e) {
         return false;
       }
     };
 
-    // Private function.
+    // Private function. Mapped to this.put later.
     var put = function(key, value) {
+      console.log('AAAAAAAAA Storage put ' + key + ' = ' + JSON.stringify(value));
       sessionStorage[key] = JSON.stringify(value);
       return true;
     };
@@ -94,8 +96,11 @@ angular.module("scorer").factory('Storage', [function() {
       return this.get('scoreboard');
     };
 
-    this.put_scoreboard = function() {
-      return this.put('scoreboard');
+    this.put_scoreboard = function(scoreboard) {
+      if (! scoreboard){
+        throw new Error('Storage.put_scoreboard require 1 parameter');
+      }
+      return this.put('scoreboard', scoreboard);
     };
 
 

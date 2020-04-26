@@ -143,15 +143,27 @@ describe("ScCommandsTest. Real Template", function() {
       }
     };
 
-    test_succeeds({ test: 1 }, ["test"]);
+    test_succeeds({
+      test: 1
+    }, ["test"]);
 
-    test_fails({ test2: 1 }, ["test"]);
+    test_fails({
+      test2: 1
+    }, ["test"]);
 
     test_fails({}, ["test"]);
 
-    test_succeeds({ test: { t: 1 } }, ["test.t"]);
+    test_succeeds({
+      test: {
+        t: 1
+      }
+    }, ["test.t"]);
 
-    test_fails({ test: { t2: 1 } }, ["test.t"]);
+    test_fails({
+      test: {
+        t2: 1
+      }
+    }, ["test.t"]);
   });
 
   it("Sc.Command over.", function() {

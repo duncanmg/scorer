@@ -19,7 +19,7 @@ angular.module("scorer").factory('Scoreboard', ['Sc', 'Storage', 'Settings', '$r
     if (!initial_scoreboard) {
       console.log("Initialise");
       initial_scoreboard = new ScoreboardTemplate(Settings);
-      initial_scoreboard.fred = 1;
+      storage.get_scoreboard(initial_scoreboard);
     }
 
 

@@ -185,9 +185,9 @@ sc.Commands = {
     // 3 and 6. Next batman will be 7.
     this.set_next_batsman_no = function(data) {
       var next_batsman_no =
-        data.left_bat.no > data.right_bat.no
-          ? data.left_bat.no + 1
-          : data.right_bat.no + 1;
+        data.left_bat.no > data.right_bat.no ?
+        data.left_bat.no + 1 :
+        data.right_bat.no + 1;
       return next_batsman_no;
     };
 
@@ -404,7 +404,7 @@ sc.Commands = {
       console.log("--");
       console.log("StartBowling.run");
 
-      var bowling_team_players = this.player_manager().get_team_players(this.data,'bowling');
+      var bowling_team_players = this.player_manager().get_team_players(this.data, 'bowling');
 
       var bowling = this.player_manager().get_bowling(bowling_team_players);
       if (bowling.length >= 2) {
