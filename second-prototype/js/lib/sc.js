@@ -35,17 +35,19 @@ sc.test_object = function() {
  * @property {boolean} is_ready -
  * @property {Players} home_players -
  */
-sc.Scoreboard = function(scoreboard_template, Players, Over) {
+sc.Scoreboard = function(scoreboard_template, Players, Over, Storage) {
   var s = jQuery.extend(true, {}, scoreboard_template);
 
   this.scoreboard = s.innings[0];
 
-  this.player_manager= new sc.PlayerManager();
+  this.player_manager = new sc.PlayerManager();
 
-  console.log('XXXXXXXXXXXXXXXXXX Before: '  + JSON.stringify(this.scoreboard.home_players));
+  this.storage = new Storage();
+
+  console.log('XXXXXXXXXXXXXXXXXX Before: ' + JSON.stringify(this.scoreboard.home_players));
   this.scoreboard.home_players = this.player_manager.init_players(this.scoreboard, "home");
-    console.log('XXXXXXXXXXXXXXXXXX After: '  + JSON.stringify(this.scoreboard.home_players));
-      this.scoreboard.away_players = this.player_manager.init_players(this.scoreboard, "away");
+  console.log('XXXXXXXXXXXXXXXXXX After: ' + JSON.stringify(this.scoreboard.home_players));
+  this.scoreboard.away_players = this.player_manager.init_players(this.scoreboard, "away");
 
   this.next_innings = s.innings[1];
   console.log("Scoreboard start left_bat " + JSON.stringify(this.scoreboard.left_bat));
@@ -85,7 +87,7 @@ sc.Scoreboard = function(scoreboard_template, Players, Over) {
     );
     console.log(
       "After change_bowlers: next " +
-        JSON.stringify(this.scoreboard.next_bowler)
+      JSON.stringify(this.scoreboard.next_bowler)
     );
   };
 
@@ -141,6 +143,7 @@ sc.Scoreboard = function(scoreboard_template, Players, Over) {
    *  @return {boolean}
    */
   this.bowls = function(type, runs) {
+    this.scoreboard = this.storage.get_scoreboard;
     if (this.alert_game_over()) {
       return false;
     }
@@ -171,6 +174,7 @@ sc.Scoreboard = function(scoreboard_template, Players, Over) {
     }
     this.over();
     this.set_game_over();
+    this.storage.put_scoreboard(this.scoreboard);
     this.save();
   };
 
@@ -525,7 +529,7 @@ sc.Scoreboard = function(scoreboard_template, Players, Over) {
     }
     if (
       this.scoreboard.overs_history[this.scoreboard.overs_history.length - 1]
-        .valid_balls >= 6
+      .valid_balls >= 6
     ) {
       return false;
     }

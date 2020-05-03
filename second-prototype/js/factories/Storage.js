@@ -97,6 +97,8 @@ angular.module("scorer").factory('Storage', [function() {
     };
 
     this.put_scoreboard = function(scoreboard) {
+      console.log('XXXXXXXXXXXXXXXXXXXXXX PUT_SCOREBOARD');
+      console.log("Storage put_scoreboard: " + JSON.stringify(scoreboard));
       if (! scoreboard){
         throw new Error('Storage.put_scoreboard require 1 parameter');
       }

@@ -27,17 +27,22 @@ angular.module("scorer").factory('ScoreboardTemplate', ['Settings', 'Innings',
     var obj = function() {
       this.innings = [];
 
+      // Deep copy of simple JSON object.
+      var clone = function(o) {
+        return JSON.parse(JSON.stringify(o))
+      };
+
       // console.log("settings: " + JSON.stringify(Settings));
       // var innings = Innings;
       for (var i = 0; i < Settings.settings.num_innings; i++) {
 
         var innings = new Innings(Settings);
 
-        innings.left_bat = new innings.templates.Batsman();
+        innings.left_bat = clone(innings.templates.Batsman);
         innings.left_bat.no = 1;
         innings.left_bat.striker = true;
 
-        innings.right_bat = new innings.templates.Batsman();
+        innings.right_bat = clone(innings.templates.Batsman);
         innings.right_bat.no = 2;
         innings.right_bat.striker = false;
 

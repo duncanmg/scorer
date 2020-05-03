@@ -265,7 +265,9 @@ angular.module("scorer").factory('Players', ['Storage', '$rootScope', function(S
     reset: function() {
       if (this.team) {
         var p = storage.get_scoreboard();
+        // console.log('Players.reset scoreboard: ' + JSON.stringify(p));
         this.players = this.team == "home" ? p.home_players : p.away_players;
+        // console.log('Players.reset team: ' + this.team + ' home_players: ' + JSON.stringify(this.players));
         // this.players = p ? p : this.team == "home" ? home_players : away_players;
         if (this.players) {
           this.sort_by_batting_no();

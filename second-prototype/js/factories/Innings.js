@@ -146,14 +146,14 @@ angular.module("scorer").factory("Innings", [
          *
          * @return {Batsman} The new Batsman object.
          */
-        Batsman: function() {
-          this.no = 0;
-          this.striker = false;
-          this.runs = 0;
-          this.bowler = false;
-          this.bowling = false;
-          this.name = '';
-          this.id = '';
+        Batsman: {
+          no : 0,
+          striker : false,
+          runs : 0,
+          bowler : false,
+          bowling : false,
+          name : '',
+          id : ''
         },
         /**
          * Creates an instance of Bowler

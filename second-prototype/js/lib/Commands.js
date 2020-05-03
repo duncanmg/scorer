@@ -425,6 +425,9 @@ sc.Commands = {
         bowling_team_players[i].bowling = true;
         console.log("i=" + i + " .bowler=" + next_bowler_no);
       }
+
+      this.player_manager().set_bowler_details(this.data);
+
       console.log("End start_bowling");
       return true;
 

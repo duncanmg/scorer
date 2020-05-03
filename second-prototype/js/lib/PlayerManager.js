@@ -18,6 +18,11 @@ var sc = sc || {};
 
 sc.PlayerManager = function() {
 
+  // Deep copy of simple JSON object.
+  var clone = function(o) {
+    return JSON.parse(JSON.stringify(o))
+  };
+
   /**
    * @function validator
    * @memberOf sc.Command
@@ -223,17 +228,16 @@ sc.PlayerManager = function() {
     // alert(JSON.stringify(this.scoreboard.right_bat));
   };
 
-  this.get_team_players=function(data, batting_or_bowling) {
+  this.get_team_players = function(data, batting_or_bowling) {
     var team;
-    this.validator('get_team_players').check_all_defined(data, [ 'batting_team', 'home_players',
-    'away_players']);
-      if (batting_or_bowling == 'batting') {
+    this.validator('get_team_players').check_all_defined(data, ['batting_team', 'home_players',
+      'away_players'
+    ]);
+    if (batting_or_bowling == 'batting') {
       team = data.batting_team == "home" ? data.home_players : data.away_players;
-    }
-    else if (batting_or_bowling == 'bowling') {
+    } else if (batting_or_bowling == 'bowling') {
       team = data.batting_team == "home" ? data.away_players : data.home_players;
-    }
-    else {
+    } else {
       throw new Error("Parameter value must be 'batting' or 'bowling'");
     }
     // console.log("get_team_players returning " + JSON.stringify(team));
@@ -242,15 +246,19 @@ sc.PlayerManager = function() {
 
   // ***********************************************************************
   /** @function set_bowler_details
-   * @description Manage the bowler details based on the list of players.
+   * @description Sets the data.bowler and data.next_bowler elements
+   * based on the bowler and bowling elements in the bowling team's
+   * list of players.
    * @memberOf sc.PlayerManager
    */
   this.set_bowler_details = function(data) {
     console.log("Start set_bowler_details");
 
-    this.validator('set_bowler_details').check_all_defined(data, [ 'batting_team', 'home_players',
-    'away_players']);
+    this.validator('set_bowler_details').check_all_defined(data,
+      ['batting_team', 'home_players', 'away_players', 'bowler', 'next_bowler'
+    ]);
 
+    // Private function
     /** @function is_bowling
      * @description Accept a list of bowler objects and a bowler. Return true
      * if the bowler is current bowling.
@@ -270,6 +278,7 @@ sc.PlayerManager = function() {
       return false;
     };
 
+    // Private function
     /** @function set_bowler
      * @description Accept a list of bowlers and a bowler. */
     var set_bowler = function(bowlers, bowler) {
@@ -296,9 +305,10 @@ sc.PlayerManager = function() {
     };
 
     var bowling_team =
-      data.batting_team == "home"
-        ? data.away_players
-        : data.home_players;
+      data.batting_team == "home" ?
+      data.away_players :
+      data.home_players;
+
     // Bowlers is a sorted list of the players in the bowling list who
     // are currently bowling. Rebuilt each time, so it
     // can be modified safely. Two entries max!
@@ -310,17 +320,17 @@ sc.PlayerManager = function() {
     );
     data.next_bowler = set_bowler(
       bowlers,
-     data.next_bowler
+      data.next_bowler
     );
     console.log(
       "set_bowler_details: next_bowler : " +
-        JSON.stringify(data.next_bowler)
+      JSON.stringify(data.next_bowler)
     );
     if (!data.bowler.id) {
       data.bowler = set_bowler(bowlers, data.bowler);
       console.log(
         "set_bowler_details: bowler  : " +
-          JSON.stringify(data.bowler)
+        JSON.stringify(data.bowler)
       );
     }
     if (!data.next_bowler.id) {
@@ -330,13 +340,16 @@ sc.PlayerManager = function() {
       );
       console.log(
         "set_bowler_details: next_bowler : " +
-          JSON.stringify(data.next_bowler)
+        JSON.stringify(data.next_bowler)
       );
     }
+
+    // End set_bowler_details.
   };
 
+  // Return list of players who have bowled in innings.
   this.get_bowlers = function(players) {
-    if (!players){
+    if (!players) {
       throw new Error("get_bowlers requires a list of players");
     }
     var bowlers = [];
@@ -349,9 +362,10 @@ sc.PlayerManager = function() {
     return bowlers;
   };
 
-  this.get_bowling= function(players) {
+  // Return a list of the current bowlers. (0, 1 or 2 bowlers.)
+  this.get_bowling = function(players) {
     // console.log("get_bowling received " + JSON.stringify(players));
-    if (!players){
+    if (!players) {
       throw new Error("get_bowling requires a list of players");
     }
     var bowlers = this.get_bowlers(players);
@@ -432,41 +446,40 @@ sc.PlayerManager = function() {
       throw new Error('Parameter "action" must be "home" or "away"');
     }
 
-var doit = function(base, output) {
-  output = [];
-  base.forEach(
-    function(p,i) {
-      // console.log('p=' + JSON.stringify(p));
-      var player = new data.templates.Batsman();
-      var keys = Object.keys(p);
-      keys.forEach(
-        function(k,i) {
-          player[k] = p[k];
+    var doit = function(base, output) {
+      output = [];
+      base.forEach(
+        function(p, i) {
+          console.log('init_players data.templates: ' + JSON.stringify(data.templates));
+          var player = clone(data.templates.Batsman);
+          var keys = Object.keys(p);
+          keys.forEach(
+            function(k, i) {
+              player[k] = p[k];
+            }
+          );
+          // console.log('push: ' + JSON.stringify(player));
+          output.push(player);
+          // console.log('X output:' + JSON.stringify(output));
         }
       );
-      // console.log('push: ' + JSON.stringify(player));
-      output.push(player);
-      // console.log('X output:' + JSON.stringify(output));
+      // console.log('output:' + JSON.stringify(output));
+      return output;
     }
-  );
-  // console.log('output:' + JSON.stringify(output));
-  return output;
-}
-if(action=='home'){
-  return doit(data.templates.HomePlayers, data.home_players);
-}
-else{
-  return doit(data.templates.AwayPlayers, data.away_players);
-}
-};
+    if (action == 'home') {
+      return doit(data.templates.HomePlayers, data.home_players);
+    } else {
+      return doit(data.templates.AwayPlayers, data.away_players);
+    }
+  };
 
-this.lookup = function(players, player) {
-  for (var i = 0; i < players.length; i++) {
-    if (players[i].id == player.id) {
-      return i;
+  this.lookup = function(players, player) {
+    for (var i = 0; i < players.length; i++) {
+      if (players[i].id == player.id) {
+        return i;
+      }
     }
-  }
-  return -1;
-};
+    return -1;
+  };
 
 };
