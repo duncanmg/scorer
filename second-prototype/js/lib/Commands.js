@@ -434,6 +434,41 @@ sc.Commands = {
     };
   },
 
+  StopBowling: function(args) {
+    this.name = "StartBowling";
+
+    this.data = args[0];
+    this.player = args[1];
+
+    sc.Command.call(this, this.data);
+
+    this.validator("StopBowling").check_all_defined(this, [
+      "data",
+      "data.away_players",
+      "data.home_players",
+    ]);
+
+    this.run = function() {
+
+      console.log("--");
+      console.log("StopBowling.run");
+
+      var bowling_team_players = this.player_manager().get_team_players(this.data, 'bowling');
+
+      var i = this.player_manager().lookup(bowling_team_players, this.player);
+      if (i >= 0) {
+        this.bowling_team_players[i].bowling = false;
+        this.player_manager().set_bowler_details(this.data);
+        console.log("End StopBowling.run");
+        return true;
+      }
+
+      console.log("StopBowling.run. Player was not bowling");
+      return false;
+
+    };
+  },
+
   Run: function(object, args) {
     object.prototype = Object.create(sc.Command.prototype);
     object.prototype.Constructor = sc.Command.Wicket;

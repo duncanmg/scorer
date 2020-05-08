@@ -23,6 +23,8 @@ sc.PlayerManager = function() {
     return JSON.parse(JSON.stringify(o))
   };
 
+  this.logger = new sc.Logger('PlayerManager', sc.LoggerLevels.DEBUG);
+
   /**
    * @function validator
    * @memberOf sc.Command
@@ -252,11 +254,10 @@ sc.PlayerManager = function() {
    * @memberOf sc.PlayerManager
    */
   this.set_bowler_details = function(data) {
-    console.log("Start set_bowler_details");
+    this.logger.debug("Start set_bowler_details");
 
     this.validator('set_bowler_details').check_all_defined(data,
-      ['batting_team', 'home_players', 'away_players', 'bowler', 'next_bowler'
-    ]);
+      ['batting_team', 'home_players', 'away_players', 'bowler', 'next_bowler']);
 
     // Private function
     /** @function is_bowling
@@ -281,26 +282,26 @@ sc.PlayerManager = function() {
     // Private function
     /** @function set_bowler
      * @description Accept a list of bowlers and a bowler. */
-    var set_bowler = function(bowlers, bowler) {
+    var set_bowler = function(bowlers, bowler, logger) {
       if (!bowlers.length) {
-        console.log("WARN set_bowler_details. No bowlers!");
+        logger.warn("set_bowler_details. No bowlers!");
         return {};
       }
       if (!bowler.id) {
         // No bowler id. Just return first bowler in list.
-        console.log("INFO set_bowler_details. Return first bowler in list.");
+        logger.info("set_bowler_details. Return first bowler in list.");
         return bowlers.shift;
       } else if (!is_bowling(bowlers, bowler)) {
-        console.log(
-          "WARN set_bowler_details. Bowler " + bowler.id + " is not bowling."
+        logger.warn(
+          "set_bowler_details. Bowler " + bowler.id + " is not bowling."
         );
         return {};
       } else {
         var b = bowlers[0].id == bowler.id ? bowlers.shift() : bowlers.pop();
-        console.log("INFO set_bowler_details. Return bowler " + b.id);
+        logger.info("set_bowler_details. Return bowler " + b.id);
         return b;
       }
-      console.log("INFO set_bowler_details. Return bowler " + bowler.id);
+      logger.info("set_bowler_details. Return bowler " + bowler.id);
       return bowler;
     };
 
@@ -313,22 +314,23 @@ sc.PlayerManager = function() {
     // are currently bowling. Rebuilt each time, so it
     // can be modified safely. Two entries max!
     var bowlers = this.get_bowling(bowling_team);
-    console.log("set_bowler_details: bowlers list:" + JSON.stringify(bowlers));
-    data.bowler = set_bowler(bowlers, data.bowler);
-    console.log(
+    this.logger.debug("set_bowler_details: bowlers list:" + JSON.stringify(bowlers));
+    data.bowler = set_bowler(bowlers, data.bowler, this.logger);
+    this.logger.debug(
       "set_bowler_details: bowler  : " + JSON.stringify(data.bowler)
     );
     data.next_bowler = set_bowler(
       bowlers,
-      data.next_bowler
+      data.next_bowler,
+      this.logger
     );
-    console.log(
+    this.logger.debug(
       "set_bowler_details: next_bowler : " +
       JSON.stringify(data.next_bowler)
     );
     if (!data.bowler.id) {
-      data.bowler = set_bowler(bowlers, data.bowler);
-      console.log(
+      data.bowler = set_bowler(bowlers, data.bowler, this.logger);
+      this.logger.debug(
         "set_bowler_details: bowler  : " +
         JSON.stringify(data.bowler)
       );
@@ -336,9 +338,10 @@ sc.PlayerManager = function() {
     if (!data.next_bowler.id) {
       data.next_bowler = set_bowler(
         bowlers,
-        data.next_bowler
+        data.next_bowler,
+        this.logger
       );
-      console.log(
+      this.logger.debug(
         "set_bowler_details: next_bowler : " +
         JSON.stringify(data.next_bowler)
       );

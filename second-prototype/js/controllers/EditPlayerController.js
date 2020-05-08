@@ -25,7 +25,7 @@ angular.module('scorer')
       // console.log(JSON.stringify(Scoreboard.scoreboard));
       if (player.bowling) {
         console.log('About to call stop bowling');
-        Players.stop_bowling(player);
+        Sc.Commands.Run(Sc.Commands.StopBowling, [Scoreboard.scoreboard, player])
       } else {
         console.log('About to call start_bowling');
         if (!Sc.Commands.Run(Sc.Commands.StartBowling, [Scoreboard.scoreboard, player])) {

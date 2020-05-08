@@ -170,12 +170,12 @@ angular.module("scorer").factory("Innings", [
          *
          * @return {Bowler} The new Batsman object.
          */
-        Bowler: function() {
-          this.no = 0;
-          this.striker = false;
-          this.runs = 0;
-          this.bowler = false;
-          this.bowling = false;
+        Bowler: {
+          "no": 0,
+          "striker" : false,
+          "runs" : 0,
+          "bowler" : false,
+          "bowling" : false
         },
 
         HomePlayers : [{
