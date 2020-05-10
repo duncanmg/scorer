@@ -6,6 +6,7 @@ describe("ScPlayerManagerTest", function() {
   var players;
   var sc2;
   var over;
+  var storage;
 
   beforeEach(
     inject(function(Players) {
@@ -32,8 +33,15 @@ describe("ScPlayerManagerTest", function() {
   );
 
   beforeEach(
+    inject(function(Storage) {
+      storage = Storage;
+    })
+  );
+
+
+  beforeEach(
     inject(function(Sc) {
-      sc2 = new Sc.Scoreboard(template, players, over);
+      sc2 = new Sc.Scoreboard(template, players, over, storage);
     })
   );
 

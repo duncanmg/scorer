@@ -15,7 +15,7 @@ angular.module("scorer").factory('Storage', [function() {
       var value;
       try {
         value = JSON.parse(sessionStorage[key]);
-        console.log('BBBBBBBB Storage get ' + key + ' = ' + JSON.stringify(value));
+        this.logger.debug('get ' + key + ' = ' + JSON.stringify(value));
         return value;
       } catch (e) {
         return false;
@@ -24,10 +24,12 @@ angular.module("scorer").factory('Storage', [function() {
 
     // Private function. Mapped to this.put later.
     var put = function(key, value) {
-      console.log('AAAAAAAAA Storage put ' + key + ' = ' + JSON.stringify(value));
+      this.logger.debug('put ' + key + ' = ' + JSON.stringify(value));
       sessionStorage[key] = JSON.stringify(value);
       return true;
     };
+
+    this.logger = new sc.Logger('Storage');
 
     /**
      * @function get_match
@@ -93,13 +95,19 @@ angular.module("scorer").factory('Storage', [function() {
     this.put = put;
 
     this.get_scoreboard = function() {
-      return this.get('scoreboard');
+      this.logger.debug('get_scoreboard');
+      var scoreboard = this.get('scoreboard');
+      this.logger.debug("bowler=" + JSON.stringify(scoreboard.bowler));
+      if (is.existy(scoreboard.away_players)) {
+        this.logger.debug("away_player 0 " + JSON.stringify(scoreboard.away_players[0]));
+      }
+      return scoreboard;
     };
 
     this.put_scoreboard = function(scoreboard) {
-      console.log('XXXXXXXXXXXXXXXXXXXXXX PUT_SCOREBOARD');
-      console.log("Storage put_scoreboard: " + JSON.stringify(scoreboard));
-      if (! scoreboard){
+      this.logger.debug('put_scoreboard');
+      // this.logger.debug("put_scoreboard: " + JSON.stringify(scoreboard));
+      if (!scoreboard) {
         throw new Error('Storage.put_scoreboard require 1 parameter');
       }
       return this.put('scoreboard', scoreboard);

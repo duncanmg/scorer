@@ -445,15 +445,17 @@ sc.PlayerManager = function() {
 
   this.init_players = function(data, action) {
 
+    this.logger.debug('Start init_players. ' + action);
     if (action != 'home' && action != 'away') {
       throw new Error('Parameter "action" must be "home" or "away"');
     }
 
-    var doit = function(base, output) {
+    var doit = function(base, output, logger) {
       output = [];
       base.forEach(
         function(p, i) {
-          console.log('init_players data.templates: ' + JSON.stringify(data.templates));
+          logger.debug('init_players data.templates.Batsman: ' +
+            JSON.stringify(data.templates.Batsman));
           var player = clone(data.templates.Batsman);
           var keys = Object.keys(p);
           keys.forEach(
@@ -470,9 +472,9 @@ sc.PlayerManager = function() {
       return output;
     }
     if (action == 'home') {
-      return doit(data.templates.HomePlayers, data.home_players);
+      return doit(data.templates.HomePlayers, data.home_players, this.logger);
     } else {
-      return doit(data.templates.AwayPlayers, data.away_players);
+      return doit(data.templates.AwayPlayers, data.away_players, this.logger);
     }
   };
 

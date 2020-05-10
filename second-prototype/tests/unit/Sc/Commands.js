@@ -5,6 +5,7 @@ describe("ScCommandsTest. Real Template", function() {
   var template;
   var players;
   var over;
+  var storage;
 
   beforeEach(
     inject(function(Players) {
@@ -30,8 +31,14 @@ describe("ScCommandsTest. Real Template", function() {
     })
   );
 
+  beforeEach(
+    inject(function(Storage) {
+      storage = Storage;
+    })
+  );
+
   it("Sc.Command set_innings_over", function() {
-    sc2 = new sc.Scoreboard(template, players, over);
+    sc2 = new sc.Scoreboard(template, players, over, storage);
     expect(typeof sc2).toEqual("object");
 
     expect(sc2.scoreboard.innings_over).toEqual(false);
@@ -50,7 +57,7 @@ describe("ScCommandsTest. Real Template", function() {
   });
 
   it("Sc.Command set_game_over. Not over", function() {
-    sc2 = new sc.Scoreboard(template, players, over);
+    sc2 = new sc.Scoreboard(template, players, over, storage);
     expect(typeof sc2).toEqual("object");
 
     expect(sc2.scoreboard.innings_over).toEqual(false);
@@ -70,7 +77,7 @@ describe("ScCommandsTest. Real Template", function() {
   });
 
   it("Sc.Command set_game_over. Batting team win.", function() {
-    sc2 = new sc.Scoreboard(template, players, over);
+    sc2 = new sc.Scoreboard(template, players, over, storage);
     expect(typeof sc2).toEqual("object");
 
     expect(sc2.scoreboard.innings_over).toEqual(false);
@@ -94,7 +101,7 @@ describe("ScCommandsTest. Real Template", function() {
   });
 
   it("Sc.Command set_game_over. Bowling team win.", function() {
-    sc2 = new sc.Scoreboard(template, players, over);
+    sc2 = new sc.Scoreboard(template, players, over, storage);
     expect(typeof sc2).toEqual("object");
 
     expect(sc2.scoreboard.innings_over).toEqual(false);
@@ -118,8 +125,8 @@ describe("ScCommandsTest. Real Template", function() {
   });
 
   it("Sc.Command validator. Throws.", function() {
-    sc2 = new sc.Scoreboard(template, players, over);
-    sc2.scoreboard.bowler = new sc2.scoreboard.templates.Bowler();
+    sc2 = new sc.Scoreboard(template, players, over, storage);
+    sc2.scoreboard.bowler = sc.Utils.clone( sc2.scoreboard.templates.Bowler);
     expect(typeof sc2).toEqual("object");
 
     var o = new sc.Command();
@@ -167,12 +174,12 @@ describe("ScCommandsTest. Real Template", function() {
   });
 
   it("Sc.Command over.", function() {
-    sc2 = new sc.Scoreboard(template, players, over);
+    sc2 = new sc.Scoreboard(template, players, over, storage);
     expect(typeof sc2).toEqual("object");
 
     var o = new sc.Command();
     o.data = sc2.scoreboard;
-    o.over_manager().add_over(1, new o.data.templates.Bowler());
+    o.over_manager().add_over(1, sc.Utils.clone(o.data.templates.Bowler));
 
     expect(o.data.overs).toEqual(0);
     expect(o.data.overs_and_balls).toEqual(0);
@@ -183,14 +190,14 @@ describe("ScCommandsTest. Real Template", function() {
   });
 
   it("Sc.Command over. 6 balls", function() {
-    sc2 = new sc.Scoreboard(template, players, over);
+    sc2 = new sc.Scoreboard(template, players, over, storage);
     expect(typeof sc2).toEqual("object");
 
     var o = new sc.Command();
     o.data = sc2.scoreboard;
 
-    o.data.bowler = new o.data.templates.Bowler();
-    o.data.next_bowler = new o.data.templates.Bowler();
+    o.data.bowler = sc.Utils.clone( o.data.templates.Bowler);
+    o.data.next_bowler = sc.Utils.clone( o.data.templates.Bowler);
     o.data.bowler.no = 11;
     o.data.next_bowler.no = 10;
 
@@ -224,11 +231,11 @@ describe("ScCommandsTest. Real Template", function() {
   // **********************************************************
 
   it("An Sc.Commands.Wicket", function() {
-    sc2 = new sc.Scoreboard(template, players, over);
-    sc2.scoreboard.bowler = new sc2.scoreboard.templates.Bowler();
+    sc2 = new sc.Scoreboard(template, players, over, storage);
+    sc2.scoreboard.bowler = sc.Utils.clone(sc2.scoreboard.templates.Bowler);
     expect(typeof sc2).toEqual("object");
 
-    sc2.scoreboard.left_bat = new sc2.scoreboard.templates.Batsman();
+    sc2.scoreboard.left_bat = sc.Utils.clone(sc2.scoreboard.templates.Batsman);
 
     expect(sc2.scoreboard.wickets).toEqual(0);
     expect(sc2.scoreboard.balls).toEqual(0);
@@ -240,8 +247,8 @@ describe("ScCommandsTest. Real Template", function() {
   });
 
   it("An Sc.Commands.Wicket set_next_batsman_no", function() {
-    sc2 = new sc.Scoreboard(template, players, over);
-    sc2.scoreboard.bowler = new sc2.scoreboard.templates.Bowler();
+    sc2 = new sc.Scoreboard(template, players, over, storage);
+    sc2.scoreboard.bowler = sc.Utils.clone(sc2.scoreboard.templates.Bowler);
     expect(typeof sc2).toEqual("object");
 
     expect(sc2.scoreboard.left_bat.no).toEqual(1);
@@ -257,8 +264,8 @@ describe("ScCommandsTest. Real Template", function() {
   });
 
   it("An Sc.Commands.StandardBall change_ends", function() {
-    sc2 = new sc.Scoreboard(template, players, over);
-    sc2.scoreboard.bowler = new sc2.scoreboard.templates.Bowler();
+    sc2 = new sc.Scoreboard(template, players, over, storage);
+    sc2.scoreboard.bowler = sc.Utils.clone(sc2.scoreboard.templates.Bowler);
     expect(typeof sc2).toEqual("object");
     expect(sc2.scoreboard.left_bat.striker).toEqual(true);
     expect(sc2.scoreboard.right_bat.striker).toEqual(false);
@@ -272,8 +279,8 @@ describe("ScCommandsTest. Real Template", function() {
   });
 
   it("An Sc.Commands.StandardBall, change_ends, right bat is striker", function() {
-    sc2 = new sc.Scoreboard(template, players, over);
-    sc2.scoreboard.bowler = new sc2.scoreboard.templates.Bowler();
+    sc2 = new sc.Scoreboard(template, players, over, storage);
+    sc2.scoreboard.bowler = sc.Utils.clone(sc2.scoreboard.templates.Bowler);
     expect(typeof sc2).toEqual("object");
 
     sc2.ball(1);
@@ -291,8 +298,8 @@ describe("ScCommandsTest. Real Template", function() {
   });
 
   it("An Sc.Commands.StandardBall no change_ends", function() {
-    sc2 = new sc.Scoreboard(template, players, over);
-    sc2.scoreboard.bowler = new sc2.scoreboard.templates.Bowler();
+    sc2 = new sc.Scoreboard(template, players, over, storage);
+    sc2.scoreboard.bowler = sc.Utils.clone(sc2.scoreboard.templates.Bowler);
     expect(typeof sc2).toEqual("object");
     expect(sc2.scoreboard.left_bat.striker).toEqual(true);
     expect(sc2.scoreboard.right_bat.striker).toEqual(false);
@@ -306,8 +313,8 @@ describe("ScCommandsTest. Real Template", function() {
   });
 
   it("An Sc.Commands.Wide", function() {
-    sc2 = new sc.Scoreboard(template, players, over);
-    sc2.scoreboard.bowler = new sc2.scoreboard.templates.Bowler();
+    sc2 = new sc.Scoreboard(template, players, over, storage);
+    sc2.scoreboard.bowler = sc.Utils.clone(sc2.scoreboard.templates.Bowler);
     expect(typeof sc2).toEqual("object");
     expect(sc2.scoreboard.left_bat.striker).toEqual(true);
     expect(sc2.scoreboard.right_bat.striker).toEqual(false);
@@ -325,8 +332,8 @@ describe("ScCommandsTest. Real Template", function() {
   });
 
   it("An Sc.Commands.NoBall", function() {
-    sc2 = new sc.Scoreboard(template, players, over);
-    sc2.scoreboard.bowler = new sc2.scoreboard.templates.Bowler();
+    sc2 = new sc.Scoreboard(template, players, over, storage);
+    sc2.scoreboard.bowler = sc.Utils.clone(sc2.scoreboard.templates.Bowler);
     expect(typeof sc2).toEqual("object");
     expect(sc2.scoreboard.left_bat.striker).toEqual(true);
     expect(sc2.scoreboard.right_bat.striker).toEqual(false);
@@ -344,8 +351,8 @@ describe("ScCommandsTest. Real Template", function() {
   });
 
   it("An Sc.Commands.Bye", function() {
-    sc2 = new sc.Scoreboard(template, players, over);
-    sc2.scoreboard.bowler = new sc2.scoreboard.templates.Bowler();
+    sc2 = new sc.Scoreboard(template, players, over, storage);
+    sc2.scoreboard.bowler = sc.Utils.clone(sc2.scoreboard.templates.Bowler);
     expect(typeof sc2).toEqual("object");
     expect(sc2.scoreboard.left_bat.striker).toEqual(true);
     expect(sc2.scoreboard.right_bat.striker).toEqual(false);
@@ -363,8 +370,8 @@ describe("ScCommandsTest. Real Template", function() {
   });
 
   it("An Sc.Commands.LegBye", function() {
-    sc2 = new sc.Scoreboard(template, players, over);
-    sc2.scoreboard.bowler = new sc2.scoreboard.templates.Bowler();
+    sc2 = new sc.Scoreboard(template, players, over, storage);
+    sc2.scoreboard.bowler = sc.Utils.clone(sc2.scoreboard.templates.Bowler);
 
     expect(typeof sc2).toEqual("object");
     expect(sc2.scoreboard.left_bat.striker).toEqual(true);

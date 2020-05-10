@@ -37,6 +37,7 @@ angular.module("scorer").factory('ScoreboardTemplate', ['Settings', 'Innings',
       for (var i = 0; i < Settings.settings.num_innings; i++) {
 
         var innings = new Innings(Settings);
+        innings = innings.innings;
 
         innings.left_bat = clone(innings.templates.Batsman);
         innings.left_bat.no = 1;

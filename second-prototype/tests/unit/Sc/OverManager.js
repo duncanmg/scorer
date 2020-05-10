@@ -6,6 +6,7 @@ describe("ScOverManagerTest Simple Construction", function() {
   var players;
   var om;
   var om_class;
+  var storage;
 
   beforeEach(
     inject(function(Players) {
@@ -20,8 +21,15 @@ describe("ScOverManagerTest Simple Construction", function() {
   );
 
   beforeEach(
+    inject(function(Storge) {
+      storage = new Storage();
+    })
+  );
+
+
+  beforeEach(
     inject(function(Sc) {
-      sc = new Sc.Scoreboard(template, players);
+      sc = new Sc.Scoreboard(template, players, {}, storage);
       om = new Sc.OverManager(sc.scoreboard);
       om_class = Sc.OverManager;
     })
@@ -37,12 +45,17 @@ describe("ScOverManagerTest Simple Construction", function() {
 
     // Missing templates
     expect(function() {
-      new om_class({ overs_history: [] });
+      new om_class({
+        overs_history: []
+      });
     }).toThrow(new Error("data.templates must be an object"));
 
     // Missing templates.Ball
     expect(function() {
-      new om_class({ overs_history: [], templates: {} });
+      new om_class({
+        overs_history: [],
+        templates: {}
+      });
     }).toThrow(new Error("data.templates.Ball must be a function"));
   });
 

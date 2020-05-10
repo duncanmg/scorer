@@ -11,8 +11,8 @@ sc.OverManager = function(data) {
     throw new Error("data.templates must be an object");
   }
 
-  if (typeof this.data.templates.Ball != "function") {
-    throw new Error("data.templates.Ball must be a function");
+  if (typeof this.data.templates.Ball != "object") {
+    throw new Error("data.templates.Ball must be an object");
   }
 
   /** @function add_ball
@@ -34,7 +34,7 @@ sc.OverManager = function(data) {
     if (typeof striker != "object") {
       throw new Error(
         "OverManager.add_ball argument 1 must be an object. Got " +
-          typeof striker
+        typeof striker
       );
     }
 
@@ -59,7 +59,7 @@ sc.OverManager = function(data) {
     if (typeof striker != "object") {
       throw new Error(
         "OverManager.add_ball argument 1 must be an object. Got " +
-          typeof striker
+        typeof striker
       );
     }
 
@@ -72,9 +72,13 @@ sc.OverManager = function(data) {
       throw new Error("The over has finished.");
     }
 
-    this.data.overs_history[this.data.overs_history.length - 1].balls.push(
-      new data.templates.Ball(striker, runs, extras, wkt, valid)
-    );
+    var b = sc.Utils.clone(data.templates.Ball);
+    b.striker = striker;
+    b.runs = runs;
+    b.extras = extras;
+    b.wkt = wkt;
+    b.valid = valid;
+    this.data.overs_history[this.data.overs_history.length - 1].balls.push(b);
 
     if (valid) {
       this.data.overs_history[
@@ -108,7 +112,7 @@ sc.OverManager = function(data) {
 
     if (this.current_over_no()) {
       var bowler_of_last_over = this.current_over().bowler.no;
-      if ( bowler_of_last_over === bowler_obj.no) {
+      if (bowler_of_last_over === bowler_obj.no) {
         throw new Error("New bowler cannot be same as last bowler");
       }
     }
@@ -116,14 +120,16 @@ sc.OverManager = function(data) {
     if (this.current_over_no() + 1 !== over_no) {
       throw new Error(
         "Over number must increment." +
-          " Current over: " +
-          this.current_over_no()
+        " Current over: " +
+        this.current_over_no()
       );
     }
 
-    this.data.overs_history.push(
-      new this.data.templates.Over(over_no, bowler_obj)
-    );
+
+    var o = sc.Utils.clone(this.data.templates.Over);
+    o.over_no = over_no;
+    o.bowler = bowler_obj;
+    this.data.overs_history.push(o);
 
     this.data.balls = 0;
     this.data.overs = this.completed_overs();

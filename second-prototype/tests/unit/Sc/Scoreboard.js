@@ -41,6 +41,7 @@ describe("ScScoreboardTest. Real Template", function() {
   var template;
   var players;
   var over;
+  var storage;
 
   beforeEach(
     inject(function(Players) {
@@ -66,13 +67,19 @@ describe("ScScoreboardTest. Real Template", function() {
     })
   );
 
+  beforeEach(
+    inject(function(Storage) {
+      storage = Storage;
+    })
+  );
+
   it("An Sc.Scoreboard object has been created.", function() {
-    sc2 = new sc.Scoreboard(template, players, over);
+    sc2 = new sc.Scoreboard(template, players, over, storage);
     expect(typeof sc2).toEqual("object");
   });
 
   it("An Sc.Scoreboard has overs_history and add_over.", function() {
-    sc2 = new sc.Scoreboard(template, players, over);
+    sc2 = new sc.Scoreboard(template, players, over, storage);
     expect(typeof sc2).toEqual("object");
     expect(sc2.scoreboard.overs_history.length).toEqual(0);
     sc2.add_over(1, 2);
