@@ -47,12 +47,14 @@ describe("ScPlayerManagerTest", function() {
 
   it("Sc.PlayerManager Constructor", function() {
     pm = new sc.PlayerManager();
+    pm.logger.set_level(sc.LoggerLevels.WARN);
     expect(typeof pm).toEqual("object");
     expect(pm instanceof sc.PlayerManager).toEqual(true);
   });
 
   it("Sc.PlayerManager set_batsmen_details", function() {
     pm = new sc.PlayerManager();
+    pm.logger.set_level(sc.LoggerLevels.WARN);
     var data = sc2.scoreboard;
 
     data.home_players = pm.init_players(data,"home");

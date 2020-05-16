@@ -11,9 +11,7 @@ sc.OverManager = function(data) {
     throw new Error("data.templates must be an object");
   }
 
-  if (typeof this.data.templates.Ball != "object") {
-    throw new Error("data.templates.Ball must be an object");
-  }
+  sc.validators.is_ball(this.data.templates.Ball);
 
   /** @function add_ball
    *  @description Add a ball

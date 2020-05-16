@@ -19,7 +19,14 @@ sc.LoggerLevels = {
   'DEBUG': 1,
   'INFO': 2,
   'WARN': 3,
-  'ERROR': 4
+  'ERROR': 4,
+};
+
+sc.LoggerConfig = {
+  'PlayerManager': sc.LoggerLevels.DEBUG,
+  'Commands': sc.LoggerLevels.DEBUG,
+  'Command': sc.LoggerLevels.DEBUG,
+  'Storage': sc.LoggerLevels.DEBUG,
 };
 
 sc.Logger = function(name) {
@@ -31,12 +38,7 @@ sc.Logger = function(name) {
 
   var label = ['', 'DEBUG', 'INFO', 'WARN', 'ERROR'];
 
-  var config = {
-    'PlayerManager': sc.LoggerLevels.DEBUG,
-    'Commands': sc.LoggerLevels.DEBUG,
-    'Command': sc.LoggerLevels.DEBUG,
-    'Storage': sc.LoggerLevels.DEBUG,
-  };
+  var config = sc.LoggerConfig;
 
   this.debug = function(text) {
     if (this.log(sc.LoggerLevels.DEBUG)) {
@@ -71,21 +73,27 @@ sc.Logger = function(name) {
   // private
   this.log = function(method_level) {
     var level = this.get_level();
-    if (level == undefined || level < method_level) {
-      return false;
+    // console.log('level='+level+' method_level=' +method_level);
+    if (is.existy(level) && level <= method_level) {
+      // console.log('Log it');
+      return true;
     }
-    return true;
+    return false;
   }
   // private
   this.level = undefined;
 
   // Override the level in the configuration. Set to undefine to disable.
   this.set_level = function(level) {
+    // console.log('set level to ' + level);
     this.level = level;
   };
 
   this.get_level = function() {
-    return this.level || config[this.name];
-};
+    if (is.existy(this.level)) {
+      return this.level;
+    }
+    return config[this.name];
+  };
 
 };

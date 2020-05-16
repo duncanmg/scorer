@@ -7,6 +7,7 @@ describe("ScOverManagerTest Simple Construction", function() {
   var om;
   var om_class;
   var storage;
+  var clone;
 
   beforeEach(
     inject(function(Players) {
@@ -21,17 +22,57 @@ describe("ScOverManagerTest Simple Construction", function() {
   );
 
   beforeEach(
-    inject(function(Storge) {
+    inject(function(Storage) {
+      //console.log('XXXX');
       storage = new Storage();
+      //console.log('XXXXXXXXXXXXXXXXXXXXXXXXXXXXX ' + storage);
+    })
+  );
+
+  beforeEach(
+    inject(function(Sc) {
+      clone = Sc.Utils.clone;
+      //console.log("Sc=" + JSON.stringify(Sc));
+      //console.log("Utils=" + JSON.stringify(Sc.Utils));
+      //console.log("clone=" + clone);
     })
   );
 
 
   beforeEach(
-    inject(function(Sc) {
-      sc = new Sc.Scoreboard(template, players, {}, storage);
+    inject(function(Sc, Storage) {
+      console.log('1 Sc.LoggerConfig.PlayerManager=' + Sc.LoggerConfig.PlayerManager);
+      Sc.LoggerConfig.PlayerManager = Sc.LoggerLevels.ERROR;
+        console.log('2 Sc.LoggerConfig.PlayerManager=' + Sc.LoggerConfig.PlayerManager);
+      sc = new Sc.Scoreboard(template, players, {}, Storage);
+        console.log('3 Sc.LoggerConfig.PlayerManager=' + Sc.LoggerConfig.PlayerManager);
+      //om = new Sc.OverManager(sc.scoreboard);
+      //om_class = Sc.OverManager;
+      //console.log("About to set clone");
+      //clone = Sc.Utils.clone;
+
+    })
+  );
+
+  beforeEach(
+    inject(function(Sc, Storage) {
+      //sc = new Sc.Scoreboard(template, players, {}, Storage);
       om = new Sc.OverManager(sc.scoreboard);
+      //om_class = Sc.OverManager;
+      //console.log("About to set clone");
+      //clone = Sc.Utils.clone;
+
+    })
+  );
+
+  beforeEach(
+    inject(function(Sc, Storage) {
+      //sc = new Sc.Scoreboard(template, players, {}, Storage);
+      //om = new Sc.OverManager(sc.scoreboard);
       om_class = Sc.OverManager;
+      //console.log("About to set clone");
+      //clone = Sc.Utils.clone;
+
     })
   );
 
@@ -43,20 +84,20 @@ describe("ScOverManagerTest Simple Construction", function() {
       new om_class({});
     }).toThrow(new Error("data.overs_history must be an array"));
 
-    // Missing templates
-    expect(function() {
-      new om_class({
-        overs_history: []
-      });
-    }).toThrow(new Error("data.templates must be an object"));
-
-    // Missing templates.Ball
-    expect(function() {
-      new om_class({
-        overs_history: [],
-        templates: {}
-      });
-    }).toThrow(new Error("data.templates.Ball must be a function"));
+    // // Missing templates
+    // expect(function() {
+    //   new om_class({
+    //     overs_history: []
+    //   });
+    // }).toThrow(new Error("data.templates must be an object"));
+    //
+    // // Missing templates.Ball
+    // expect(function() {
+    //   new om_class({
+    //     overs_history: [],
+    //     templates: {}
+    //   });
+    // }).toThrow(new Error("Not a Ball: undefined"));
   });
 
   it("An Sc.OverManager add_ball arguments.", function() {
@@ -91,7 +132,7 @@ describe("ScOverManagerTest Simple Construction", function() {
     expect(typeof om).toEqual("object");
 
     expect(om.data.overs_history.length).toEqual(0);
-    var bowler = new om.data.templates.Bowler();
+    var bowler = clone(om.data.templates.Bowler);
 
     expect(function() {
       om.add_over();
@@ -115,8 +156,8 @@ describe("ScOverManagerTest Simple Construction", function() {
 
     expect(om.current_over_no()).toEqual(0);
 
-    var batsman = new om.data.templates.Batsman();
-    om.data.bowler = new om.data.templates.Bowler();
+    var batsman = clone(om.data.templates.Batsman);
+    om.data.bowler = clone(om.data.templates.Bowler);
 
     om.add_ball(batsman, 4, 1, 0, 0);
 
@@ -145,10 +186,10 @@ describe("ScOverManagerTest Simple Construction", function() {
 
     expect(om.current_over_no()).toEqual(0);
 
-    var batsman = new om.data.templates.Batsman();
+    var batsman = clone(om.data.templates.Batsman);
 
-    var bowler1 = new om.data.templates.Bowler();
-    var bowler2 = new om.data.templates.Bowler();
+    var bowler1 = clone(om.data.templates.Bowler);
+    var bowler2 = clone(om.data.templates.Bowler);
     bowler1.no = 1;
     bowler2.no = 2;
 

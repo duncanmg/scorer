@@ -194,11 +194,11 @@ sc.Commands = {
     // Make the next batsman the striker.
     this.set_striker_as_new = function(data) {
       if (data.left_bat.striker === true) {
-        data.left_bat = new data.templates.Batsman();
+        data.left_bat = sc.Utils.clone( data.templates.Batsman);
         data.left_bat.no = this.set_next_batsman_no(data);
         data.left_bat.striker = true;
       } else {
-        data.right_bat = new data.templates.Batsman();
+        data.right_bat =  sc.Utils.clone(data.templates.Batsman);
         data.right_bat.no = this.set_next_batsman_no(data);
         data.right_bat.striker = true;
       }
