@@ -28,5 +28,10 @@ sc.validators = {
     if (!is.existy(b) || !is.all.existy(b.striker, b.runs, b.extras, b.wkt, b.valid)) {
       throw new Error("Not a Ball: " + JSON.stringify(b));
     }
+  },
+  is_json: function(json) {
+    if (!is.json) {
+      throw new Error("Not pure JSON: " + json);
+    }
   }
 };

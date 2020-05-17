@@ -34,6 +34,7 @@ angular.module('scorer')
         }
       }
       console.log('End toggle_bowling: ' + JSON.stringify(Scoreboard.scoreboard.away_players));
+      console.log('bowler=' + Scoreboard.scoreboard.bowler);
       return true;
     };
 

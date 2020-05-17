@@ -25,6 +25,7 @@ angular.module("scorer").factory('Storage', [function() {
     // Private function. Mapped to this.put later.
     var put = function(key, value) {
       this.logger.debug('put ' + key + ' = ' + JSON.stringify(value));
+      sc.validators.is_json(value);
       sessionStorage[key] = JSON.stringify(value);
       return true;
     };
@@ -110,6 +111,7 @@ angular.module("scorer").factory('Storage', [function() {
       if (!scoreboard) {
         throw new Error('Storage.put_scoreboard require 1 parameter');
       }
+      this.logger.debug("bowler=" + JSON.stringify(scoreboard.bowler));
       return this.put('scoreboard', scoreboard);
     };
 

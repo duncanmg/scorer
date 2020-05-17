@@ -21,8 +21,15 @@ describe("Logger", function() {
 
     expect(logger.log(sc.LoggerLevels.DEBUG)).toEqual(true);
 
+    expect(logger.log(sc.LoggerLevels.DEBUG)).toEqual(true);
+    expect(logger.log(sc.LoggerLevels.INFO)).toEqual(true);
+    expect(logger.log(sc.LoggerLevels.WARN)).toEqual(true);
+    expect(logger.log(sc.LoggerLevels.ERROR)).toEqual(true);
+
     logger.set_level(sc.LoggerLevels.WARN);
     expect(logger.log(sc.LoggerLevels.DEBUG)).toEqual(false);
+    expect(logger.log(sc.LoggerLevels.INFO)).toEqual(false);
+    expect(logger.log(sc.LoggerLevels.WARN)).toEqual(true);
     expect(logger.log(sc.LoggerLevels.ERROR)).toEqual(true);
 
     logger.set_level(undefined);

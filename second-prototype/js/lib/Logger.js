@@ -27,6 +27,7 @@ sc.LoggerConfig = {
   'Commands': sc.LoggerLevels.DEBUG,
   'Command': sc.LoggerLevels.DEBUG,
   'Storage': sc.LoggerLevels.DEBUG,
+  'Scoreboard': sc.LoggerLevels.DEBUG,
 };
 
 sc.Logger = function(name) {
@@ -48,26 +49,25 @@ sc.Logger = function(name) {
 
   this.info = function(text) {
 
-    if (!config[this.name] || config[this.name] < sc.LoggerLevels.INFO) {
-      return true;
+    if (this.log(sc.LoggerLevels.INFO)) {
+      console.log('INFO ' + this.name + ' ' + text);
     }
-    console.log('INFO ' + this.name + ' ' + text);
   };
 
   this.warn = function(text) {
 
-    if (!config[this.name] || config[this.name] < sc.LoggerLevels.WARN) {
-      return true;
+    if (this.log(sc.LoggerLevels.WARN)) {
+      console.log('WARN ' + this.name + ' ' + text);
     }
-    console.log('WARN ' + this.name + ' ' + text);
+
   };
 
   this.error = function(text) {
 
-    if (!config[this.name] || config[this.name] < sc.LoggerLevels.ERROR) {
-      return true;
+    if (this.log(sc.LoggerLevels.ERROR)) {
+      console.log('ERROR ' + this.name + ' ' + text);
     }
-    console.log('ERROR ' + this.name + ' ' + text);
+
   };
 
   // private

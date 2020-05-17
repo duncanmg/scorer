@@ -41,11 +41,8 @@ describe("ScOverManagerTest Simple Construction", function() {
 
   beforeEach(
     inject(function(Sc, Storage) {
-      console.log('1 Sc.LoggerConfig.PlayerManager=' + Sc.LoggerConfig.PlayerManager);
       Sc.LoggerConfig.PlayerManager = Sc.LoggerLevels.ERROR;
-        console.log('2 Sc.LoggerConfig.PlayerManager=' + Sc.LoggerConfig.PlayerManager);
       sc = new Sc.Scoreboard(template, players, {}, Storage);
-        console.log('3 Sc.LoggerConfig.PlayerManager=' + Sc.LoggerConfig.PlayerManager);
       //om = new Sc.OverManager(sc.scoreboard);
       //om_class = Sc.OverManager;
       //console.log("About to set clone");

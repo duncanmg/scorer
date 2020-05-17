@@ -283,6 +283,7 @@ sc.PlayerManager = function() {
     /** @function set_bowler
      * @description Accept a list of bowlers and a bowler. */
     var set_bowler = function(bowlers, bowler, logger) {
+      logger.debug('set_bowler TTTTTTTTTTTTTTTTTTTTTTTTTTTTTT');
       if (!bowlers.length) {
         logger.warn("set_bowler_details. No bowlers!");
         return {};
@@ -290,7 +291,7 @@ sc.PlayerManager = function() {
       if (!bowler.id) {
         // No bowler id. Just return first bowler in list.
         logger.info("set_bowler_details. Return first bowler in list.");
-        return bowlers.shift;
+        return bowlers.shift();
       } else if (!is_bowling(bowlers, bowler)) {
         logger.warn(
           "set_bowler_details. Bowler " + bowler.id + " is not bowling."
@@ -347,6 +348,9 @@ sc.PlayerManager = function() {
       );
     }
 
+    sc.validators.is_json(data.bowler);
+    sc.validators.is_json(data.next_bowler);
+    
     // End set_bowler_details.
   };
 
