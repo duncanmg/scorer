@@ -264,6 +264,7 @@ sc.Commands = {
       );
 
       this.player_manager().change_ends(this.data, this.runs);
+      this.over();
     };
   },
 

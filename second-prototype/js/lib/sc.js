@@ -154,7 +154,7 @@ sc.Scoreboard = function(scoreboard_template, Players, Over, Storage) {
    *  @return {boolean}
    */
   this.bowls = function(type, runs) {
-    this.scoreboard = this.storage.get_scoreboard;
+    this.scoreboard = this.storage.get_scoreboard();
     if (this.alert_game_over()) {
       return false;
     }
@@ -183,9 +183,8 @@ sc.Scoreboard = function(scoreboard_template, Players, Over, Storage) {
         // this.change_ends(runs);
         break;
     }
-    this.over();
+    // this.over();
     this.set_game_over();
-    this.storage.put_scoreboard(this.scoreboard);
     this.save();
   };
 
@@ -282,7 +281,7 @@ sc.Scoreboard = function(scoreboard_template, Players, Over, Storage) {
    *  @memberOf sc.Scoreboard
    */
   this.save = function() {
-    storage.put_scoreboard(this.scoreboard);
+    this.storage.put_scoreboard(this.scoreboard);
   };
 
   /** @function new_match
@@ -344,21 +343,21 @@ sc.Scoreboard = function(scoreboard_template, Players, Over, Storage) {
    *  @memberOf sc.Scoreboard
    */
   this.reset = function() {
-    this.logger.debug("1 reset");
-    this.logger.debug("2 reset");
-    this.logger.debug("Players: " + JSON.stringify(Players));
+    this.logger.debug("Start reset");
+    // this.logger.debug("2 reset");
+    // this.logger.debug("Players: " + JSON.stringify(Players));
     Players.set_team("home");
-    Players.reset();
-    this.logger.debug("4 reset");
-    this.scoreboard.home_players = this.player_manager.init_players(this.scoreboard, "home");
+    // Players.reset();
+    // this.logger.debug("4 reset");
+    // this.scoreboard.home_players = this.player_manager.init_players(this.scoreboard, "home");
     Players.set_team("away");
-    Players.reset();
-    this.logger.debug("5 reset");
-    this.scoreboard.away_players = this.player_manager.init_players(this.scoreboard, "away");
+    // Players.reset();
+    // this.logger.debug("5 reset");
+    // this.scoreboard.away_players = this.player_manager.init_players(this.scoreboard, "away");
     this.player_manager.set_batsmen_details(this.scoreboard);
-    this.logger.debug("6 reset");
+    // this.logger.debug("6 reset");
     this.player_manager.set_bowler_details(this.scoreboard);
-    this.logger.debug("End reset");
+    this.logger.debug("End sc reset");
   };
 
   /** @function add_over

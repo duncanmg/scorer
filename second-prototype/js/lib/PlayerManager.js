@@ -116,14 +116,15 @@ sc.PlayerManager = function() {
    *  @param {Object} data
    *  @description Swop the objects in data.bowler and data.next_bowler.
    *  Called at the end of each over.
+   *  The next bowler may not have been selected at this point.
    *
    */
   this.change_bowlers = function(data) {
     var tmp = data.bowler;
     sc.validators.is_bowler(data.bowler);
 
-    // If next_bowler is true, it must be a Bowler object.
-    if (data.next_bowler) {
+    // If next_bowler is true, it must be a Bowler object or an empty JSON object.
+    if (data.next_bowler && JSON.stringify(data.next_bowler) != "{}") {
       sc.validators.is_bowler(data.next_bowler);
     }
     data.bowler = data.next_bowler;
@@ -283,7 +284,7 @@ sc.PlayerManager = function() {
     /** @function set_bowler
      * @description Accept a list of bowlers and a bowler. */
     var set_bowler = function(bowlers, bowler, logger) {
-      logger.debug('set_bowler TTTTTTTTTTTTTTTTTTTTTTTTTTTTTT');
+      // logger.debug('set_bowler TTTTTTTTTTTTTTTTTTTTTTTTTTTTTT');
       if (!bowlers.length) {
         logger.warn("set_bowler_details. No bowlers!");
         return {};
@@ -331,10 +332,6 @@ sc.PlayerManager = function() {
     );
     if (!data.bowler.id) {
       data.bowler = set_bowler(bowlers, data.bowler, this.logger);
-      this.logger.debug(
-        "set_bowler_details: bowler  : " +
-        JSON.stringify(data.bowler)
-      );
     }
     if (!data.next_bowler.id) {
       data.next_bowler = set_bowler(
@@ -342,15 +339,22 @@ sc.PlayerManager = function() {
         data.next_bowler,
         this.logger
       );
-      this.logger.debug(
-        "set_bowler_details: next_bowler : " +
-        JSON.stringify(data.next_bowler)
-      );
+
     }
+
+    this.logger.debug(
+      "set_bowler_details: bowler  : " +
+      JSON.stringify(data.bowler)
+    );
+
+    this.logger.debug(
+      "set_bowler_details: next_bowler : " +
+      JSON.stringify(data.next_bowler)
+    );
 
     sc.validators.is_json(data.bowler);
     sc.validators.is_json(data.next_bowler);
-    
+
     // End set_bowler_details.
   };
 
