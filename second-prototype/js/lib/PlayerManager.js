@@ -471,6 +471,8 @@ sc.PlayerManager = function() {
               player[k] = p[k];
             }
           );
+          player.no = player.batting_no;
+          // delete player.batting_no;
           // console.log('push: ' + JSON.stringify(player));
           output.push(player);
           // console.log('X output:' + JSON.stringify(output));

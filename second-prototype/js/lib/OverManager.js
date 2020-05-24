@@ -3,6 +3,8 @@ var sc = sc || {};
 sc.OverManager = function(data) {
   this.data = data;
 
+  this.logger = new sc.Logger('OverManager');
+
   if (typeof this.data.overs_history != "object") {
     throw new Error("data.overs_history must be an array");
   }
@@ -111,6 +113,8 @@ sc.OverManager = function(data) {
     if (this.current_over_no()) {
       var bowler_of_last_over = this.current_over().bowler.no;
       if (bowler_of_last_over === bowler_obj.no) {
+        this.logger.error('New bowler: ' + JSON.stringify(bowler_obj));
+        this.logger.error('Last bowler: ' + JSON.stringify(this.current_over().bowler));
         throw new Error("New bowler cannot be same as last bowler");
       }
     }

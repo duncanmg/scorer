@@ -23,11 +23,12 @@ sc.LoggerLevels = {
 };
 
 sc.LoggerConfig = {
-  'PlayerManager': sc.LoggerLevels.DEBUG,
-  'Commands': sc.LoggerLevels.DEBUG,
   'Command': sc.LoggerLevels.DEBUG,
-  'Storage': sc.LoggerLevels.DEBUG,
+  'Commands': sc.LoggerLevels.DEBUG,
+  'OverManager': sc.LoggerLevels.DEBUG,
+  'PlayerManager': sc.LoggerLevels.DEBUG,
   'Scoreboard': sc.LoggerLevels.DEBUG,
+  'Storage': sc.LoggerLevels.DEBUG,
 };
 
 sc.Logger = function(name) {
