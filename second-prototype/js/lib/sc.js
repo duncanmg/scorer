@@ -256,7 +256,7 @@ sc.Scoreboard = function(scoreboard_template, Players, Over, Storage) {
   this.wicket = function() {
     var w = sc.Commands.Run(sc.Commands.Wicket, this.scoreboard);
 
-    this.logger.warn("NOT IMPLEMENTED save");
+    //this.logger.warn("NOT IMPLEMENTED save");
     // this.save();
   };
 

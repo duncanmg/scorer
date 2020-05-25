@@ -247,7 +247,20 @@ describe("ScCommandsTest. Real Template", function() {
     expect(sc2.scoreboard.game_over).toEqual(false);
   });
 
-  it("An Sc.Commands.Wicket set_next_batsman_no", function() {
+  it("An Sc.Commands.Wicket method get_next_batsman_no", function() {
+    sc2.scoreboard.bowler = sc.Utils.clone(sc2.scoreboard.templates.Bowler);
+    expect(typeof sc2).toEqual("object");
+
+    expect(sc2.scoreboard.left_bat.no).toEqual(1);
+    expect(sc2.scoreboard.right_bat.no).toEqual(2);
+    expect(sc2.scoreboard.next_batsman_no).toEqual(3);
+    expect(sc2.scoreboard.left_bat.striker).toEqual(true);
+
+    var command = new sc.Commands.Wicket(sc2.scoreboard);
+    expect(command.get_next_batsman_no(sc2.scoreboard)).toEqual(3);
+  });
+
+  it("An Sc.Commands.Wicket get_next_batsman_no", function() {
     sc2.scoreboard.bowler = sc.Utils.clone(sc2.scoreboard.templates.Bowler);
     expect(typeof sc2).toEqual("object");
 
@@ -260,7 +273,27 @@ describe("ScCommandsTest. Real Template", function() {
     expect(sc2.scoreboard.left_bat.no).toEqual(3);
     expect(sc2.scoreboard.left_bat.striker).toEqual(true);
     expect(sc2.scoreboard.right_bat.striker).toEqual(false);
-    // expect(sc2.scoreboard.next_batsman_no).toEqual(4);
+    expect(sc2.scoreboard.next_batsman_no).toEqual(4);
+  });
+
+  it("An Sc.Commands.Wicket two wickets", function() {
+      sc.LoggerConfig = {'Wicket' : sc.LoggerLevels.DEBUG};
+    sc2.scoreboard.bowler = sc.Utils.clone(sc2.scoreboard.templates.Bowler);
+    expect(typeof sc2).toEqual("object");
+
+    expect(sc2.scoreboard.left_bat.no).toEqual(1);
+    expect(sc2.scoreboard.right_bat.no).toEqual(2);
+    expect(sc2.scoreboard.next_batsman_no).toEqual(3);
+    expect(sc2.scoreboard.left_bat.striker).toEqual(true);
+    sc2.wicket();
+    expect(sc2.scoreboard.left_bat.no).toEqual(3);
+    expect(sc2.scoreboard.next_batsman_no).toEqual(4);
+    sc2.wicket();
+    expect(sc2.scoreboard.right_bat.no).toEqual(2);
+    expect(sc2.scoreboard.left_bat.no).toEqual(4);
+    expect(sc2.scoreboard.left_bat.striker).toEqual(true);
+    expect(sc2.scoreboard.right_bat.striker).toEqual(false);
+    expect(sc2.scoreboard.next_batsman_no).toEqual(5);
   });
 
   it("An Sc.Commands.StandardBall change_ends", function() {
@@ -372,6 +405,7 @@ describe("ScCommandsTest. Real Template", function() {
     expect(sc2.scoreboard.left_bat.runs).toEqual(0);
     expect(sc2.scoreboard.extras).toEqual(0);
     expect(sc2.scoreboard.total).toEqual(0);
+    expect(sc2.scoreboard.overs_and_balls).toEqual(0);
 
     sc.Commands.Run(sc.Commands.LegBye, sc2.scoreboard);
 
@@ -380,5 +414,6 @@ describe("ScCommandsTest. Real Template", function() {
     expect(sc2.scoreboard.right_bat.striker).toEqual(true);
     expect(sc2.scoreboard.extras).toEqual(1);
     expect(sc2.scoreboard.total).toEqual(1);
+    expect(sc2.scoreboard.overs_and_balls).toEqual('0.1');
   });
 });
