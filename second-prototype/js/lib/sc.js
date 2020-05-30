@@ -2,7 +2,6 @@
 
 /**
  * @namespace sc
- * @memberOf scorer.lib
  *
  */
 var sc = sc || {};

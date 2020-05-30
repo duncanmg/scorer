@@ -1,8 +1,8 @@
 /*jslint vars:true, plusplus:true, devel:true, nomen:true, indent:4, maxerr:50*/
 
 /**
- * @namespace sc
- * @memberOf scorer.lib
+ * @namespace Logger
+ * @memberOf sc
  *
  */
 var sc = sc || {};

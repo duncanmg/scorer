@@ -1,21 +1,18 @@
 /*jslint vars:true, plusplus:true, devel:true, nomen:true, indent:4, maxerr:50*/
 
-/**
- * @namespace sc
- * @memberOf scorer.lib
- *
- */
 var sc = sc || {};
 
 /**
- * @class PlayerManager
- * @memberOf sc
+ * @namespace PlayerManager
+ * memberOf sc
+ */
+
+/**
  * @constructor PlayerManager
  * @param data
  * @param {Players} Players
  *
  */
-
 sc.PlayerManager = function() {
 
   // Deep copy of simple JSON object.
@@ -26,8 +23,38 @@ sc.PlayerManager = function() {
   this.logger = new sc.Logger('PlayerManager', sc.LoggerLevels.DEBUG);
 
   /**
-   * @function validator
-   * @memberOf sc.Command
+   * @method change_ends
+   * @memberOf PlayerManager
+   * @description Accept the number of times the batsmen ran and calculate whether
+   * the batsmen changed ends. If they did, toggle the values of scoreboard.left_bat.striker
+   * and scoreboard.right_bat.striker.
+   * @param data {json} - JSON data structure.
+   * @param num_runs {integer} - Number of times the batsmen ran on the last ball.
+   */
+  this.change_ends = function(data, num_runs) {
+    if (!data) {
+      throw new Error("Parameter data is mandatory");
+    }
+    if (typeof num_runs === "undefined") {
+      throw new Error("Parameter runs is mandatory");
+    }
+
+    if (num_runs % 2 === 0) {
+      return true;
+    }
+
+    if (data.left_bat.striker === true) {
+      data.left_bat.striker = false;
+      data.right_bat.striker = true;
+    } else {
+      data.left_bat.striker = true;
+      data.right_bat.striker = false;
+    }
+  };
+
+  /**
+   * @method validator
+   * @memberOf PlayerManager
    * @param name {String} A name to be used in the error messages
    * @description Return a new Validator object.
    * @return {Validator}
@@ -35,7 +62,6 @@ sc.PlayerManager = function() {
   this.validator = function(name) {
     /**
      * @class Validator
-     * @memberOf sc.Command.validator
      * @constructor Validator
      * @param name {String} A name to be used in the error messages.
      * @return {Validator}
@@ -77,42 +103,9 @@ sc.PlayerManager = function() {
     return new Validator(name);
   };
 
-  // this.Players = Players;
-  // if ( ! this.Players) {
-  //   throw new Error( "sc.PlayerManager argument Players is mandatory");
-  // }
-  /**
-   * @method change_ends
-   * @memberOf sc.Scoreboard
-   * @description Accept the number of times the batsmen ran and calculate whether
-   * the batsmen changed ends. If they did, toggle the values of scoreboard.left_bat.striker
-   * and scoreboard.right_bat.striker.
-   * @param {integer} num_runs - Number of times the batsmen ran on the last ball.
-   */
-  this.change_ends = function(data, num_runs) {
-    if (!data) {
-      throw new Error("Parameter data is mandatory");
-    }
-    if (typeof num_runs === "undefined") {
-      throw new Error("Parameter runs is mandatory");
-    }
-
-    if (num_runs % 2 === 0) {
-      return true;
-    }
-
-    if (data.left_bat.striker === true) {
-      data.left_bat.striker = false;
-      data.right_bat.striker = true;
-    } else {
-      data.left_bat.striker = true;
-      data.right_bat.striker = false;
-    }
-  };
-
   /**
    *  @function change_bowlers
-   *  @memberOf sc.PlayerManager
+   *  @memberOf PlayerManager
    *  @param {Object} data
    *  @description Swop the objects in data.bowler and data.next_bowler.
    *  Called at the end of each over.
@@ -136,10 +129,10 @@ sc.PlayerManager = function() {
     );
   };
 
-  /** @function alert_no_bowler
+  /**
+   *  @method alert_no_bowler
+   *  @memberOf PlayerManager
    *  @description Alert if the bowler is not set.
-   *  @memberOf sc.Scoreboard
-   *  @private
    *  @return boolean
    */
   this.alert_no_bowler = function() {
@@ -152,7 +145,7 @@ sc.PlayerManager = function() {
 
   /** @function add_runs_to_striker
    *  @description Add the runs to the batsman's score.
-   *  @memberOf sc.Scoreboard
+   *  @memberOf PlayerManager
    *  @param {objects} data - Data
    *  @param {integer} runs - Number of runs to be added.
    */
@@ -172,8 +165,8 @@ sc.PlayerManager = function() {
   };
 
   /** @function set_batting_team
-   * @description Set the batting team.
-   *  @memberOf sc.Scoreboard
+   *  @description Set the batting team.
+   *  @memberOf PlayerManager
    *  @param {Players} - batting_team - The batting team.
    */
   this.set_batting_team = function(batting_team) {
@@ -186,10 +179,12 @@ sc.PlayerManager = function() {
     }
   };
 
-  /** @function set_batsmen_details
+  /** @method set_batsmen_details
+   *  @memberOf PlayerManager
    *  @description Uses the list of players to flesh out the left_bat and
    *  right_bat_no with details such as name and description.
-   *  @memberOf sc.Scoreboard
+   *  @param {objects} data - Data
+   *  @return {void}
    */
   this.set_batsmen_details = function(data) {
     // console.log("set_batsmen_details " + JSON.stringify(data));
@@ -231,6 +226,13 @@ sc.PlayerManager = function() {
     // alert(JSON.stringify(this.scoreboard.right_bat));
   };
 
+  /**
+   * @method get_team_players
+   * @memberOf PlayerManager
+   * @param data {object} - data
+   * @param batting_or_bowling {string} "batting" or "bowling"
+   * @return {array}
+   */
   this.get_team_players = function(data, batting_or_bowling) {
     var team;
     this.validator('get_team_players').check_all_defined(data, ['batting_team', 'home_players',
@@ -248,11 +250,12 @@ sc.PlayerManager = function() {
   };
 
   // ***********************************************************************
-  /** @function set_bowler_details
+  /** @method set_bowler_details
    * @description Sets the data.bowler and data.next_bowler elements
    * based on the bowler and bowling elements in the bowling team's
    * list of players.
-   * @memberOf sc.PlayerManager
+   * @memberOf PlayerManager
+   * @param data {object} - Data
    */
   this.set_bowler_details = function(data) {
     this.logger.debug("Start set_bowler_details");
@@ -358,7 +361,13 @@ sc.PlayerManager = function() {
     // End set_bowler_details.
   };
 
-  // Return list of players who have bowled in innings.
+  /**
+   * @method get_bowlers
+   * @memberOf PlayerManager
+   * @param players {array}
+   * @description list of players who have bowled in innings.
+   * @returns {array}
+   */
   this.get_bowlers = function(players) {
     if (!players) {
       throw new Error("get_bowlers requires a list of players");
@@ -373,7 +382,13 @@ sc.PlayerManager = function() {
     return bowlers;
   };
 
-  // Return a list of the current bowlers. (0, 1 or 2 bowlers.)
+  /**
+   * @method get_bowling
+   * @memberOf PlayerManager
+   * @description Return a list of the current bowlers. (0, 1 or 2 bowlers.)
+   * @param players {array} - List of players in bowling team
+   * @returns {array}
+   */
   this.get_bowling = function(players) {
     // console.log("get_bowling received " + JSON.stringify(players));
     if (!players) {
@@ -389,6 +404,12 @@ sc.PlayerManager = function() {
     return bowling;
   };
 
+  /**
+   * @method sort_by_bowler_no
+   * @description Does this work?
+   * @memberOf PlayerManager
+   * returns {integer}
+   */
   this.sort_by_bowler_no = function(a, b) {
     if (!a.bowler) {
       a.bowler = 0;
@@ -400,57 +421,12 @@ sc.PlayerManager = function() {
   }
 
   /**
-   * @function validator
-   * @memberOf sc.Command
-   * @param name {String} A name to be used in the error messages
-   * @description Return a new Validator object.
-   * @return {Validator}
+   * @method init_players
+   * @memberOf PlayerManager
+   * @param data {JSON} - Data
+   * @param action {string} - "home" or "away"
+   * returns {array}
    */
-  this.validator = function(name) {
-    /**
-     * @class Validator
-     * @memberOf sc.Command.validator
-     * @constructor Validator
-     * @param name {String} A name to be used in the error messages.
-     * @return {Validator}
-     */
-    var Validator = function(name) {
-      this.name = name;
-      this.msg = this.name + ". A mandatory parameter is missing: ";
-
-      this.check_namespaces_defined = function(obj, element) {
-        var namespaces = element.split(".");
-        var done = "";
-        var context = obj;
-        for (var i = 0; i < namespaces.length; i++) {
-          context = context[namespaces[i]];
-          done = done + "." + namespaces[i];
-          if (!is.existy(context)) {
-            throw new Error(this.msg + done);
-          }
-        }
-      };
-
-      /**
-       * @function check_all_defined
-       * @memberOf validator
-       * @description Accepts an object and a list of properties it
-       * should have. Throws an error if any do not exist.
-       * @param obj {Object} The object to be tested.
-       * @param list {Array} List of properties
-       * @return {void}
-       * @throws {Error}
-       */
-      this.check_all_defined = function(obj, list) {
-        for (var x = 0; x < list.length; x++) {
-          var p = list[x];
-          this.check_namespaces_defined(obj, p);
-        }
-      };
-    };
-    return new Validator(name);
-  };
-
   this.init_players = function(data, action) {
 
     this.logger.debug('Start init_players. ' + action);
@@ -488,6 +464,13 @@ sc.PlayerManager = function() {
     }
   };
 
+  /**
+   * @method lookup
+   * @memberOf PlayerManager
+   * @param players {array} - List of players in a team
+   * @param player {Batsman} - Player to be returned
+   * @returns {integer}
+   */
   this.lookup = function(players, player) {
     for (var i = 0; i < players.length; i++) {
       if (players[i].id == player.id) {
