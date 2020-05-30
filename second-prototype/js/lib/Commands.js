@@ -157,7 +157,7 @@ sc.Commands = {
   Wicket: function(data) {
     sc.Command.call(this, data);
     this.data = data;
-
+    this.logger = new sc.Logger('Wicket');
     this.run = function() {
       data.balls++;
       data.wickets += 1;
@@ -183,25 +183,28 @@ sc.Commands = {
 
     // Allocate the next batsman's number. If current batsmen are
     // 3 and 6. Next batman will be 7.
-    this.set_next_batsman_no = function(data) {
+    this.get_next_batsman_no = function(data) {
+      this.logger.debug(JSON.stringify(data.left_bat) + ' : ' + JSON.stringify(data.right_bat));
       var next_batsman_no =
         data.left_bat.no > data.right_bat.no ?
         data.left_bat.no + 1 :
         data.right_bat.no + 1;
+      this.logger.debug('get_next_batsman_no returning: ' + next_batsman_no);
       return next_batsman_no;
     };
 
     // Make the next batsman the striker.
     this.set_striker_as_new = function(data) {
       if (data.left_bat.striker === true) {
-        data.left_bat = sc.Utils.clone( data.templates.Batsman);
-        data.left_bat.no = this.set_next_batsman_no(data);
+        data.left_bat = sc.Utils.clone(data.templates.Batsman);
+        data.left_bat.no = data.next_batsman_no;
         data.left_bat.striker = true;
       } else {
-        data.right_bat =  sc.Utils.clone(data.templates.Batsman);
-        data.right_bat.no = this.set_next_batsman_no(data);
+        data.right_bat = sc.Utils.clone(data.templates.Batsman);
+        data.right_bat.no = data.next_batsman_no;
         data.right_bat.striker = true;
       }
+      data.next_batsman_no = this.get_next_batsman_no(data);
     };
   },
 
@@ -211,6 +214,8 @@ sc.Commands = {
         "StandardBall Parameter args must be an array of length 2"
       );
     }
+
+    this.logger = new sc.Logger('StandardBall');
 
     this.data = args[0];
     this.runs = args[1];
@@ -251,10 +256,10 @@ sc.Commands = {
 
       sc.validators.is_batsman(this.data.left_bat);
       sc.validators.is_batsman(this.data.right_bat);
-      console.log("StandardBall About to call add_runs_to_striker " + JSON.stringify(this.data.left_bat));
+      this.logger.debug("About to call add_runs_to_striker " + JSON.stringify(this.data.left_bat));
       this.player_manager().add_runs_to_striker(this.data, this.runs);
 
-      console.log("StandardBall About to call add_ball " + JSON.stringify(this.data.left_bat));
+      this.logger.debug("About to call add_ball " + JSON.stringify(this.data.left_bat));
       this.over_manager().add_ball(
         this.data.left_bat.striker ? this.data.left_bat : this.data.right_bat,
         this.runs,
@@ -370,13 +375,14 @@ sc.Commands = {
     this.run = function() {
       this.data.extras += 1;
       this.data.total += 1;
+      this.data.balls += 1;
 
       this.over_manager().add_ball(
         this.data.left_bat.striker ? this.data.left_bat : this.data.right_bat,
         0,
         1,
         false,
-        false
+        true
       );
 
       this.player_manager().change_ends(this.data, 1);
@@ -472,7 +478,7 @@ sc.Commands = {
 
   Run: function(object, args) {
     object.prototype = Object.create(sc.Command.prototype);
-    object.prototype.Constructor = sc.Command.Wicket;
+    // object.prototype.Constructor = sc.Command.Wicket;
 
     var o = new object(args);
 

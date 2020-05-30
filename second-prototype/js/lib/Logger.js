@@ -28,7 +28,9 @@ sc.LoggerConfig = {
   'OverManager': sc.LoggerLevels.DEBUG,
   'PlayerManager': sc.LoggerLevels.DEBUG,
   'Scoreboard': sc.LoggerLevels.DEBUG,
-  'Storage': sc.LoggerLevels.DEBUG,
+  'StandardBall': sc.LoggerLevels.DEBUG,
+  'Storage': sc.LoggerLevels.INFO,
+  'Wicket': sc.LoggerLevels.DEBUG,
 };
 
 sc.Logger = function(name) {
