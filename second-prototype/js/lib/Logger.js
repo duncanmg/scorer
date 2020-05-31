@@ -28,7 +28,7 @@ sc.LoggerConfig = {
   'OverManager': sc.LoggerLevels.DEBUG,
   'PlayerManager': sc.LoggerLevels.DEBUG,
   'Scoreboard': sc.LoggerLevels.DEBUG,
-  'StandardBall': sc.LoggerLevels.DEBUG,
+  'StandardBall': sc.LoggerLevels.INFO,
   'Storage': sc.LoggerLevels.INFO,
   'Wicket': sc.LoggerLevels.DEBUG,
 };
