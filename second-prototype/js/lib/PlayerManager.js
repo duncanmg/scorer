@@ -4,7 +4,7 @@ var sc = sc || {};
 
 /**
  * @namespace PlayerManager
- * memberOf sc
+ * @memberOf sc
  */
 
 /**
