@@ -29,6 +29,7 @@ sc.LoggerConfig = {
   'PlayerManager': sc.LoggerLevels.DEBUG,
   'Scoreboard': sc.LoggerLevels.DEBUG,
   'StandardBall': sc.LoggerLevels.INFO,
+  'StopBowling': sc.LoggerLevels.DEBUG,
   'Storage': sc.LoggerLevels.INFO,
   'Wicket': sc.LoggerLevels.DEBUG,
 };
@@ -39,6 +40,8 @@ sc.Logger = function(name) {
     throw new Error("Logger needs name");
   }
   this.name = name;
+
+  this.verbose = 0;
 
   var label = ['', 'DEBUG', 'INFO', 'WARN', 'ERROR'];
 
@@ -76,13 +79,16 @@ sc.Logger = function(name) {
   // private
   this.log = function(method_level) {
     var level = this.get_level();
-    // console.log('level='+level+' method_level=' +method_level);
+    this.verbose_msg(
+      'level=' + level + ' method_level=' + method_level);
+
     if (is.existy(level) && level <= method_level) {
-      // console.log('Log it');
+      this.verbose_msg('Log it');
       return true;
     }
     return false;
   }
+
   // private
   this.level = undefined;
 
@@ -94,9 +100,22 @@ sc.Logger = function(name) {
 
   this.get_level = function() {
     if (is.existy(this.level)) {
+      if (this.verbose) {
+        console.log("Attribute level set to " + this.level);
+      }
       return this.level;
     }
+    this.verbose_msg(
+      config[this.name] ?
+      "Configured level is " + config[this.name] :
+      "Level is not configured");
+
     return config[this.name];
   };
 
+  this.verbose_msg = function(msg) {
+    if (this.verbose) {
+      console.log('In Logger ' + this.name + ': ' + msg);
+    }
+  }
 };
