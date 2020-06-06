@@ -295,7 +295,14 @@ sc.Commands = {
   },
 
   StopBowling: function(args) {
-    this.name = "StartBowling";
+    this.name = "StopBowling";
+    this.logger = new sc.Logger(this.name);
+
+    this.logger.debug("XXXXXXXXXXXXXXXXXXXXXXXXXXX "+JSON.stringify(args));
+    if ((!is.array(args)) || args.length != 2) {
+      this.logger.error(JSON.stringify(args));
+      throw new Error(this.name + " expects an array with two elements");
+    }
 
     this.data = args[0];
     this.player = args[1];
@@ -306,6 +313,7 @@ sc.Commands = {
       "data",
       "data.away_players",
       "data.home_players",
+      "player",
     ]);
 
     this.run = function() {
