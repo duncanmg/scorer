@@ -31,7 +31,7 @@ sc.LoggerConfig = {
   'StandardBall': sc.LoggerLevels.INFO,
   'StopBowling': sc.LoggerLevels.DEBUG,
   'Storage': sc.LoggerLevels.INFO,
-  'Wicket': sc.LoggerLevels.DEBUG,
+  'Wicket': sc.LoggerLevels.INFO,
 };
 
 sc.Logger = function(name) {
@@ -92,9 +92,28 @@ sc.Logger = function(name) {
   // private
   this.level = undefined;
 
+  var validate_level = function(level) {
+    var level_ok = 0;
+
+    if (!is.existy(level)) {
+      return 1;
+    }
+
+    for (k in sc.LoggerLevels) {
+      // console.log("k=" + k + " level=" + level);
+      if (sc.LoggerLevels[k] === level) {
+        level_ok = 1;
+      }
+    }
+    if (!level_ok) {
+      throw new sc.InvalidParamError('Invalid logger level ' + level);
+    }
+    return 1;
+  };
+
   // Override the level in the configuration. Set to undefine to disable.
   this.set_level = function(level) {
-    // console.log('set level to ' + level);
+    validate_level(level);
     this.level = level;
   };
 
@@ -109,7 +128,7 @@ sc.Logger = function(name) {
       config[this.name] ?
       "Configured level is " + config[this.name] :
       "Level is not configured");
-
+    validate_level(config[this.name]);
     return config[this.name];
   };
 
