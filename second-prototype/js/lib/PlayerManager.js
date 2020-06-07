@@ -235,7 +235,8 @@ sc.PlayerManager = function() {
    */
   this.get_team_players = function(data, batting_or_bowling) {
     var team;
-    this.validator('get_team_players').check_all_defined(data, ['batting_team', 'home_players',
+    this.validator('get_team_players').check_all_defined(data, ['batting_team',
+      'home_players',
       'away_players'
     ]);
     if (batting_or_bowling == 'batting') {

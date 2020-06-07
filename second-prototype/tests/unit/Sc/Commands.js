@@ -90,9 +90,9 @@ describe("ScCommandsTest. Real Template", function() {
   });
 
   it("An Sc.Commands.Wicket two wickets", function() {
-    sc.LoggerConfig = {
-      'Wicket': sc.LoggerLevels.DEBUG
-    };
+    //sc.LoggerConfig = {
+    //  'Wicket': sc.LoggerLevels.DEBUG
+    //};
     sc2.scoreboard.bowler = sc.Utils.clone(sc2.scoreboard.templates.Bowler);
     expect(typeof sc2).toEqual("object");
 
@@ -235,10 +235,6 @@ describe("ScCommandsTest. Real Template", function() {
   it("An Sc.Commands.StopBowling Parameters", function() {
     sc2.scoreboard.bowler = sc.Utils.clone(sc2.scoreboard.templates.Bowler);
 
-    sc.LoggerConfig = {
-      'StopBowling': sc.LoggerLevels.DEBUG
-    };
-
     expect(typeof sc2).toEqual("object");
 
     expect(function() {
@@ -259,24 +255,51 @@ describe("ScCommandsTest. Real Template", function() {
   });
 
   it("An Sc.Commands.StopBowling", function() {
+
+    sc.LoggerConfig = {
+      'StopBowling': sc.LoggerLevels.DEBUG
+    };
+
     sc2.scoreboard.bowler = sc.Utils.clone(sc2.scoreboard.templates.Bowler);
 
     expect(typeof sc2).toEqual("object");
-    expect(sc2.scoreboard.left_bat.striker).toEqual(true);
-    expect(sc2.scoreboard.right_bat.striker).toEqual(false);
-    expect(sc2.scoreboard.left_bat.runs).toEqual(0);
-    expect(sc2.scoreboard.extras).toEqual(0);
-    expect(sc2.scoreboard.total).toEqual(0);
-    expect(sc2.scoreboard.overs_and_balls).toEqual(0);
 
-    sc.Commands.Run(sc.Commands.StopBowling, [sc2.scoreboard]);
+    var bowler = {
+      'id': 22,
+      'no': 11,
+      'striker': false,
+      'runs': 0,
+      'bowler': 1,
+      'bowling': false
+    };
 
-    expect(sc2.scoreboard.left_bat.striker).toEqual(false);
-    expect(sc2.scoreboard.left_bat.runs).toEqual(0);
-    expect(sc2.scoreboard.right_bat.striker).toEqual(true);
-    expect(sc2.scoreboard.extras).toEqual(1);
-    expect(sc2.scoreboard.total).toEqual(1);
-    expect(sc2.scoreboard.overs_and_balls).toEqual('0.1');
+    sc2.scoreboard.away_players = [{
+        "no": 10,
+        "striker": false,
+        "runs": 0,
+        "bowler": false,
+        "bowling": false,
+        "name": "Away Player 10",
+        "id": 21,
+        "batting_no": 10
+      },
+      {
+        "no": 11,
+        "striker": false,
+        "runs": 0,
+        "bowler": 1,
+        "bowling": true,
+        "name": "Away Player 11",
+        "id": 22,
+        "batting_no": 11
+      }
+    ];
+
+    expect(sc2.scoreboard.away_players[1].bowling).toEqual(true);
+
+    sc.Commands.Run(sc.Commands.StopBowling, [sc2.scoreboard, bowler]);
+
+    expect(sc2.scoreboard.away_players[1].bowling).toEqual(false);
   });
 
 });
