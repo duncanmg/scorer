@@ -29,6 +29,7 @@ sc.LoggerConfig = {
   'PlayerManager': sc.LoggerLevels.DEBUG,
   'Scoreboard': sc.LoggerLevels.DEBUG,
   'StandardBall': sc.LoggerLevels.INFO,
+  'StartBowling': sc.LoggerLevels.DEBUG,
   'StopBowling': sc.LoggerLevels.DEBUG,
   'Storage': sc.LoggerLevels.INFO,
   'Wicket': sc.LoggerLevels.INFO,

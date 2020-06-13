@@ -302,4 +302,102 @@ describe("ScCommandsTest. Real Template", function() {
     expect(sc2.scoreboard.away_players[1].bowling).toEqual(false);
   });
 
+  it("An Sc.Commands.StartBowling Parameters", function() {
+    sc2.scoreboard.bowler = sc.Utils.clone(sc2.scoreboard.templates.Bowler);
+
+    expect(typeof sc2).toEqual("object");
+
+    expect(function() {
+      sc.Commands.Run(sc.Commands.StartBowling)
+    }).toThrow(
+      new Error("StartBowling expects an array with two elements"));
+
+    expect(function() {
+      sc.Commands.Run(sc.Commands.StartBowling, [])
+    }).toThrow(
+      new Error("StartBowling expects an array with two elements"));
+
+    expect(function() {
+      sc.Commands.Run(sc.Commands.StartBowling, [{}, {}])
+    }).toThrow(
+      new Error("StartBowling. A mandatory parameter is missing: .data.total"));
+
+  });
+
+  it("An Sc.Commands.StartBowling", function() {
+
+    sc.LoggerConfig = {
+      'StartBowling': sc.LoggerLevels.DEBUG
+    };
+
+    sc2.scoreboard.bowler = sc.Utils.clone(sc2.scoreboard.templates.Bowler);
+
+    expect(typeof sc2).toEqual("object");
+
+    var bowler = {
+      'id': 22,
+      'no': 11,
+      'striker': false,
+      'runs': 0,
+      'bowler': 1,
+      'bowling': false
+    };
+
+    sc2.scoreboard.away_players = [{
+        "no": 10,
+        "striker": false,
+        "runs": 0,
+        "bowler": false,
+        "bowling": false,
+        "name": "Away Player 10",
+        "id": 21,
+        "batting_no": 10
+      },
+      {
+        "no": 11,
+        "striker": false,
+        "runs": 0,
+        "bowler": 1,
+        "bowling": false,
+        "name": "Away Player 11",
+        "id": 22,
+        "batting_no": 11
+      }
+    ];
+
+    expect(sc2.scoreboard.away_players[1].bowling).toEqual(false);
+
+    sc.Commands.Run(sc.Commands.StartBowling, [sc2.scoreboard, bowler]);
+
+    expect(sc2.scoreboard.away_players[1].bowling).toEqual(true);
+
+    bowler.id = 9999;
+    expect(function() {
+        sc.Commands.Run(sc.Commands.StartBowling, [sc2.scoreboard, bowler]);
+      })
+      .toThrow(new Error("Player not found in bowling team."));
+
+    bowler.id = 22;
+
+    var bowler2 = {
+      'id': 21,
+      'no': 10,
+      'striker': false,
+      'runs': 0,
+      'bowler': 2,
+      'bowling': false
+    };
+
+    expect(sc2.scoreboard.away_players[0].bowling).toEqual(false);
+
+    sc.Commands.Run(sc.Commands.StartBowling, [sc2.scoreboard, bowler2]);
+
+    expect(sc2.scoreboard.away_players[0].bowling).toEqual(true);
+
+    expect(function() {
+        sc.Commands.Run(sc.Commands.StartBowling, [sc2.scoreboard, bowler2]);
+      })
+      .toThrow(new Error("Two bowlers are already bowling."));
+
+  });
 });

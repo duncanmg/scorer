@@ -244,6 +244,12 @@ sc.Commands = {
 
   StartBowling: function(args) {
     this.name = "StartBowling";
+    this.logger = new sc.Logger(this.name);
+
+    if ((!is.array(args)) || args.length != 2) {
+      this.logger.error(JSON.stringify(args));
+      throw new Error(this.name + " expects an array with two elements");
+    }
 
     this.data = args[0];
     this.player = args[1];
@@ -261,34 +267,36 @@ sc.Commands = {
 
     this.run = function() {
 
-      console.log("--");
-      console.log("StartBowling.run");
+      this.logger.debug("--");
+      this.logger.debug("StartBowling.run");
 
       var bowling_team_players = this.player_manager().get_team_players(this.data, 'bowling');
 
       var bowling = this.player_manager().get_bowling(bowling_team_players);
       if (bowling.length >= 2) {
-        return false;
+        throw new Error("Two bowlers are already bowling.")
       }
       // alert(1);
-      console.log("Still in start_bowling");
+      this.logger.debug("Still in start_bowling");
       var bowlers = this.player_manager().get_bowlers(bowling_team_players);
       // alert(JSON.stringify(bowlers));
       var next_bowler_no = bowlers.length ?
         bowlers[bowlers.length - 1].bowler + 1 : 1;
 
-      console.log("next_bowler_no " + next_bowler_no);
+      this.logger.debug("next_bowler_no " + next_bowler_no);
 
       var i = this.player_manager().lookup(bowling_team_players, this.player);
       if (i >= 0) {
         bowling_team_players[i].bowler = next_bowler_no;
         bowling_team_players[i].bowling = true;
-        console.log("i=" + i + " .bowler=" + next_bowler_no);
+        this.logger.debug("i=" + i + " .bowler=" + next_bowler_no);
+      } else {
+        throw new Error('Player not found in bowling team.');
       }
 
       this.player_manager().set_bowler_details(this.data);
 
-      console.log("End start_bowling");
+      this.logger.debug("End start_bowling");
       return true;
 
     };
@@ -328,7 +336,7 @@ sc.Commands = {
       var i = this.player_manager().lookup(bowling_team_players, this.player);
       if (i >= 0) {
         bowling_team_players[i].bowling = false;
-        this.player_manager().set_bowler_details(this.data);
+        // this.player_manager().set_bowler_details(this.data);
         this.logger.debug("End StopBowling.run");
         return true;
       }
