@@ -20,6 +20,3 @@ describe("A suite is just a function", function() {
     expect(o.msg()).toEqual('test_object');
   });
 });
-    
-
-
