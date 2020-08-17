@@ -7,6 +7,7 @@ describe("ScPlayerManagerTest", function() {
   var sc2;
   var over;
   var storage;
+  var settings;
 
   beforeEach(
     inject(function(Players) {
@@ -16,7 +17,7 @@ describe("ScPlayerManagerTest", function() {
 
   beforeEach(
     inject(function(ScoreboardTemplate) {
-      template = new ScoreboardTemplate();
+      template = ScoreboardTemplate;
     })
   );
 
@@ -38,10 +39,16 @@ describe("ScPlayerManagerTest", function() {
     })
   );
 
+  beforeEach(
+    inject(function(Settings) {
+      settings = Settings;
+    })
+  );
+
 
   beforeEach(
     inject(function(Sc) {
-      sc2 = new Sc.Scoreboard(template, players, over, storage);
+      sc2 = new Sc.Scoreboard(template, settings, players, over, storage);
     })
   );
 
@@ -57,8 +64,8 @@ describe("ScPlayerManagerTest", function() {
     pm.logger.set_level(sc.LoggerLevels.WARN);
     var data = sc2.scoreboard;
 
-    data.home_players = pm.init_players(data,"home");
-    data.away_players = pm.init_players(data,"away");
+    data.home_players = pm.init_players(data, "home");
+    data.away_players = pm.init_players(data, "away");
 
     expect(data.left_bat.no).toEqual(1);
     expect(data.right_bat.no).toEqual(2);

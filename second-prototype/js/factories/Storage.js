@@ -115,6 +115,10 @@ angular.module("scorer").factory('Storage', [function() {
       return this.put('scoreboard', scoreboard);
     };
 
+    this.clear = function() {
+      sessionStorage.clear();
+      this.logger.info("All session storage cleared.");
+    }
 
   };
 

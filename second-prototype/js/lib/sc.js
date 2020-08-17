@@ -34,34 +34,33 @@ sc.test_object = function() {
  * @property {boolean} is_ready -
  * @property {Players} home_players -
  */
-sc.Scoreboard = function(scoreboard_template, Players, Over, Storage) {
-  var s = jQuery.extend(true, {}, scoreboard_template);
+sc.Scoreboard = function(ScoreboardTemplate, Settings, Players, Over, Storage) {
 
-  if (arguments.length != 4) {
-    throw new Error('sc.Scoreboard requires 4 parameters');
-  }
+  // The constructor statements are at the bottom because they rely on a couple
+  // of methods having been defined.
 
-  this.logger = new sc.Logger('Scoreboard');
+  this.prepare_match_in_progress = function(ScoreboardTemplate, Settings, Storage) {
 
-  this.scoreboard = s.innings[0];
+    if (arguments.length != 3) {
+      throw new Error("prepare_match_in_progress requires 3 arguments. Got " + arguments.length);
+    }
+    var scoreboard_template = new ScoreboardTemplate(Settings);
 
-  this.player_manager = new sc.PlayerManager();
+    storage = new Storage();
+    var scoreboard_data = storage.get_scoreboard();
 
-  // this.logger.debug("About to call Storage " + JSON.stringify(Storage));
-  this.storage = new Storage();
+    if (scoreboard_data) {
+      this.logger.debug('No need to initialise. Using stored scoreboard.');
+      this.logger.debug("Data retrieved from storage: " + JSON.stringify(scoreboard_data));
+      scoreboard_template.innings[0] = scoreboard_data;
+    }
 
-  if (!this.scoreboard.home_players.length) {
-    this.logger.debug('XXXXXXXXXXXXXXXXXX Before: ' + JSON.stringify(this.scoreboard.home_players));
-    this.scoreboard.home_players = this.player_manager.init_players(this.scoreboard, "home");
-    this.logger.debug('XXXXXXXXXXXXXXXXXX After: ' + JSON.stringify(this.scoreboard.home_players));
-  }
-  if (!this.scoreboard.away_players.length) {
-    this.scoreboard.away_players = this.player_manager.init_players(this.scoreboard, "away");
-  }
+    // initial_scoreboard.innings[0] = stored_scoreboard;
+    this.logger.debug("Modified scoreboard template: " + JSON.stringify(scoreboard_template));
 
-  this.next_innings = s.innings[1];
-  this.logger.debug("Scoreboard start left_bat " + JSON.stringify(this.scoreboard.left_bat));
-  // this.logger.debug("scoreboard " + JSON.stringify(this.scoreboard));
+    return scoreboard_template;
+  };
+
   /**
    * @method change_ends
    * @memberOf sc.Scoreboard
@@ -140,6 +139,7 @@ sc.Scoreboard = function(scoreboard_template, Players, Over, Storage) {
    *  @return boolean
    */
   this.alert_no_bowler = function() {
+    this.logger.error("alert_no_bowler " + JSON.stringify(this.scoreboard));
     if (!this.scoreboard.bowler.name) {
       alert("Please select a bowler.");
       return true;
@@ -154,6 +154,7 @@ sc.Scoreboard = function(scoreboard_template, Players, Over, Storage) {
    */
   this.bowls = function(type, runs) {
     this.scoreboard = this.storage.get_scoreboard();
+    this.logger.debug("In bowls(). scoreboard= " + JSON.stringify(this.scoreboard));
     if (this.alert_game_over()) {
       return false;
     }
@@ -273,8 +274,6 @@ sc.Scoreboard = function(scoreboard_template, Players, Over, Storage) {
     this.save();
   };
 
-
-
   /** @function save
    *  @description Save the current scoreboard object.
    *  @memberOf sc.Scoreboard
@@ -288,16 +287,11 @@ sc.Scoreboard = function(scoreboard_template, Players, Over, Storage) {
    *  @memberOf sc.Scoreboard
    */
   this.new_match = function() {
-    var s = new ScoreboardTemplate(Settings);
-    this.logger.debug("new_match s.innings[0].overs_history");
-    this.logger.debug(JSON.stringify(s.innings[0].overs_history));
-    this.logger.debug("new_match this.scoreboard.overs_history");
-    this.logger.debug(JSON.stringify(this.scoreboard.overs_history));
-    this.scoreboard = s.innings[0];
-    this.next_innings = s.innings[1];
-    this.logger.debug("new_match");
-    this.logger.debug(JSON.stringify(this));
-    this.save();
+
+    this.logger.debug("Start new_match");
+    this.storage.clear();
+    this.scoreboard = this.storage.get_scoreboard();
+    this.logger.debug("End new_match");
   };
 
   /** @function new_innings
@@ -429,4 +423,54 @@ sc.Scoreboard = function(scoreboard_template, Players, Over, Storage) {
   this.clear = function() {
     this.scoreboard.overs_history = [];
   };
+
+  // Start constructor
+
+  this.logger = new sc.Logger('Scoreboard');
+
+  if (arguments.length != 5) {
+    throw new Error('sc.Scoreboard requires 5 parameters Got ' + arguments.length);
+  }
+
+  if (!is.object(ScoreboardTemplate)) {
+    throw new Error('sc.Scoreboard ScoreboardTemplate must be an object. Got ' + typeof(ScoreboardTemplate));
+  }
+
+  if (!is.object(Settings)) {
+    throw new Error('sc.Scoreboard Settings must be an object');
+  }
+
+  if (!is.object(Storage)) {
+    throw new Error('sc.Scoreboard Storage must be an object. Got ' + typeof(Storage));
+  }
+
+  this.logger.debug('About to call prepare_match_in_progress');
+  var scoreboard_template = this.prepare_match_in_progress(ScoreboardTemplate, Settings, Storage);
+
+  var s = jQuery.extend(true, {}, scoreboard_template);
+
+  this.scoreboard = s.innings[0];
+
+  this.player_manager = new sc.PlayerManager();
+
+  // this.logger.debug("About to call Storage " + JSON.stringify(Storage));
+  this.storage = new Storage();
+
+  if (!this.scoreboard.home_players.length) {
+    this.logger.debug('XXXXXXXXXXXXXXXXXX Before: ' + JSON.stringify(this.scoreboard.home_players));
+    this.scoreboard.home_players = this.player_manager.init_players(this.scoreboard, "home");
+    this.logger.debug('XXXXXXXXXXXXXXXXXX After: ' + JSON.stringify(this.scoreboard.home_players));
+  }
+  if (!this.scoreboard.away_players.length) {
+    this.scoreboard.away_players = this.player_manager.init_players(this.scoreboard, "away");
+  }
+
+  this.next_innings = s.innings[1];
+  this.logger.debug("Scoreboard start left_bat " + JSON.stringify(this.scoreboard.left_bat));
+  this.logger.debug("scoreboard " + JSON.stringify(this.scoreboard));
+
+  this.save();
+
+  // End constructor
+
 };

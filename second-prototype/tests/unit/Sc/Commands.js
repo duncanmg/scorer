@@ -7,6 +7,7 @@ describe("ScCommandsTest. Real Template", function() {
   var players;
   var over;
   var storage;
+  var settings;
 
   beforeEach(
     inject(function(Players) {
@@ -16,7 +17,7 @@ describe("ScCommandsTest. Real Template", function() {
 
   beforeEach(
     inject(function(ScoreboardTemplate) {
-      template = new ScoreboardTemplate();
+      template = ScoreboardTemplate;
     })
   );
 
@@ -39,9 +40,15 @@ describe("ScCommandsTest. Real Template", function() {
   );
 
   beforeEach(
+    inject(function(Settings) {
+      settings = Settings;
+    })
+  );
+
+  beforeEach(
     inject(function(Sc) {
       sc.LoggerConfig = {};
-      sc2 = new Sc.Scoreboard(template, players, over, storage);
+      sc2 = new Sc.Scoreboard(template, settings, players, over, storage);
     })
   );
 

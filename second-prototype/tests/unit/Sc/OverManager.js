@@ -2,12 +2,13 @@ describe("ScOverManagerTest Simple Construction", function() {
   beforeEach(module("scorer"));
 
   var sc;
-  var template;
+  var Template;
   var players;
   var om;
   var om_class;
   var storage;
   var clone;
+  var Settings;
 
   beforeEach(
     inject(function(Players) {
@@ -16,8 +17,8 @@ describe("ScOverManagerTest Simple Construction", function() {
   );
 
   beforeEach(
-    inject(function(ScoreboardTemplate) {
-      template = new ScoreboardTemplate();
+    inject(function(_ScoreboardTemplate_) {
+      Template = _ScoreboardTemplate_;
     })
   );
 
@@ -25,6 +26,14 @@ describe("ScOverManagerTest Simple Construction", function() {
     inject(function(Storage) {
       //console.log('XXXX');
       storage = new Storage();
+      //console.log('XXXXXXXXXXXXXXXXXXXXXXXXXXXXX ' + storage);
+    })
+  );
+
+  beforeEach(
+    inject(function(_Settings_) {
+      //console.log('XXXX');
+      Settings = _Settings_;
       //console.log('XXXXXXXXXXXXXXXXXXXXXXXXXXXXX ' + storage);
     })
   );
@@ -42,7 +51,7 @@ describe("ScOverManagerTest Simple Construction", function() {
   beforeEach(
     inject(function(Sc, Storage) {
       Sc.LoggerConfig.PlayerManager = Sc.LoggerLevels.ERROR;
-      sc = new Sc.Scoreboard(template, players, {}, Storage);
+      sc = new Sc.Scoreboard(Template, Settings, players, {}, Storage);
       //om = new Sc.OverManager(sc.scoreboard);
       //om_class = Sc.OverManager;
       //console.log("About to set clone");
