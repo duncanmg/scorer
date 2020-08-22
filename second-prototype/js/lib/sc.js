@@ -38,6 +38,9 @@ sc.Scoreboard = function(ScoreboardTemplate, Settings, Players, Over, Storage) {
 
   // The constructor statements are at the bottom because they rely on a couple
   // of methods having been defined.
+  if (arguments.length != 5) {
+    throw new Error('sc.Scoreboard requires 5 parameters Got ' + arguments.length);
+  }
 
   this.prepare_match_in_progress = function(ScoreboardTemplate, Settings, Storage) {
 
@@ -426,11 +429,8 @@ sc.Scoreboard = function(ScoreboardTemplate, Settings, Players, Over, Storage) {
 
   // Start constructor
 
+this.initialize = function() {
   this.logger = new sc.Logger('Scoreboard');
-
-  if (arguments.length != 5) {
-    throw new Error('sc.Scoreboard requires 5 parameters Got ' + arguments.length);
-  }
 
   if (!is.object(ScoreboardTemplate)) {
     throw new Error('sc.Scoreboard ScoreboardTemplate must be an object. Got ' + typeof(ScoreboardTemplate));
@@ -470,6 +470,9 @@ sc.Scoreboard = function(ScoreboardTemplate, Settings, Players, Over, Storage) {
   this.logger.debug("scoreboard " + JSON.stringify(this.scoreboard));
 
   this.save();
+};
+
+this.initialize();
 
   // End constructor
 
