@@ -14,6 +14,8 @@ var sc = sc || {};
  *
  */
 
+sc.LoggerHttp = undefined;
+
 sc.LoggerLevels = {
   'OFF': 0,
   'DEBUG': 1,
@@ -50,21 +52,21 @@ sc.Logger = function(name) {
 
   this.debug = function(text) {
     if (this.log(sc.LoggerLevels.DEBUG)) {
-      console.log('DEBUG ' + this.name + ' ' + text);
+      this.output('DEBUG ' + this.name + ' ' + text);
     }
   };
 
   this.info = function(text) {
 
     if (this.log(sc.LoggerLevels.INFO)) {
-      console.log('INFO ' + this.name + ' ' + text);
+      this.output('INFO ' + this.name + ' ' + text);
     }
   };
 
   this.warn = function(text) {
 
     if (this.log(sc.LoggerLevels.WARN)) {
-      console.log('WARN ' + this.name + ' ' + text);
+      this.output('WARN ' + this.name + ' ' + text);
     }
 
   };
@@ -72,7 +74,7 @@ sc.Logger = function(name) {
   this.error = function(text) {
 
     if (this.log(sc.LoggerLevels.ERROR)) {
-      console.log('ERROR ' + this.name + ' ' + text);
+      this.output('ERROR ' + this.name + ' ' + text);
     }
 
   };
@@ -138,4 +140,13 @@ sc.Logger = function(name) {
       console.log('In Logger ' + this.name + ': ' + msg);
     }
   }
+
+  this.output = function(msg) {
+    if (!sc.LoggerHttp) {
+      console.log(msg);
+    } else {
+      sc.LoggerHttp.post('/log', { 'msg' : msg });
+    }
+  };
+
 };
