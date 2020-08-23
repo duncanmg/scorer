@@ -157,7 +157,7 @@ sc.Scoreboard = function(ScoreboardTemplate, Settings, Players, Over, Storage) {
    */
   this.bowls = function(type, runs) {
     this.scoreboard = this.storage.get_scoreboard();
-    this.logger.debug("In bowls(). scoreboard= " + JSON.stringify(this.scoreboard));
+    // this.logger.debug("In bowls(). scoreboard= " + JSON.stringify(this.scoreboard));
     if (this.alert_game_over()) {
       return false;
     }
@@ -307,15 +307,24 @@ sc.Scoreboard = function(ScoreboardTemplate, Settings, Players, Over, Storage) {
   this.new_innings = function() {
     storage.put("last_innings", this.scoreboard);
     var last_innings_runs = this.scoreboard.total;
-    var last_overs_history = this.scoreboard.overs_history;
+    var last_overs_history =
+      sc.Utils.clone(this.scoreboard.overs_history);
     var num_overs = this.scoreboard.num_overs;
     this.scoreboard = this.next_innings;
     this.scoreboard.last_innings = last_innings_runs;
+
     this.scoreboard.last_overs_history = last_overs_history;
+    this.scoreboard.overs_history = [];
+
     this.scoreboard.target = last_innings_runs + 1;
     this.scoreboard.innings_no += 1;
+
     this.scoreboard.batting_team =
       this.scoreboard.batting_team == "home" ? "away" : "home";
+
+    this.scoreboard.home_players = this.player_manager.init_players(this.scoreboard, 'home');
+    this.scoreboard.away_players = this.player_manager.init_players(this.scoreboard, 'away');
+
     this.scoreboard.num_overs = num_overs;
     this.scoreboard.innings_over = false;
     this.player_manager.set_batsmen_details(this.scoreboard);
