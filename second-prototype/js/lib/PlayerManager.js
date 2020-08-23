@@ -123,8 +123,8 @@ sc.PlayerManager = function() {
     data.bowler = data.next_bowler;
 
     data.next_bowler = tmp;
-    console.log("After change_bowlers: bowler " + JSON.stringify(data.bowler));
-    console.log(
+    this.logger.debug("After change_bowlers: bowler " + JSON.stringify(data.bowler));
+    this.logger.debug(
       "After change_bowlers: next " + JSON.stringify(data.next_bowler)
     );
   };
@@ -137,7 +137,7 @@ sc.PlayerManager = function() {
    */
   this.alert_no_bowler = function() {
     if (!this.scoreboard.bowler.name) {
-      alert("Please select a bowler.");
+      alert("Please select a bowlerrrrr.");
       return true;
     }
     return false;
@@ -187,7 +187,7 @@ sc.PlayerManager = function() {
    *  @return {void}
    */
   this.set_batsmen_details = function(data) {
-    // console.log("set_batsmen_details " + JSON.stringify(data));
+    // this.logger.debug("set_batsmen_details " + JSON.stringify(data));
 
     var m = "PlayerManager set_batsmen_details. ";
 
@@ -246,7 +246,7 @@ sc.PlayerManager = function() {
     } else {
       throw new Error("Parameter value must be 'batting' or 'bowling'");
     }
-    // console.log("get_team_players returning " + JSON.stringify(team));
+    // this.logger.debug("get_team_players returning " + JSON.stringify(team));
     return team;
   };
 
@@ -259,7 +259,9 @@ sc.PlayerManager = function() {
    * @param data {object} - Data
    */
   this.set_bowler_details = function(data) {
-    this.logger.debug("Start set_bowler_details");
+    //this.logger.debug("Start set_bowler_details");
+
+    var logger = this.logger;
 
     this.validator('set_bowler_details').check_all_defined(data,
       ['batting_team', 'home_players', 'away_players', 'bowler', 'next_bowler']);
@@ -272,13 +274,13 @@ sc.PlayerManager = function() {
     var is_bowling = function(bowlers, bowler) {
       for (var i = 0; i < bowlers.length; i++) {
         if (bowlers[i].id == bowler.id) {
-          console.log(
+          logger.debug(
             "set_bowler_details is_bowling true for bowler.id " + bowler.id
           );
           return bowlers[i];
         }
       }
-      console.log(
+      logger.debug(
         "set_bowler_details is_bowling false for bowler.id " + bowler.id
       );
       return false;
@@ -391,7 +393,7 @@ sc.PlayerManager = function() {
    * @returns {array}
    */
   this.get_bowling = function(players) {
-    // console.log("get_bowling received " + JSON.stringify(players));
+    // this.logger.debug("get_bowling received " + JSON.stringify(players));
     if (!players) {
       throw new Error("get_bowling requires a list of players");
     }
@@ -424,6 +426,8 @@ sc.PlayerManager = function() {
   /**
    * @method init_players
    * @memberOf PlayerManager
+   * @description Returns a list of player objects for the home team or
+   * the away team. The list is cloned from the template.
    * @param data {JSON} - Data
    * @param action {string} - "home" or "away"
    * returns {array}
@@ -450,14 +454,15 @@ sc.PlayerManager = function() {
           );
           player.no = player.batting_no;
           // delete player.batting_no;
-          // console.log('push: ' + JSON.stringify(player));
+          // this.logger.debug('push: ' + JSON.stringify(player));
           output.push(player);
-          // console.log('X output:' + JSON.stringify(output));
+          // this.logger.debug('X output:' + JSON.stringify(output));
         }
       );
-      // console.log('output:' + JSON.stringify(output));
+      // this.logger.debug('output:' + JSON.stringify(output));
       return output;
-    }
+    };
+
     if (action == 'home') {
       return doit(data.templates.HomePlayers, data.home_players, this.logger);
     } else {
