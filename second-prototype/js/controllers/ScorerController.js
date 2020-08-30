@@ -13,7 +13,7 @@ angular.module('scorer').controller('ScorerController',
       board.initialize();
     }
     $scope.scoreboard = board.scoreboard;
-    console.log(JSON.stringify(board.scoreboard));
+    // console.log(JSON.stringify(board.scoreboard));
     $scope.board = board;
     $scope.board.reset();
     // alert('Bang!');
@@ -82,7 +82,7 @@ angular.module('scorer').controller('ScorerController',
     var board = Scoreboard;
     board.new_match();
     board = undefined;
-    console.log('NewMatchController. Redirect to scorer.');
+    // console.log('NewMatchController. Redirect to scorer.');
     $state.go('scorer');
 
   }]);

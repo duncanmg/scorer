@@ -41,8 +41,9 @@ angular.module('scorer')
           return true;
         };
 
-        $scope.accept = function() {
+        $scope.accept = function(player) {
           console.log('accept');
+          Sc.Commands.Run(Sc.Commands.ModifyPlayerDetails, [Scoreboard.scoreboard, player])
           var storage = new Storage();
           storage.put_scoreboard(Scoreboard.scoreboard);
           $state.go('players', {

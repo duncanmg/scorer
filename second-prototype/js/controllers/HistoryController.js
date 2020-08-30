@@ -11,7 +11,7 @@ angular.module('scorer').controller('HistoryController', ['$scope', '$stateParam
     console.log("........................History.......................");
     //console.log("h=" + JSON.stringify(h));
     h.reverse();
-    console.log("h reversed=" + JSON.stringify(h));
+    // console.log("h reversed=" + JSON.stringify(h));
     for (var i = 0; i < h.length; i++) {
       h[i] = jQuery.extend(true, {}, h[i]);
       h[i].balls.reverse();

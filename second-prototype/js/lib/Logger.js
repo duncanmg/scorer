@@ -27,6 +27,7 @@ sc.LoggerLevels = {
 sc.LoggerConfig = {
   'Command': sc.LoggerLevels.DEBUG,
   'Commands': sc.LoggerLevels.DEBUG,
+  'ModifyPlayerDetails': sc.LoggerLevels.DEBUG,
   'OverManager': sc.LoggerLevels.DEBUG,
   'PlayerManager': sc.LoggerLevels.DEBUG,
   'Scoreboard': sc.LoggerLevels.DEBUG,
