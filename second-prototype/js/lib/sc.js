@@ -306,11 +306,15 @@ sc.Scoreboard = function(ScoreboardTemplate, Settings, Players, Over, Storage) {
    */
   this.new_innings = function() {
     storage.put("last_innings", this.scoreboard);
+    var last_scoreboard = sc.Utils.clone(this.scoreboard);
+
     var last_innings_runs = this.scoreboard.total;
     var last_overs_history =
       sc.Utils.clone(this.scoreboard.overs_history);
     var num_overs = this.scoreboard.num_overs;
+
     this.scoreboard = this.next_innings;
+
     this.scoreboard.last_innings = last_innings_runs;
 
     this.scoreboard.last_overs_history = last_overs_history;
@@ -322,12 +326,13 @@ sc.Scoreboard = function(ScoreboardTemplate, Settings, Players, Over, Storage) {
     this.scoreboard.batting_team =
       this.scoreboard.batting_team == "home" ? "away" : "home";
 
-    this.scoreboard.home_players = this.player_manager.init_players(this.scoreboard, 'home');
-    this.scoreboard.away_players = this.player_manager.init_players(this.scoreboard, 'away');
+    this.scoreboard.home_players = sc.Utils.clone(last_scoreboard.home_players);
+    this.scoreboard.away_players = sc.Utils.clone(last_scoreboard.away_players);
 
     this.scoreboard.num_overs = num_overs;
     this.scoreboard.innings_over = false;
     this.player_manager.set_batsmen_details(this.scoreboard);
+    this.logger.debug('batting_team=' + this.scoreboard.batting_team);
     this.save();
   };
 

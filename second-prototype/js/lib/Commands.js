@@ -273,8 +273,8 @@ sc.Commands = {
 
     this.run = function() {
 
-      this.logger.debug("--");
-      this.logger.debug("StartBowling.run");
+      // this.logger.debug("--");
+      this.logger.debug("StartBowling.run. Batting team=" + this.data.batting_team);
 
       var bowling_team_players = this.player_manager().get_team_players(this.data, 'bowling');
 
@@ -401,13 +401,15 @@ sc.Commands = {
 
       var ok = false;
       if (doit(this, 'batting')) {
-        this.player_manager().set_batsmen_details(data);
+        this.logger.debug('batting player: ' + JSON.stringify(this.player));
+        this.player_manager().set_batsmen_details(this.data);
         ok = true;
       }
       else if(doit(this, 'bowling')) {
         ok = true;
       }
 
+      this.logger.debug(JSON.stringify(this.data));
       this.logger.debug("ModifyPlayerDetails.run returning " + ok);
 
       return ok;
