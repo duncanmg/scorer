@@ -375,51 +375,6 @@ sc.Scoreboard = function(ScoreboardTemplate, Settings, Players, Over, Storage) {
     this.logger.debug("End sc reset");
   };
 
-  /** @function add_over
-   * @description Add an over.
-   *  @memberOf sc.Scoreboard
-   *  @param {integer} over_no - The number of the over.
-   *  @param {Player}  bowler_obj - The bowler of the over.
-   */
-  this.add_over = function(over_no, bowler_obj) {
-    this.logger.debug("add_over " + over_no);
-    this.logger.debug("bowler_obj " + JSON.stringify(bowler_obj));
-    this.scoreboard.overs_history.push(new Over(over_no, bowler_obj));
-    alert("Over");
-  };
-  /** @function add_ball
-   * @description Add a ball
-   *  @memberOf sc.Scoreboard
-   *  @param striker
-   *  @param runs
-   *  @param extras
-   *  @param wkt
-   *  @param valid
-   */
-  this.add_ball = function(striker, runs, extras, wkt, valid) {
-    if (!this.scoreboard.overs_history.length) {
-      alert("xxxxx " + this.add_over);
-      this.add_over(1, this.scoreboard.bowler);
-    }
-    alert(this.scoreboard.overs_history.length);
-    var over = this.scoreboard.overs_history[
-      this.scoreboard.overs_history.length - 1
-    ];
-    if (over.valid_balls >= 6) {
-      alert("The over has finished.");
-    }
-    this.scoreboard.overs_history[
-      this.scoreboard.overs_history.length - 1
-    ].balls.push(new Ball(striker, runs, extras, wkt, valid));
-    if (valid) {
-      this.scoreboard.overs_history[
-        this.scoreboard.overs_history.length - 1
-      ].valid_balls += 1;
-    }
-    this.scoreboard.overs_history[
-      this.scoreboard.overs_history.length - 1
-    ].total_balls += 1;
-  };
   /** @function is_ready
    * @description True if the set up is complete.
    *  @memberOf scorer.factory.Scoreboard
