@@ -144,7 +144,12 @@ sc.Scoreboard = function(ScoreboardTemplate, Settings, Players, Over, Storage) {
   this.alert_no_bowler = function() {
     if (!this.scoreboard.bowler.name) {
       this.logger.error("alert_no_bowler. No bowler. " + JSON.stringify(this.scoreboard));
-      alert("Please select a bowler.");
+      alert("Please select a bowler for the current over.");
+      return true;
+    }
+    if (!this.scoreboard.next_bowler.name) {
+      this.logger.error("alert_no_bowler. No bowler. " + JSON.stringify(this.scoreboard));
+      alert("Please select a bowler for the next over.");
       return true;
     }
     return false;

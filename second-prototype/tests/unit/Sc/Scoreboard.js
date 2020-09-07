@@ -95,11 +95,4 @@ describe("ScScoreboardTest. Real Template", function() {
     expect(typeof sc2).toEqual("object");
   });
 
-  it("An Sc.Scoreboard has overs_history and add_over.", function() {
-    sc2 = new sc.Scoreboard(template, settings, players, over, storage);
-    expect(typeof sc2).toEqual("object");
-    expect(sc2.scoreboard.overs_history.length).toEqual(0);
-    sc2.add_over(1, 2);
-    expect(sc2.scoreboard.overs_history.length).toEqual(1);
-  });
 });
