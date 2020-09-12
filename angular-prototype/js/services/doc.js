@@ -1,5 +1,0 @@
-/**
-* @namespace service
-* @memberOf scorer
-*
-*/

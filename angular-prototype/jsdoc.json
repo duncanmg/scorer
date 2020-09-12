@@ -1,4 +1,0 @@
-{"source": { "include":[ "./js/services", "./js/controllers","./js" ] ,
- "includePattern": ".+\\.js(doc)?$"},
-"opts":{"destination":"./jsdoc/"}
-}
