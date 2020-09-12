@@ -6,3 +6,4 @@ plugins/
 second-prototype/node_modules/
 second-prototype/jsdoc
 second-prototype/logs
+npm-debug.log
