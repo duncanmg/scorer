@@ -7,7 +7,7 @@ router.post('/', function(req, res, next) {
 	var day = date.getDate();
 	fs = require('fs');
 	var data = JSON.stringify(req.body.msg);
-	fs.appendFile('/home/duncan/scorer/second-prototype/logs/log'+day+'.log', data + "\n", 'utf8', function(err) { console.log(err);});
+	fs.appendFile('/home/duncan/dev_scorer/second-prototype/logs/log'+day+'.log', data + "\n", 'utf8', function(err) { console.log(err);});
   res.send('ok with a resource');
 });
 
