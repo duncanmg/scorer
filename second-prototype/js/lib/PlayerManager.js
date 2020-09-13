@@ -3,14 +3,9 @@
 var sc = sc || {};
 
 /**
- * @namespace PlayerManager
+ * @class PlayerManager
  * @memberOf sc
- */
-
-/**
  * @constructor PlayerManager
- * @param data
- * @param {Players} Players
  *
  */
 sc.PlayerManager = function() {
@@ -24,7 +19,7 @@ sc.PlayerManager = function() {
 
   /**
    * @method change_ends
-   * @memberOf PlayerManager
+   * @memberOf sc.PlayerManager
    * @description Accept the number of times the batsmen ran and calculate whether
    * the batsmen changed ends. If they did, toggle the values of scoreboard.left_bat.striker
    * and scoreboard.right_bat.striker.
@@ -54,7 +49,7 @@ sc.PlayerManager = function() {
 
   /**
    * @method validator
-   * @memberOf PlayerManager
+   * @memberOf sc.PlayerManager
    * @param name {String} A name to be used in the error messages
    * @description Return a new Validator object.
    * @return {Validator}
@@ -105,7 +100,7 @@ sc.PlayerManager = function() {
 
   /**
    *  @function change_bowlers
-   *  @memberOf PlayerManager
+   *  @memberOf sc.PlayerManager
    *  @param {Object} data
    *  @description Swop the objects in data.bowler and data.next_bowler.
    *  Called at the end of each over.
@@ -131,7 +126,7 @@ sc.PlayerManager = function() {
 
   /**
    *  @method alert_no_bowler
-   *  @memberOf PlayerManager
+   *  @memberOf sc.PlayerManager
    *  @description Alert if the bowler is not set.
    *  @return boolean
    */
@@ -145,7 +140,7 @@ sc.PlayerManager = function() {
 
   /** @function add_runs_to_striker
    *  @description Add the runs to the batsman's score.
-   *  @memberOf PlayerManager
+   *  @memberOf sc.PlayerManager
    *  @param {objects} data - Data
    *  @param {integer} runs - Number of runs to be added.
    */
@@ -166,7 +161,7 @@ sc.PlayerManager = function() {
 
   /** @function set_batting_team
    *  @description Set the batting team.
-   *  @memberOf PlayerManager
+   *  @memberOf sc.PlayerManager
    *  @param {Players} - batting_team - The batting team.
    */
   this.set_batting_team = function(batting_team) {
@@ -180,7 +175,7 @@ sc.PlayerManager = function() {
   };
 
   /** @method set_batsmen_details
-   *  @memberOf PlayerManager
+   *  @memberOf sc.PlayerManager
    *  @description Uses the list of players to flesh out the left_bat and
    *  right_bat_no with details such as name and description.
    *  @param {objects} data - Data
@@ -228,7 +223,7 @@ sc.PlayerManager = function() {
 
   /**
    * @method get_team_players
-   * @memberOf PlayerManager
+   * @memberOf sc.PlayerManager
    * @param data {object} - data
    * @param batting_or_bowling {string} "batting" or "bowling"
    * @return {array}
@@ -255,7 +250,7 @@ sc.PlayerManager = function() {
    * @description Sets the data.bowler and data.next_bowler elements
    * based on the bowler and bowling elements in the bowling team's
    * list of players.
-   * @memberOf PlayerManager
+   * @memberOf sc.PlayerManager
    * @param data {object} - Data
    */
   this.set_bowler_details = function(data) {
@@ -366,7 +361,7 @@ sc.PlayerManager = function() {
 
   /**
    * @method get_bowlers
-   * @memberOf PlayerManager
+   * @memberOf sc.PlayerManager
    * @param players {array}
    * @description list of players who have bowled in innings.
    * @returns {array}
@@ -387,7 +382,7 @@ sc.PlayerManager = function() {
 
   /**
    * @method get_bowling
-   * @memberOf PlayerManager
+   * @memberOf sc.PlayerManager
    * @description Return a list of the current bowlers. (0, 1 or 2 bowlers.)
    * @param players {array} - List of players in bowling team
    * @returns {array}
@@ -410,7 +405,7 @@ sc.PlayerManager = function() {
   /**
    * @method sort_by_bowler_no
    * @description Does this work?
-   * @memberOf PlayerManager
+   * @memberOf sc.PlayerManager
    * returns {integer}
    */
   this.sort_by_bowler_no = function(a, b) {
@@ -425,7 +420,7 @@ sc.PlayerManager = function() {
 
   /**
    * @method init_players
-   * @memberOf PlayerManager
+   * @memberOf sc.PlayerManager
    * @description Returns a list of player objects for the home team or
    * the away team. The list is cloned from the template.
    * @param data {JSON} - Data
@@ -472,7 +467,7 @@ sc.PlayerManager = function() {
 
   /**
    * @method lookup
-   * @memberOf PlayerManager
+   * @memberOf sc.PlayerManager
    * @param players {array} - List of players in a team
    * @param player {Batsman} - Player to be returned
    * @returns {integer}

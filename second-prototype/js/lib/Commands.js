@@ -7,6 +7,11 @@ var sc = sc || {};
  */
 
 sc.Commands = {
+  /**
+   * @class Commands.Wicket
+   * @memberOf sc
+   * @constructor Commands.Wicket
+   */
   Wicket: function(data) {
     sc.Command.call(this, data);
     this.data = data;
@@ -61,6 +66,11 @@ sc.Commands = {
     };
   },
 
+  /**
+   * @class Commands.StandardBall
+   * @memberOf sc
+   * @constructor Commands.StandardBall
+   */
   StandardBall: function(args) {
     if (!(args instanceof Array) || args.length != 2) {
       throw new Error(
@@ -126,6 +136,11 @@ sc.Commands = {
     };
   },
 
+  /**
+   * @class Commands.Wide
+   * @memberOf sc
+   * @constructor Commands.Wide
+   */
   Wide: function(args) {
     this.data = args;
 
@@ -153,6 +168,12 @@ sc.Commands = {
       this.over();
     };
   },
+
+  /**
+   * @class Commands.NoBall
+   * @memberOf sc
+   * @constructor Commands.NoBall
+   */
   NoBall: function(args) {
     this.data = args;
 
@@ -181,6 +202,11 @@ sc.Commands = {
     };
   },
 
+  /**
+   * @class Commands.Bye
+   * @memberOf sc
+   * @constructor Commands.Bye
+   */
   Bye: function(args) {
     this.data = args;
 
@@ -213,6 +239,11 @@ sc.Commands = {
     this.player_manager().change_ends(this.data, 1);
   },
 
+  /**
+   * @class Commands.LegBye
+   * @memberOf sc
+   * @constructor Commands.LegBye
+   */
   LegBye: function(args) {
     this.name = "LegBye";
 
@@ -248,6 +279,11 @@ sc.Commands = {
     };
   },
 
+  /**
+   * @class Commands.StartBowling
+   * @memberOf sc
+   * @constructor Commands.StartBowling
+   */
   StartBowling: function(args) {
     this.name = "StartBowling";
     this.logger = new sc.Logger(this.name);
@@ -308,6 +344,11 @@ sc.Commands = {
     };
   },
 
+  /**
+   * @class Commands.StopBowling
+   * @memberOf sc
+   * @constructor Commands.StopBowling
+   */
   StopBowling: function(args) {
     this.name = "StopBowling";
     this.logger = new sc.Logger(this.name);
@@ -353,6 +394,11 @@ sc.Commands = {
     };
   },
 
+  /**
+   * @class Commands.ModifyPlayerDetails
+   * @memberOf sc
+   * @constructor Commands.ModifyPlayerDetails
+   */
   ModifyPlayerDetails: function(args) {
     this.name = "ModifyPlayerDetails";
     this.logger = new sc.Logger(this.name);
@@ -417,6 +463,11 @@ sc.Commands = {
     };
   },
 
+  /**
+   * @class Commands.Run
+   * @memberOf sc
+   * @constructor Commands.Run
+   */
   Run: function(object, args) {
     object.prototype = Object.create(sc.Command.prototype);
     // object.prototype.Constructor = sc.Command.Wicket;
