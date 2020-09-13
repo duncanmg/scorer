@@ -20,7 +20,7 @@
     "jade": "1.11.0",
     "jasmine": "2.5.3",
     "jquery": "3.5.0",
-    "morgan": "1.7.0",
+    "morgan": "1.9.1",
     "serve-favicon": "2.3.0"
   },
   "devDependencies": {
