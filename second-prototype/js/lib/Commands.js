@@ -403,7 +403,6 @@ sc.Commands = {
     this.name = "ModifyPlayerDetails";
     this.logger = new sc.Logger(this.name);
 
-    // this.logger.debug("XXXXXXXXXXXXXXXXXXXXXXXXXXX "+JSON.stringify(args));
     if ((!is.array(args)) || args.length != 2) {
       this.logger.error(JSON.stringify(args));
       throw new Error(this.name + " expects an array with two elements");
@@ -414,25 +413,9 @@ sc.Commands = {
 
     sc.Command.call(this, this.data);
 
-    // this.validator("StopBowling").check_all_defined(this, [
-    //   "data",
-    //   "data.away_players",
-    //   "data.home_players",
-    //   "player",
-    //   "player"
-    // ]);
-
-    // sc.validators.is_bowler(this.player);
-
     this.run = function() {
 
       this.logger.debug("ModifyPlayerDetails.run");
-
-      // var bowling_team_players = this.player_manager().get_team_players(this.data, 'bowling');
-      // var batting_team_players = this.player_manager().get_team_players(this.data, 'batting');
-      // var all_players = bowling_team_players.concat(batting_team_players)
-
-      // var i = this.player_manager().lookup(all_players, this.player);
 
       var doit = function(obj, team) {
         var players = obj.player_manager().get_team_players(obj.data, team);

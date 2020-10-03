@@ -164,6 +164,84 @@ describe("ScCommandsTest. Real Template", function() {
     expect(sc2.scoreboard.right_bat.striker).toEqual(false);
   });
 
+  it("An Sc.Commands.StandardBall exceptions", function() {
+
+    expect(typeof sc).toEqual("object");
+
+    expect(function() {
+      sc.Commands.Run(sc.Commands.StandardBall)
+    }).toThrow(
+      new Error("StandardBall Parameter args must be an array of length 2"));
+
+    expect(function() {
+      sc.Commands.Run(sc.Commands.StandardBall, [undefined, 1])
+    }).toThrow(
+      new Error("StandardBall Parameter data is mandatory"));
+
+    expect(function() {
+      sc.Commands.Run(sc.Commands.StandardBall, [{}, undefined])
+    }).toThrow(
+      new Error("StandardBall Parameter runs is mandatory"));
+
+    expect(function() {
+      sc.Commands.Run(sc.Commands.StandardBall, [{}, 1])
+    }).toThrow(
+      new Error("StandardBall data.total must be defined"));
+
+    expect(function() {
+      sc.Commands.Run(sc.Commands.StandardBall, [{
+        total: 100
+      }, 1])
+    }).toThrow(
+      new Error("StandardBall data.balls must be defined"));
+
+    expect(function() {
+      sc.Commands.Run(sc.Commands.StandardBall, [{
+        total: 100,
+        balls: 1
+      }, 1])
+    }).toThrow(
+      new Error("StandardBall data.left_bat must be defined"));
+
+    expect(function() {
+      sc.Commands.Run(sc.Commands.StandardBall, [{
+          total: 100,
+          balls: 1,
+          left_bat: {}
+        },
+        1
+      ])
+    }).toThrow(
+      new Error("StandardBall data.left_bat.striker must be defined"));
+
+    expect(function() {
+      sc.Commands.Run(sc.Commands.StandardBall, [{
+          total: 100,
+          balls: 1,
+          left_bat: {
+            striker: true
+          }
+        },
+        1
+      ])
+    }).toThrow(
+      new Error("StandardBall data.right_bat must be defined"));
+
+    expect(function() {
+      sc.Commands.Run(sc.Commands.StandardBall, [{
+        total: 100,
+        balls: 1,
+        left_bat: {
+          striker: true
+        },
+        right_bat: {}
+      }, 1])
+    }).toThrow(
+      new Error('Not a Batsman. Must have the following properties: ' +
+        '["no","runs","name","id","bowler","bowling"]. Got:{"striker":true}'));
+
+  });
+
   it("An Sc.Commands.Wide", function() {
     sc2.scoreboard.bowler = sc.Utils.clone(sc2.scoreboard.templates.Bowler);
     expect(typeof sc2).toEqual("object");
@@ -407,4 +485,26 @@ describe("ScCommandsTest. Real Template", function() {
       .toThrow(new Error("Two bowlers are already bowling."));
 
   });
+
+  it("An Sc.Commands.ModifyPlayerDetails", function() {
+
+    sc.LoggerConfig = {
+      'ModifyPlayerDetails': sc.LoggerLevels.DEBUG
+    };
+
+    expect(typeof sc).toEqual("object");
+
+    expect(function() {
+      sc.Commands.Run(sc.Commands.ModifyPlayerDetails)
+    }).toThrow(
+      new Error("ModifyPlayerDetails expects an array with two elements"));
+
+    // expect(function() {
+    //   sc.Commands.Run(sc.Commands.ModifyPlayerDetails, [undefined, undefined])
+    // }).toThrow(
+    //   new Error("TypeError: undefined is not an object (evaluating 'context[namespaces[i]]')"));
+
+
+  });
+
 });
