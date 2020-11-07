@@ -127,6 +127,32 @@ sc.Command = function() {
           this.check_namespaces_defined(obj, p);
         }
       };
+
+      this.check_constructor_args = function(args, spec) {
+        switch (spec) {
+          case "none":
+            if (is.existy(args)) {
+              throw new Error(this.name + " does not take any arguments");
+            }
+            break;
+          case "one":
+            if (is.not.existy(args)) {
+              throw new Error(this.name + " requires one argument");
+            }
+            if (is.array(args)) {
+              throw new Error(this.name + " does not take an array");
+            }
+            break;
+          case "many":
+            if (is.not.array(args)) {
+              throw new Error(this.name + " requires an array");
+            }
+            break;
+          default:
+            throw new Error(this.name + " spec must be one of 'none', 'one', 'many'");
+        }
+      };
+
     };
     return new Validator(name);
   };
