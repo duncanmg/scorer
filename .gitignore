@@ -4,6 +4,7 @@
 platforms/
 plugins/
 second-prototype/node_modules/
-second-prototype/jsdoc
+second-prototype/public/jsdoc
+second-prototype/public/coverage
 second-prototype/logs
 npm-debug.log
