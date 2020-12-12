@@ -1,5 +1,5 @@
 {"source": { "include":[ "./js/services", "./js/controllers","./js", "./js/factories", "./js/factories/delivery_types", "./js/lib" ] ,
  "includePattern": ".+\\.js(doc)?$"},
-"opts":{"destination":"./jsdoc/"},
+"opts":{"destination":"./public/jsdoc/"},
 "templates":{"theme":"united"}
 }
