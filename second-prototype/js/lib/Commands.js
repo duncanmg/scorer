@@ -433,8 +433,7 @@ sc.Commands = {
         this.logger.debug('batting player: ' + JSON.stringify(this.player));
         this.player_manager().set_batsmen_details(this.data);
         ok = true;
-      }
-      else if(doit(this, 'bowling')) {
+      } else if (doit(this, 'bowling')) {
         ok = true;
       }
 
