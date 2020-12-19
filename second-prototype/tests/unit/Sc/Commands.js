@@ -168,64 +168,63 @@ describe("ScCommandsTest. Real Template", function() {
 
     expect(typeof sc).toEqual("object");
 
+    console.log('About to call sc.Commands.StandardBall with 0 args');
     expect(function() {
       sc.Commands.Run(sc.Commands.StandardBall)
     }).toThrow(
-      new Error("StandardBall Parameter args must be an array of length 2"));
+      new Error("StandardBall requires an array"));
 
-    expect(function() {
-      sc.Commands.Run(sc.Commands.StandardBall, [undefined, 1])
-    }).toThrow(
-      new Error("StandardBall Parameter data is mandatory"));
+    var msg = 'StandardBall. A mandatory parameter is missing: .';
+    var run = sc.Commands.Run;
+    var cmd = sc.Commands.StandardBall;
 
-    expect(function() {
-      sc.Commands.Run(sc.Commands.StandardBall, [{}, undefined])
-    }).toThrow(
-      new Error("StandardBall Parameter runs is mandatory"));
-
-    expect(function() {
-      sc.Commands.Run(sc.Commands.StandardBall, [{}, 1])
-    }).toThrow(
-      new Error("StandardBall data.total must be defined"));
-
-    expect(function() {
-      sc.Commands.Run(sc.Commands.StandardBall, [{
-        total: 100
-      }, 1])
-    }).toThrow(
-      new Error("StandardBall data.balls must be defined"));
-
-    expect(function() {
-      sc.Commands.Run(sc.Commands.StandardBall, [{
-        total: 100,
-        balls: 1
-      }, 1])
-    }).toThrow(
-      new Error("StandardBall data.left_bat must be defined"));
-
-    expect(function() {
-      sc.Commands.Run(sc.Commands.StandardBall, [{
+    var tests = [
+      ["data", function() {
+        run(cmd, [undefined, 1]);
+      }],
+      ["runs", function() {
+        run(cmd, [{}, undefined]);
+      }],
+      ["data.total", function() {
+        run(cmd, [{}, 1]);
+      }],
+      ["data.balls", function() {
+        run(cmd, [{
+          total: 100
+        }, 1]);
+      }],
+      ["data.left_bat", function() {
+        run(cmd, [{
           total: 100,
-          balls: 1,
-          left_bat: {}
-        },
-        1
-      ])
-    }).toThrow(
-      new Error("StandardBall data.left_bat.striker must be defined"));
+          balls: 1
+        }, 1]);
+      }],
+      ["data.left_bat.striker", function() {
+        run(cmd, [{
+            total: 100,
+            balls: 1,
+            left_bat: {}
+          },
+          1
+        ])
+      }],
+      ["data.right_bat", function() {
+        run(cmd, [{
+            total: 100,
+            balls: 1,
+            left_bat: {
+              striker: true
+            }
+          },
+          1
+        ])
+      }],
 
-    expect(function() {
-      sc.Commands.Run(sc.Commands.StandardBall, [{
-          total: 100,
-          balls: 1,
-          left_bat: {
-            striker: true
-          }
-        },
-        1
-      ])
-    }).toThrow(
-      new Error("StandardBall data.right_bat must be defined"));
+    ];
+
+    tests.forEach(function(test, index) {
+      expect(test[1]).toThrow(new Error(msg + test[0]));
+    });
 
     expect(function() {
       sc.Commands.Run(sc.Commands.StandardBall, [{
