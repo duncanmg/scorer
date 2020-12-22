@@ -11,6 +11,7 @@ const jsdoc = require('gulp-jsdoc3');
 const jasmine = require('gulp-jasmine');
 const watch = require('gulp-watch');
 const batch = require('gulp-batch');
+const babel = require('gulp-babel');
 
 const Server = require('karma').Server;
 
@@ -32,6 +33,10 @@ function scripts() {
   const headerValue = "\n// Evaluated by gulp\n\n";
   return gulp.src(['js/*.js', 'js/controllers/*.js', 'js/services/*.js', 'js/factories/**/*.js', 'js/lib/**/*.js'])
     .pipe(concat('combined.js'))
+    .pipe(babel({
+        presets: ['@babel/preset-env'],
+     sourceType: "script",
+    }))
     .pipe(header(headerValue))
     .pipe(gulp.dest('public/javascripts'))
     .pipe(rename('combined.min.js'))
