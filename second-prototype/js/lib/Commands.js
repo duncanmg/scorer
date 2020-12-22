@@ -14,6 +14,9 @@ sc.Commands = {
    */
   Wicket: function(data) {
     sc.Command.call(this, data);
+
+    this.validator('Wicket').check_constructor_args(data, 'one');
+
     this.data = data;
     this.logger = new sc.Logger('Wicket');
     this.run = function() {
@@ -72,46 +75,25 @@ sc.Commands = {
    * @constructor Commands.StandardBall
    */
   StandardBall: function(args) {
-    if (!(args instanceof Array) || args.length != 2) {
-      throw new Error(
-        "StandardBall Parameter args must be an array of length 2"
-      );
-    }
 
     this.logger = new sc.Logger('StandardBall');
+
+    sc.Command.call(this);
+
+    this.validator('StandardBall').check_constructor_args(args, 'many');
 
     this.data = args[0];
     this.runs = args[1];
 
-    if (!this.data) {
-      throw new Error("StandardBall Parameter data is mandatory");
-    }
-
-    if (typeof this.runs === "undefined") {
-      throw new Error("StandardBall Parameter runs is mandatory");
-    }
-
-    if (typeof this.data.total === "undefined") {
-      throw new Error("StandardBall data.total must be defined");
-    }
-
-    if (typeof this.data.balls === "undefined") {
-      throw new Error("StandardBall data.balls must be defined");
-    }
-
-    if (typeof this.data.left_bat === "undefined") {
-      throw new Error("StandardBall data.left_bat must be defined");
-    }
-
-    if (typeof this.data.left_bat.striker === "undefined") {
-      throw new Error("StandardBall data.left_bat.striker must be defined");
-    }
-
-    if (typeof this.data.right_bat === "undefined") {
-      throw new Error("StandardBall data.right_bat must be defined");
-    }
-
-    sc.Command.call(this, this.data);
+    this.validator("StandardBall").check_all_defined(this, [
+      "data",
+      "runs",
+      "data.total",
+      "data.balls",
+      "data.left_bat",
+      "data.left_bat.striker",
+      "data.right_bat"
+    ]);
 
     this.run = function() {
       this.data.total += this.runs;
@@ -121,7 +103,6 @@ sc.Commands = {
       sc.validators.is_batsman(this.data.right_bat);
       this.logger.debug("About to call add_runs_to_striker " + JSON.stringify(this.data.left_bat));
       this.player_manager().add_runs_to_striker(this.data, this.runs);
-
       this.logger.debug("About to call add_ball " + JSON.stringify(this.data.left_bat));
       this.over_manager().add_ball(
         this.data.left_bat.striker ? this.data.left_bat : this.data.right_bat,
@@ -413,6 +394,11 @@ sc.Commands = {
 
     sc.Command.call(this, this.data);
 
+    this.validator("StopBowling").check_all_defined(this, [
+      "data",
+      "player"
+    ]);
+
     this.run = function() {
 
       this.logger.debug("ModifyPlayerDetails.run");
@@ -453,9 +439,7 @@ sc.Commands = {
   Run: function(object, args) {
     object.prototype = Object.create(sc.Command.prototype);
     // object.prototype.Constructor = sc.Command.Wicket;
-
     var o = new object(args);
-
     o.run();
     return 1;
   }

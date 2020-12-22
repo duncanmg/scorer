@@ -103,7 +103,7 @@ sc.Logger = function(name) {
       return 1;
     }
 
-    for (k in sc.LoggerLevels) {
+    for (var k in sc.LoggerLevels) {
       // console.log("k=" + k + " level=" + level);
       if (sc.LoggerLevels[k] === level) {
         level_ok = 1;
