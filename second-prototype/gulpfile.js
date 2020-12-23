@@ -12,6 +12,7 @@ const jasmine = require('gulp-jasmine');
 const watch = require('gulp-watch');
 const batch = require('gulp-batch');
 const babel = require('gulp-babel');
+const debug = require("gulp-debug");
 
 const Server = require('karma').Server;
 
@@ -24,19 +25,28 @@ function lint() {
 function test(done) {
   new Server({
     configFile: __dirname + '/karma.conf.js',
-    // configFile: __dirname + '/node_modules/karma/karma.conf.js',
     singleRun: true
   }, done).start();
+}
+
+// Transpile .es6 files to .js
+function es6() {
+  const headerValue = "\n// Transpiled from ES6 by gulp\n\n";
+  return gulp.src(['js/**/*.es6'])
+    .pipe(babel({
+        presets: ['@babel/preset-env'],
+     sourceType: "script",
+    }))
+    .pipe(header(headerValue))
+    // No need to rename because default action changes .es6 to .js
+    .pipe(gulp.dest('js'));
+
 }
 
 function scripts() {
   const headerValue = "\n// Evaluated by gulp\n\n";
   return gulp.src(['js/*.js', 'js/controllers/*.js', 'js/services/*.js', 'js/factories/**/*.js', 'js/lib/**/*.js'])
     .pipe(concat('combined.js'))
-    .pipe(babel({
-        presets: ['@babel/preset-env'],
-     sourceType: "script",
-    }))
     .pipe(header(headerValue))
     .pipe(gulp.dest('public/javascripts'))
     .pipe(rename('combined.min.js'))
@@ -68,9 +78,10 @@ function watchFiles(done) {
     done();
 }
 
-const build = gulp.series(lint, scripts, test, build_jsdoc, watchFiles);
+const build = gulp.series(lint, es6, scripts, test, build_jsdoc, watchFiles);
 
 exports.lint = lint;
+exports.lint = es6;
 exports.test = test;
 exports.scripts = scripts;
 exports.jsdoc = jsdoc;

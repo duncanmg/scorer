@@ -21,9 +21,9 @@ module.exports = function(config) {
       "javascripts/angular-ui-router.min.js",
       "javascripts/angular-resource.min.js",
       '../node_modules/angular-mocks/angular-mocks.js',
-      'javascripts/combined.js',
-      // '../js/*.js',
-      // '../js/**/*.js',
+      // 'javascripts/combined.js',
+      '../js/*.js',
+      '../js/**/*.js',
       '../tests/unit/*.js',
       '../tests/unit/delivery_types/*.js',
       '../tests/unit/Sc/*.js'
@@ -39,7 +39,7 @@ module.exports = function(config) {
     // preprocess matching files before serving them to the browser
     // available preprocessors: https://npmjs.org/browse/keyword/karma-preprocessor
     // preprocessors: { '../js/*.js': ['sourcemap', 'coverage'], '../js/**/*.js': ['sourcemap', 'coverage']
-    preprocessors: { 'javascripts/combined.js': ['coverage']
+    preprocessors: { '../js/*.js': ['coverage'], '../js/**/*.js': ['coverage']
     },
 
 coverageReporter: {
