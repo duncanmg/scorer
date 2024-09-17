@@ -13,7 +13,7 @@
     "angular": "1.8.0",
     "angular-resource": "1.7.8",
     "angular-ui-router": "0.3.2",
-    "body-parser": "1.20.1",
+    "body-parser": "1.20.3",
     "cookie-parser": "1.4.3",
     "debug": "3.1.0",
     "express": "4.19.2",
